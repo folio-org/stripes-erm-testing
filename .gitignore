@@ -1,0 +1,15 @@
+node_modules
+yarn.lock
+.yarnclean
+yarn-error.log
+.idea
+.vscode/
+package-lock.json
+
+cypress/screenshots
+
+.DS_Store
+
+allure-results
+
+videos
