@@ -1,0 +1,49 @@
+{
+  "name": "@folio/stripes-erm-testing",
+  "version": "1.0.0",
+  "description": "Testing library for Stripes ERM applications",
+  "sideEffects": [
+    "*.css"
+  ],
+  "publishConfig": {
+    "registry": "https://repository.folio.org/repository/npm-folio/"
+  },
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "scripts": {
+    "lint": "eslint lib test"
+  },
+  "dependencies": {
+    "@interactors/html": "^1.0.0-rc1.2",
+    "@folio/stripes-testing": "^4.3.1",
+    "@testing-library/react": "^12.1.5",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.18.9",
+    "@babel/eslint-parser": "^7.15.0",
+    "@folio/eslint-config-stripes": "^6.1.0",
+    "@folio/stripes-testing": "^4.2.0",
+    "@interactors/html": "^1.0.0-rc1.2",
+    "@testing-library/dom": "^8.16.0",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react-hooks": "^8.0.0",
+    "@testing-library/user-event": "^14.3.0",
+    "babel-jest": "^28.1.3",
+    "eslint": "^7.32.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.6.0",
+    "eslint-plugin-jest-dom": "^4.0.2",
+    "eslint-plugin-testing-library": "^5.5.1",
+    "jest": "^28.1.0",
+    "jest-css-modules": "^2.1.0",
+    "jest-css-modules-transform": "^4.0.0",
+    "jest-environment-jsdom": "^28.1.2",
+    "jest-junit": "^13.2.0",
+    "jest-webpack": "^0.5.1",
+    "moment": "^2.29.4",
+    "testing-library-selector": "^0.2.1",
+  }
+}
