@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import prefixKeys from './prefixKeys';
 import mockOffsetSize from './mockOffsetSize';
 
+import CalloutHarness from './CalloutHarness';
 
 export default function Harness({
   children,
@@ -26,17 +27,19 @@ export default function Harness({
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <IntlProvider
-        key="en"
-        locale="en"
-        messages={allTranslations}
-        onError={() => {}}
-        timeZone="UTC"
-      >
-        {children}
-      </IntlProvider>
-    </QueryClientProvider>
+    <CalloutHarness>
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider
+          key="en"
+          locale="en"
+          messages={allTranslations}
+          onError={() => {}}
+          timeZone="UTC"
+        >
+          {children}
+        </IntlProvider>
+      </QueryClientProvider>
+    </CalloutHarness>
   );
 }
 
