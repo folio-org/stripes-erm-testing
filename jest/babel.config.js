@@ -10,7 +10,5 @@ module.exports = {
       { decoratorsBeforeExport: false },
     ],
     '@babel/plugin-transform-runtime',
-    // FIXME TRY WITHOUT THIS ??
-    'transform-require-context'
   ],
 };
