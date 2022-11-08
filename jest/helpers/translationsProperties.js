@@ -17,7 +17,13 @@ const translationsProperties = [
       'cancel': 'Cancel',
       'paneMenuActionsToggleLabel': 'Actions',
       'collapseAll': 'Collapse all',
-      'button.edit': 'Edit'
+      'button.edit': 'Edit',
+      'noValue.noValueSet': 'No value set',
+      'tableEmpty': 'The list contains no items',
+      'metaSection.recordCreated': 'Record created: {date} {time}',
+      'metaSection.recordCreatedNoData': 'Record created: Unknown',
+      'metaSection.recordLastUpdated': 'Record last updated: {date} {time}',
+      'metaSection.recordLastUpdatedNoData': 'Record last updated: Unknown',
     },
   },
   {
