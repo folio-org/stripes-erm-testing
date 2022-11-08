@@ -1,3 +1,7 @@
+// Direct import is a bit gross, but so is exposing the translations file...
+// no super great way to do this so this will do for now.
+import ermTranslations from '@folio/stripes-erm-components/translations/stripes-erm-components/en.json'
+
 const translationsProperties = [
   {
     prefix: 'stripes-core',
@@ -27,6 +31,10 @@ const translationsProperties = [
       'searchResultsCountHeader': '"{count, number} {count, plural, one {record found} other {records found}}"',
       'new': 'New'
     },
+  },
+  {
+    prefix: 'stripes-erm-components',
+    translations: ermTranslations
   }
 ];
 
