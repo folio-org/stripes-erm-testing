@@ -32,7 +32,7 @@ import  '@folio/stripes-erm-testing/jest/directMocks';
 ```
 as well as ensuring that the jest config is drawn from `stripes-erm-testing` instead of  `stripes-erm-components`.
 
-This process can be followed in this PR (ADD LINK TO PR HERE).
+This process can be followed [in this PR](https://github.com/folio-org/ui-agreements/pull/1143).
 
 ### Phase 2, manual mocks for external modules
 (Once phase 1 is complete for all modules, deadline Orchid, it can be skipped for future modules)
