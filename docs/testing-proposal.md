@@ -77,3 +77,19 @@ Possible Mitigations:
 - Have daily/weekly/monthly tasks for each individual module implementing the shared resources, which run the tests and complain loudly if they fail.
 	- Similar to the above, except the onus is on an implementing module to follow up when tests start failing
 	- Less visible when changing a test resource what that might mean
+
+## Plan of attack
+The PR for ui-agreements named above takes that module through Phase 1. The effort required to jump straight to Phase 2 is not significantly higher, and so the recommendation is that we do that for each module.
+
+All modules except stripes-erm-components must be completed (Either phase 1 OR 2) before erm-components can have the test stuff removed on master.
+
+Phase 1
+- ui-agreements (Phase 2 PR HERE)
+Phase 2
+- ui-licenses
+- ui-local-kb-admin
+- ui-erm-comparisons
+- ui-dashboard
+- ui-plugin-find-agreement
+- ui-plugin-find-license
+- ui-plugin-find-eresource
