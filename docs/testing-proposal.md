@@ -85,6 +85,7 @@ All modules except stripes-erm-components must be completed (Either phase 1 OR 2
 
 Phase 1
 - ui-agreements ([PR](https://github.com/folio-org/ui-agreements/pull/1143))(Phase 2 PR HERE)
+
 Phase 2
 - ui-licenses ([PR](https://github.com/folio-org/ui-licenses/pull/639))
 - ui-local-kb-admin
