@@ -84,9 +84,9 @@ The PR for ui-agreements named above takes that module through Phase 1. The effo
 All modules except stripes-erm-components must be completed (Either phase 1 OR 2) before erm-components can have the test stuff removed on master.
 
 Phase 1
-- ui-agreements (Phase 2 PR HERE)
+- ui-agreements ([PR](https://github.com/folio-org/ui-agreements/pull/1143))(Phase 2 PR HERE)
 Phase 2
-- ui-licenses
+- ui-licenses ([PR](https://github.com/folio-org/ui-licenses/pull/639))
 - ui-local-kb-admin
 - ui-erm-comparisons
 - ui-dashboard
