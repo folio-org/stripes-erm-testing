@@ -3,8 +3,7 @@ export {
   Harness,
   renderWithIntl,
   TestForm,
-  translationsProperties,
-  coreTranslationsProperties
+  translationsProperties
 } from './jest/helpers';
 
 // Interactors
