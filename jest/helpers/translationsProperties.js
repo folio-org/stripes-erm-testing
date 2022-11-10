@@ -1,43 +1,10 @@
 // Direct import is a bit gross, but so is exposing the translations file...
 // no super great way to do this so this will do for now.
 import ermTranslations from '@folio/stripes-erm-components/translations/stripes-erm-components/en.json'
+import coreTranslationsProperties from './coreTranslationsProperties';
 
 const translationsProperties = [
-  {
-    prefix: 'stripes-core',
-    translations: {
-      'label.missingRequiredField': 'Please fill this in to continue',
-      'button.save': 'Save',
-    }
-  },
-  {
-    prefix: 'stripes-components',
-    translations: {
-      'saveAndClose': 'Save and close',
-      'cancel': 'Cancel',
-      'paneMenuActionsToggleLabel': 'Actions',
-      'collapseAll': 'Collapse all',
-      'button.edit': 'Edit',
-      'noValue.noValueSet': 'No value set',
-      'tableEmpty': 'The list contains no items',
-      'metaSection.recordCreated': 'Record created: {date} {time}',
-      'metaSection.recordCreatedNoData': 'Record created: Unknown',
-      'metaSection.recordLastUpdated': 'Record last updated: {date} {time}',
-      'metaSection.recordLastUpdatedNoData': 'Record last updated: Unknown',
-    },
-  },
-  {
-    prefix: 'stripes-smart-components',
-    translations: {
-      'permissionError': 'Sorry - your permissions do not allow access to this page.',
-      'searchAndFilter': 'Search and filter',
-      'hideSearchPane': 'Hide search pane',
-      'search': 'Search',
-      'resetAll': 'Reset all',
-      'searchResultsCountHeader': '"{count, number} {count, plural, one {record found} other {records found}}"',
-      'new': 'New'
-    },
-  },
+  ...coreTranslationsProperties,
   {
     prefix: 'stripes-erm-components',
     translations: ermTranslations
