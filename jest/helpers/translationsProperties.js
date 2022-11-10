@@ -4,6 +4,9 @@ const translationsProperties = [
     translations: {
       'label.missingRequiredField': 'Please fill this in to continue',
       'button.save': 'Save',
+      'button.edit': "Edit",
+      'button.delete': "Delete",
+      'button.cancel': "Cancel",
     }
   },
   {
