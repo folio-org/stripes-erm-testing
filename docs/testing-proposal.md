@@ -84,13 +84,13 @@ The PR for ui-agreements named above takes that module through Phase 1. The effo
 All modules except stripes-erm-components must be completed (Either phase 1 OR 2) before erm-components can have the test stuff removed on master.
 
 Phase 1
-- ui-agreements ([PR](https://github.com/folio-org/ui-agreements/pull/1143))(Phase 2 PR HERE)
+- ui-agreements ([PR](https://github.com/folio-org/ui-agreements/pull/1143)) ([PR 2](https://github.com/folio-org/ui-agreements/pull/1144)) ([PR 3](https://github.com/folio-org/ui-agreements/pull/1146)) ([Phase 2 PR](https://github.com/folio-org/ui-agreements/pull/1147))
 
 Phase 2
-- ui-licenses ([PR](https://github.com/folio-org/ui-licenses/pull/639))
-- ui-local-kb-admin
-- ui-erm-comparisons
-- ui-dashboard
-- ui-plugin-find-agreement
-- ui-plugin-find-license
-- ui-plugin-find-eresource
+- ui-licenses ([PR](https://github.com/folio-org/ui-licenses/pull/639)) ([PR 2](https://github.com/folio-org/ui-licenses/pull/641)) ([PR 3](https://github.com/folio-org/ui-licenses/pull/642))
+- ui-local-kb-admin ([PR](https://github.com/folio-org/ui-local-kb-admin/pull/287))
+- ui-erm-comparisons ([PR](https://github.com/folio-org/ui-erm-comparisons/pull/175))
+- ui-dashboard ([PR](https://github.com/folio-org/ui-dashboard/pull/198))
+- ui-plugin-find-agreement ([PR](https://github.com/folio-org/ui-plugin-find-agreement/pull/187))
+- ui-plugin-find-license ([PR](https://github.com/folio-org/ui-plugin-find-license/pull/173))
+- ui-plugin-find-eresource ([PR](https://github.com/folio-org/ui-plugin-find-eresource/pull/89))
