@@ -7,11 +7,7 @@ export {
 } from './jest/helpers';
 
 // Interactors
-export {
-  HeadlineInteractor,
-  IconButtonInteractor,
-  DatepickerInteractor
-} from './interactors';
+export * from './interactors';
 
 // Mocks
 export * from './jest/mocks';
