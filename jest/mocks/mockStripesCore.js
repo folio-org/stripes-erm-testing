@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
+import { useCallout } from '../helpers/MockCalloutContext';
 
 const STRIPES = {
   actionNames: [],
@@ -80,14 +81,18 @@ const withStripes = (Component, options) => ({ stripes, ...rest }) => {
   return <Component {...rest} stripes={fakeStripes} />;
 };
 
+const mockKy = () => ({ json: () => Promise.resolve(true) });
+
 const mockStripesCore = {
   stripesConnect,
   useStripes: jest.fn(() => STRIPES),
   useOkapiKy: jest.fn().mockReturnValue({
-    delete: () => Promise.resolve(),
-    post: () => Promise.resolve(),
-    put: () => Promise.resolve()
+    delete: mockKy,
+    post: mockKy,
+    put: mockKy,
+    get: mockKy,
   }),
+  useCallout,
   withStripes,
   IfPermission: ({ children }) => {
     return typeof children === 'function' ?

@@ -27,19 +27,20 @@ export default function Harness({
   }
 
   return (
-    <CalloutHarness>
-      <QueryClientProvider client={queryClient}>
-        <IntlProvider
-          key="en"
-          locale="en"
-          messages={allTranslations}
-          onError={() => {}}
-          timeZone="UTC"
-        >
+    <QueryClientProvider client={queryClient}>
+      <IntlProvider
+        key="en"
+        locale="en"
+        messages={allTranslations}
+        onError={() => {}}
+        timeZone="UTC"
+      >
+        <CalloutHarness>
           {children}
-        </IntlProvider>
-      </QueryClientProvider>
-    </CalloutHarness>
+        </CalloutHarness>
+        <div id='OverlayContainer'/> {/* This is the div which the all overlays will render inside */}
+      </IntlProvider>
+    </QueryClientProvider>
   );
 }
 
