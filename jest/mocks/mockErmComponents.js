@@ -11,6 +11,7 @@ const mockErmComponents = {
     results: [],
     total: 0
   }),
+  useChunkedCQLFetch: jest.fn().mockReturnValue({ items: [], isLoading: false, itemQueries: [] }),
   useFileHandlers: jest.fn(() => ({
     handleDownloadFile: jest.fn(),
     handleUploadFile: jest.fn()
@@ -35,7 +36,6 @@ const mockErmComponents = {
   OrganizationsFieldArray: () => <div>OrganizationsFieldArray</div>,
   SerialCoverage: () => <div>SerialCoverage</div>,
   ViewOrganizationCard: () => <div>ViewOrganizationCard</div>,
-
 };
 
 export default mockErmComponents;
