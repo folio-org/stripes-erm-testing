@@ -16,6 +16,7 @@
     "lint": "eslint lib test",
     "test:cypress": "cypress run",
     "test:cypress:snapshot": "cypress run --config-file cypress-snapshot.config.js",
+    "test:cypress:snapshot2": "cypress run --config-file cypress-snapshot2.config.js",
     "test:cypress:local": "cypress run --config-file cypress-local.config.js",
     "test:cypress:vagrant": "cypress run --config-file cypress-vagrant.config.js"
   },

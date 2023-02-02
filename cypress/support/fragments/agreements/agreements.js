@@ -9,7 +9,6 @@ import {
 } from '@folio/stripes-testing';
 
 import NewAgreement from './newAgreement';
-import AgreementDetails from './agreementsDetails';
 
 const section = Section({ id: 'pane-agreement-list' });
 const newButton = Button('New');
@@ -30,11 +29,6 @@ export default {
     NewAgreement.fill(specialAgreement);
     NewAgreement.save();
     waitLoading();
-  },
-
-  selectRecord: (agreementTitle) => {
-    cy.do(section.find(MultiColumnListCell(agreementTitle)).click());
-    AgreementDetails.waitLoading();
   },
 
   agreementNotVisible: (agreementTitle) => cy.expect(section.find(MultiColumnListCell(agreementTitle)).absent())
