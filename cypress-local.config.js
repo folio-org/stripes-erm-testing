@@ -12,7 +12,6 @@ module.exports = defineConfig({
     OKAPI_TENANT: 'test1',
     login_username: 'admin', // Not diku, but that's the name chosen in stripes-testing -.-
     login_password: 'adminpass',
-    is_kiwi_release: false,
     downloadTimeout: 1000,
     allure: 'true',
     grepFilterSpecs: true,

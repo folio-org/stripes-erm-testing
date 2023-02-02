@@ -11,7 +11,6 @@ module.exports = defineConfig({
     OKAPI_TENANT: 'diku',
     login_username: 'diku_admin',
     login_password: 'admin',
-    is_kiwi_release: false,
     downloadTimeout: 1000,
     allure: 'true',
     grepFilterSpecs: true,

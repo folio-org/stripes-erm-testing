@@ -2,21 +2,17 @@ import { setInteractorTimeout } from '@interactors/globals';
 
 // adding of methods do and expect
 import '@interactors/with-cypress';
-
-import './stripes';
-
-import './api';
-
-import './login';
-import './users';
 import 'cypress-file-upload';
-import './commands';
 
 setInteractorTimeout(100_000);
+require('./api'); // I have NO idea why but these need to be require not import
+require('./stripes');
+require('./users');
+require('./login');
 
+require('cypress-downloadfile/lib/downloadFileCommand');
 require('cypress-xpath');
 require('cypress-grep')();
-require('@shelex/cypress-allure-plugin');
 
 // try to fix the issue with cached location in cypress
 Cypress.on('window:before:load', window => {
