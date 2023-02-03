@@ -2,6 +2,7 @@
 
 ## 1.1.0 In progress
   * ERM-2463 Added interactor for FormattedDateTime
+  * Added KintHarness and ModuleHeirachyProvider, to provide some extra solidity and ability to test using `useNamespace` and kintIntl within kint-components
 
 ## 1.0.0 2022-11-11
   * Added mock files
