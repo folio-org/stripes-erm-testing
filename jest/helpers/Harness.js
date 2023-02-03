@@ -7,9 +7,20 @@ import prefixKeys from './prefixKeys';
 import mockOffsetSize from './mockOffsetSize';
 
 import CalloutHarness from './CalloutHarness';
+import ModuleHierarchyProvider from './ModuleHeirachyProvider';
+
+const KintIntlHarness = ({ children, intlKey, moduleName }) => {
+  const { useIntlKeyStore } = jest.requireActual('@k-int/stripes-kint-components');
+  const addKey = useIntlKeyStore(state => state.addKey);
+  addKey(intlKey, moduleName);
+
+  return children;
+};
 
 export default function Harness({
   children,
+  intlKey = 'ui-test-implementor',
+  moduleName = '@folio/test-implementor',
   translations: translationsConfig,
   shouldMockOffsetSize = true,
   width = 500,
@@ -35,10 +46,14 @@ export default function Harness({
         onError={() => {}}
         timeZone="UTC"
       >
-        <CalloutHarness>
-          {children}
-        </CalloutHarness>
-        <div id='OverlayContainer'/> {/* This is the div which the all overlays will render inside */}
+        <ModuleHierarchyProvider module={moduleName}>
+          <CalloutHarness>
+            <KintIntlHarness intlKey={intlKey} moduleName={moduleName}>
+              {children}
+            </KintIntlHarness>
+          </CalloutHarness>
+        </ModuleHierarchyProvider>
+        <div id="OverlayContainer" /> {/* This is the div which the all overlays will render inside */}
       </IntlProvider>
     </QueryClientProvider>
   );
@@ -46,6 +61,8 @@ export default function Harness({
 
 Harness.propTypes = {
   children: PropTypes.node,
+  intlKey: PropTypes.string,
+  moduleName: PropTypes.string,
   translations: PropTypes.arrayOf(
     PropTypes.shape({
       prefix: PropTypes.string,
