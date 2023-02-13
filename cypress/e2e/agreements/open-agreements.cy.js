@@ -1,4 +1,4 @@
-import agreements from '../../support/fragments/agreements/agreements';
+import { waitLoading } from '../../support/fragments/agreements/AppInteractor';
 
 describe('Opening agreements', () => {
   before(() => {
@@ -8,6 +8,6 @@ describe('Opening agreements', () => {
 
   it('visiting agreements renders the correct page', () => {
     cy.visit('/erm/agreements');
-    agreements.waitLoading();
+    waitLoading();
   });
 });

@@ -5,7 +5,7 @@ import {
 
 import DateTools from '../../support/utils/dateTools';
 
-import agreements from '../../support/fragments/agreements/agreements';
+import { createAgreement } from '../../support/fragments/agreements/AppInteractor';
 
 import generateItemBarcode from '../../support/utils/generateItemBarcode';
 
@@ -18,8 +18,9 @@ describe('Create agreements', () => {
   });
 
   it('should be possible by filling the "Create agreement" form and submitting it', function () {
-    cy.visit('/erm/agreements'); // The "new agreement" created by another team relies on the "New" button being present
-    agreements.create({
+    cy.visit('/erm/agreements');
+    // createAgreement is set in appInteractor and will bootstrap a basic agreement
+    createAgreement({
       name: agreementName,
       status: 'Active',
       startDate: DateTools.getCurrentDate()

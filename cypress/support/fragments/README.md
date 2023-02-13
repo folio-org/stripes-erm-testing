@@ -1,0 +1,2 @@
+# Fragments
+This directory expects a collection of directories, each named for the app in which the fragments will be used. Any jointly useful fragments can sit at this level, or under a `utils` directory if they become too numerous.
