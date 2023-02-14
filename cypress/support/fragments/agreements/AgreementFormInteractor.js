@@ -20,6 +20,10 @@ import { getRandomPostfix, normalize } from '../../utils/stringTools';
  * ie more than once, in various tests, then we should add an action here and import to ensure consistency.
  */
 export default class AgreementFormInteractor {
+  static fillName(name) {
+    cy.do(TextField('Name*').fillIn(name));
+  }
+
   // We default the fill to a very basic agreement
   static fill(fillAgreement = {
     name: `autotest_agreement_${getRandomPostfix()}`,
@@ -27,7 +31,7 @@ export default class AgreementFormInteractor {
     startDate: DateTools.getCurrentDate()
   }) {
     // Fill in field, then check it filled in as expected
-    cy.do(TextField('Name*').fillIn(fillAgreement.name));
+    this.fillName(fillAgreement.name);
     cy.expect(TextField('Name*').has({ value: fillAgreement.name }));
 
     cy.do(Select('Status*').choose(fillAgreement.status));

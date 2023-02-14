@@ -1,11 +1,12 @@
 import {
   Button,
+  HTML,
+  including,
   MultiColumnListCell,
   MultiColumnListRow,
-  Section,
   or,
-  including,
-  HTML
+  SearchField,
+  Section,
 } from '@folio/stripes-testing';
 
 /* We can import other interactors here and expose their functionality
@@ -16,9 +17,12 @@ import {
  */
 import AgreementFormInteractor from './AgreementFormInteractor';
 
+// Do we want to make this an interactor class like the others?
 // The main interactor for the agreements 3 pane main landing page
 const section = Section({ id: 'pane-agreement-list' });
+
 const newButton = Button('New');
+
 const waitLoading = () => {
   cy.expect(or(
     section.find(MultiColumnListRow()).exists(),
@@ -26,6 +30,10 @@ const waitLoading = () => {
   ));
   cy.expect(newButton.exists());
 };
+
+const searchField = SearchField({ id: 'input-agreement-search' });
+const searchButton = Button('Search');
+
 
 const createAgreement = (agreement) => {
   cy.do(newButton.click());
@@ -35,10 +43,23 @@ const createAgreement = (agreement) => {
   waitLoading();
 };
 
-const agreementNotVisible = (agreementTitle) => cy.expect(section.find(MultiColumnListCell(agreementTitle)).absent());
+const searchAgreement = (agreementName) => {
+  cy.do([
+    searchField.fillIn(agreementName),
+    searchButton.click()
+  ]);
+};
+
+const agreementNotVisible = (agreementTitle) => {
+  cy.expect(or(
+    section.find(MultiColumnListCell(agreementTitle)).absent(),
+    section.find(HTML(including('No results found. Please check your filters.'))).exists()
+  ));
+};
 
 export {
-  waitLoading,
+  agreementNotVisible,
   createAgreement,
-  agreementNotVisible
+  searchAgreement,
+  waitLoading,
 };
