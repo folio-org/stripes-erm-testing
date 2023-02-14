@@ -8,6 +8,7 @@ import generateItemBarcode from '../../support/utils/generateItemBarcode';
 
 describe('Agreement lifecycle', () => {
   const agreementName = 'Test: ' + generateItemBarcode();
+  const agreementName2 = 'lifecycle test: ' + generateItemBarcode();
 
   before(() => {
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
@@ -31,19 +32,19 @@ describe('Agreement lifecycle', () => {
     AgreementViewInteractor.edit();
 
     AgreementFormInteractor.waitLoading();
-    AgreementFormInteractor.fillName('lifecycle test');
+    AgreementFormInteractor.fillName(agreementName2);
     AgreementFormInteractor.save();
 
-    AgreementViewInteractor.paneExists('lifecycle test');
+    AgreementViewInteractor.paneExists(agreementName2);
   });
 
   it('should be possible to delete the agreement', () => {
-    AgreementViewInteractor.paneExists('lifecycle test');
+    AgreementViewInteractor.paneExists(agreementName2);
     AgreementViewInteractor.delete();
-    AgreementViewInteractor.paneDoesNotExist('lifecycle test');
+    AgreementViewInteractor.paneDoesNotExist(agreementName2);
 
     // Check it also no longer shows in the MCL
-    AppInteractor.searchAgreement('lifecycle test');
-    AppInteractor.agreementNotVisible('lifecycle test');
+    AppInteractor.searchAgreement(agreementName2);
+    AppInteractor.agreementNotVisible(agreementName2);
   });
 });
