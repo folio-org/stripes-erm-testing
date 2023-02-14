@@ -8,11 +8,7 @@ import {
 } from '@folio/stripes-testing';
 
 
-/* The interactor for the Agreement View pane
- * This CAN also be used for unit tests if we so wish.
- *
- * Not entirely sure why we would need this to be a class not just a collection of
- * exported methods/fields like in AppInteractor.
+/* The cypressinteractor for the Agreement View pane
  *
  * If we find ourselves doing a certain action on Agreement View a lot,
  * ie more than once, in various tests, then we should add an action here and import to ensure consistency.

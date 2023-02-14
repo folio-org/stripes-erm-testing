@@ -1,4 +1,5 @@
-// This is NOT default for ERM, so we create our own version with default turned off
+// This is NOT default for ERM, so we turn this off for all erm requests.
+// We could create an equivalent okapiKiwtRequest or such with defaults for KIWT modules, but this is so far unnecessary
 const DEFAULT_SEARCH_PARAMS = {
   limit: 1000,
   query: 'cql.allRecords=1',

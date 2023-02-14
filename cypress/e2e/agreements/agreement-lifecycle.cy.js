@@ -1,6 +1,6 @@
 import DateTools from '../../support/utils/dateTools';
 
-import { agreementNotVisible, createAgreement, searchAgreement } from '../../support/fragments/agreements/AppInteractor';
+import AppInteractor from '../../support/fragments/agreements/AppInteractor';
 import AgreementFormInteractor from '../../support/fragments/agreements/AgreementFormInteractor';
 import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
 
@@ -17,7 +17,7 @@ describe('Agreement lifecycle', () => {
   it('should be possible to fill in the "Create agreement" form and submit it', () => {
     cy.visit('/erm/agreements');
     // createAgreement is set in appInteractor and will bootstrap a basic agreement
-    createAgreement({
+    AppInteractor.createAgreement({
       name: agreementName,
       status: 'Active',
       startDate: DateTools.getCurrentDate()
@@ -43,7 +43,7 @@ describe('Agreement lifecycle', () => {
     AgreementViewInteractor.paneDoesNotExist('lifecycle test');
 
     // Check it also no longer shows in the MCL
-    searchAgreement('lifecycle test');
-    agreementNotVisible('lifecycle test');
+    AppInteractor.searchAgreement('lifecycle test');
+    AppInteractor.agreementNotVisible('lifecycle test');
   });
 });

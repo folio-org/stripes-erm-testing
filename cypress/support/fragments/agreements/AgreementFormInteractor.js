@@ -10,11 +10,6 @@ import DateTools from '../../utils/dateTools';
 import { getRandomPostfix, normalize } from '../../utils/stringTools';
 
 /* The interactor for the create/edit page form
- * This CAN also be used for unit tests if we so wish.
- *
- *
- * Not entirely sure why we would need this to be a class not just a collection of
- * exported methods/fields like in AppInteractor.
  *
  * If we find ourselves doing a certain action on AgreementForm a lot,
  * ie more than once, in various tests, then we should add an action here and import to ensure consistency.

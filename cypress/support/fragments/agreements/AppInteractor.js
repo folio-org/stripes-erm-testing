@@ -17,49 +17,40 @@ import {
  */
 import AgreementFormInteractor from './AgreementFormInteractor';
 
-// Do we want to make this an interactor class like the others?
+// Making Appinteractor a class so it is consistent and clear where each action is coming from
 // The main interactor for the agreements 3 pane main landing page
-const section = Section({ id: 'pane-agreement-list' });
+export default class AppInteractor {
+  static section = Section({ id: 'pane-agreement-list' });
 
-const newButton = Button('New');
+  static newButton = Button('New');
 
-const waitLoading = () => {
-  cy.expect(or(
-    section.find(MultiColumnListRow()).exists(),
-    section.find(HTML(including('No results found. Please check your filters.'))).exists()
-  ));
-  cy.expect(newButton.exists());
-};
+  static waitLoading = () => {
+    cy.expect(or(
+      this.section.find(MultiColumnListRow()).exists(),
+      this.section.find(HTML(including('No results found. Please check your filters.'))).exists()
+    ));
+    cy.expect(this.newButton.exists());
+  };
 
-const searchField = SearchField({ id: 'input-agreement-search' });
-const searchButton = Button('Search');
+  static createAgreement = (agreement) => {
+    cy.do(this.newButton.click());
+    AgreementFormInteractor.waitLoading();
+    AgreementFormInteractor.fill(agreement);
+    AgreementFormInteractor.save();
+    this.waitLoading();
+  };
 
+  static searchAgreement = (agreementName) => {
+    cy.do([
+      SearchField({ id: 'input-agreement-search' }).fillIn(agreementName),
+      Button('Search').click()
+    ]);
+  };
 
-const createAgreement = (agreement) => {
-  cy.do(newButton.click());
-  AgreementFormInteractor.waitLoading();
-  AgreementFormInteractor.fill(agreement);
-  AgreementFormInteractor.save();
-  waitLoading();
-};
-
-const searchAgreement = (agreementName) => {
-  cy.do([
-    searchField.fillIn(agreementName),
-    searchButton.click()
-  ]);
-};
-
-const agreementNotVisible = (agreementTitle) => {
-  cy.expect(or(
-    section.find(MultiColumnListCell(agreementTitle)).absent(),
-    section.find(HTML(including('No results found. Please check your filters.'))).exists()
-  ));
-};
-
-export {
-  agreementNotVisible,
-  createAgreement,
-  searchAgreement,
-  waitLoading,
-};
+  static agreementNotVisible = (agreementTitle) => {
+    cy.expect(or(
+      this.section.find(MultiColumnListCell(agreementTitle)).absent(),
+      this.section.find(HTML(including('No results found. Please check your filters.'))).exists()
+    ));
+  };
+}
