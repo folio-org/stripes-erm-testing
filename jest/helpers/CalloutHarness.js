@@ -32,7 +32,7 @@ const CalloutHarness = ({ children }) => {
     </>
   );
 };
- 
+
 CalloutHarness.propTypes = {
   children: PropTypes.node,
 };

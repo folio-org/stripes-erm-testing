@@ -13,7 +13,7 @@
     "node": ">=10.0.0"
   },
   "scripts": {
-    "lint": "eslint lib test",
+    "lint": "eslint .",
     "test:cypress": "cypress run",
     "test:cypress:snapshot": "cypress run --config-file cypress-snapshot.config.js",
     "test:cypress:snapshot2": "cypress run --config-file cypress-snapshot2.config.js",
