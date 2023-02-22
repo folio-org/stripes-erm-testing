@@ -13,3 +13,4 @@ cypress/screenshots
 allure-results
 
 videos
+cypress-dev.config.js
