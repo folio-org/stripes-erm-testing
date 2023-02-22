@@ -1,13 +1,14 @@
-import { TextArea,
-  Select,
+import {
   Button,
-  FieldSet,
-  FieldInFieldset,
-  TextField,
-  Checkbox,
   Callout,
-  calloutTypes } from '../../../interactors';
-
+  Checkbox,
+  FieldInFieldset,
+  FieldSet,
+  Select,
+  TextArea,
+  TextField,
+  calloutTypes
+} from '@folio/stripes-testing';
 
 const deleteButton = Button({ ariaLabel: 'remove fields for ' });
 

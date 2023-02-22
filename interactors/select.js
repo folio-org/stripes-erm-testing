@@ -2,6 +2,8 @@
 import { Select } from '@folio/stripes-testing';
 /* Select blur and chooseAndBlur does not work in stripes interactor */
 
+// TODO not sure if the await is necessary here, since lint complains
+// eslint-disable-next-line no-return-await
 const blur = async (intr) => await intr.perform((el) => el.querySelector('select').blur());
 
 export default Select.extend('selectNew')

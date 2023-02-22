@@ -6,10 +6,10 @@ export default Bigtest.createInteractor('formatted-date-time')
     id: (el) => el.id,
     date: (el) => {
       const nbsp = String.fromCharCode(160);
-      return el.textContent.split(nbsp)[0]
+      return el.textContent.split(nbsp)[0];
     },
     time: (el) => {
       const nbsp = String.fromCharCode(160);
-      return el.textContent.split(nbsp)[1]
+      return el.textContent.split(nbsp)[1];
     },
   });
