@@ -18,7 +18,8 @@
     "test:cypress:snapshot": "cypress run --config-file cypress-snapshot.config.js",
     "test:cypress:snapshot2": "cypress run --config-file cypress-snapshot2.config.js",
     "test:cypress:local": "cypress run --config-file cypress-local.config.js",
-    "test:cypress:vagrant": "cypress run --config-file cypress-vagrant.config.js"
+    "test:cypress:vagrant": "cypress run --config-file cypress-vagrant.config.js",
+    "test:cypress:dev": "cypress run --config-file cypress-dev.config.js"
   },
   "dependencies": {
     "@folio/stripes-testing": "^4.3.1",
