@@ -10,7 +10,7 @@ import {
   TextField
 } from '@folio/stripes-testing';
 
-import { DatepickerInteractor as Datepicker } from '../../../interactors';
+import { DatepickerInteractor as Datepicker, HeadlineInteractor as Headline } from '../../../interactors';
 
 import DateTools from '../../support/utils/dateTools';
 import { normalize } from '../../support/utils/stringTools';
@@ -31,8 +31,7 @@ describe('License lifecycle', () => {
     startDate: DateTools.getCurrentDate(),
     type: 'Local'
   };
-  console.log('startDate %o', license.startDate);
-  console.log('formatted date %o', DateTools.getDateNoZeros(license.startDate));
+
   before(() => {
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
     cy.getAdminToken();
@@ -45,9 +44,6 @@ describe('License lifecycle', () => {
   });
 
   it('should be possible to fill in the "Create license" form and submit it', () => {
-    // cy.visit('/licenses');
-    // cy.get('[id=app-list-item-clickable-licenses-module]').click({ force: true });
-    // AppInteractor.waitLoading();
     cy.do([
       Dropdown('Actions').open(),
       DropdownMenu().find(Button('New')).click()
@@ -66,18 +62,30 @@ describe('License lifecycle', () => {
     // cy.do(Datepicker({ id: 'edit-license-start-date' }).fillIn(license.startDate));
     // cy.expect(Datepicker({ id: 'edit-license-start-date' }).has({ inputValue: license.startDate }));
 
-    // cy.do(TextField({ id: 'edit-license-name' }).fillIn(licenseName));
+    // cy.do(TextField({ id: 'edit-license-name' }).fillIn(license.name));
     // cy.expect(TextField({ id: 'edit-license-name' }).has({ value: license.name }));
 
     // cy.do(Button('Save & close').click());
   });
 
+  const createdDate = DateTools.getFormattedDateWithTime();
+  const updatedDate = createdDate;
+  console.log('creatdDate %o', createdDate);
+
   it('should be possible to view the license with correct details', () => {
-    LicenseViewInteractor.paneExists(licenseName);
-    cy.get('[id=pane-view-license]').within(() => {
+    LicenseViewInteractor.paneExists(license.name);
+    cy.get('[id=pane-view-license]').click().within(() => {
       cy.expect(KeyValue('Type').has({ value: license.type }));
       cy.expect(KeyValue('Status').has({ value: license.status }));
       cy.expect(KeyValue('Start date').has({ value: DateTools.getDateNoZeros(license.startDate) }));
+      cy.expect(Headline(license.name).exists());
+    });
+  });
+
+  it('should be possible to open and view licenseInfoRecordMetaContent', () => {
+    cy.get('[id=licenseInfoRecordMeta]').click().within(() => {
+      cy.contains('Record created: ' + createdDate);
+      cy.contains('Record last updated: ' + updatedDate);
     });
   });
 
@@ -93,10 +101,14 @@ describe('License lifecycle', () => {
   //   LicenseViewInteractor.paneExists(licenseName2);
   // });
 
-  //  it('should be possible to delete the license', () => {
-  //    LicenseViewInteractor.paneExists(licenseName);
-  // cy.get('[id=pane-view-license]').click();
-  //    cy.get('[id=view-license-action]').click();
+  // it('should be possible to delete the license', () => {
+  //   LicenseViewInteractor.paneExists(licenseName);
+  // cy.get('[id=view-license-action]').click({ force: true }).within(() => {
+  // cy.do([
+  //   Dropdown('Actions').open(),
+  //   DropdownMenu().find(Button('Delete')).click()
+  // ]);
+  // });
   //    cy.get('[id=view-license-action]').within(() => {
   //      cy.do([
   //        Dropdown('Actions').open(),
@@ -116,5 +128,5 @@ describe('License lifecycle', () => {
   // Check it also no longer shows in the MCL
   // AppInteractor.searchLicense(licenseName2);
   // AppInteractor.licenseNotVisible(licenseName2);
-  //  });
+  // });
 });
