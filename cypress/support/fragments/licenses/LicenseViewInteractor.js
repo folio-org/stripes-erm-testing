@@ -1,11 +1,8 @@
 import {
   Button,
-  Dropdown,
-  DropdownMenu,
   including,
   Modal,
-  Pane,
-  or
+  Pane
 } from '@folio/stripes-testing';
 
 
@@ -15,24 +12,12 @@ import {
  * ie more than once, in various tests, then we should add an action here and import to ensure consistency.
  */
 export default class LicenseViewInteractor {
-  static chooseAction(actionName) {
-    /* 'choose' command does not work properly in cypress,
-     * it tries to look for the dropdown after choosing option,
-     * which is normally no longer being rendered.
-     * The following is a more manual workaround.
-     */
-    cy.do([
-      Dropdown('Actions').open(),
-      DropdownMenu().find(Button(actionName)).click()
-    ]);
+  static edit(licenseName) {
+    cy.do(Pane(including(licenseName)).clickAction('Edit'));
   }
 
-  static edit() {
-    this.chooseAction('Edit');
-  }
-
-  static delete() {
-    this.chooseAction('Delete');
+  static delete(licenseName) {
+    cy.do(Pane(including(licenseName)).clickAction('Delete'));
     cy.expect(Modal('Delete license').exists());
     cy.do(Button('Delete').click());
   }

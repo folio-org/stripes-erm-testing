@@ -1,12 +1,11 @@
 import {
   Button,
-  Dropdown,
-  DropdownMenu,
   HTML,
   including,
   MultiColumnListCell,
   MultiColumnListRow,
   or,
+  Pane,
   SearchField,
   Section,
 } from '@folio/stripes-testing';
@@ -34,21 +33,12 @@ export default class AppInteractor {
     cy.expect(this.actionButton.exists());
   };
 
-  static chooseAction(actionName) {
-    /* 'choose' command does not work properly in cypress,
-     * it tries to look for the dropdown after choosing option,
-     * which is normally no longer being rendered.
-     * The following is a more manual workaround.
-     */
-    cy.do([
-      Dropdown('Actions').open(),
-      DropdownMenu().find(Button(actionName)).click()
-    ]);
-  }
-
   static createLicense = (license) => {
-    console.log('app interactor license %o', license);
-    cy.do(this.chooseAction('New'));
+    // EXAMPLE scoped interactor fetch
+    /*
+    cy.do(Pane(including('Licenses')).find(Dropdown('Actions')).choose('New', true));
+    */
+    cy.do(Pane(including('Licenses')).clickAction('New'));
     LicenseFormInteractor.waitLoading();
     LicenseFormInteractor.fill(license);
     LicenseFormInteractor.save();

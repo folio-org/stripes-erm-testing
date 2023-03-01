@@ -1,3 +1,4 @@
+import { NavList } from '@folio/stripes-testing';
 import AppInteractor from '../../support/fragments/licenses/AppInteractor';
 
 describe('Opening licenses', () => {
@@ -10,6 +11,7 @@ describe('Opening licenses', () => {
   it('locate and select license app in navbar', () => {
     // eslint-disable-next-line cypress/no-force
     cy.get('[id=app-list-item-clickable-licenses-module]').click({ force: true });
+    // cy.do(NavList({ visible: false }).navTo('Licenses'));
     AppInteractor.waitLoading();
   });
 });
