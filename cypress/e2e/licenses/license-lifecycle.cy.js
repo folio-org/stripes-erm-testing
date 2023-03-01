@@ -2,7 +2,7 @@ import {
   KeyValue,
 } from '@folio/stripes-testing';
 
-import { HeadlineInteractor as Headline } from '../../../interactors';
+import { AppListInteractor as AppList, HeadlineInteractor as Headline } from '../../../interactors';
 
 import DateTools from '../../support/utils/dateTools';
 
@@ -30,8 +30,7 @@ describe('License lifecycle', () => {
 
   describe('open licenses app', () => {
     it('should locate and select license app in navbar', () => {
-      // eslint-disable-next-line cypress/no-force
-      cy.get('[id=app-list-item-clickable-licenses-module]').click({ force: true });
+      cy.do(AppList().navTo('Licenses'));
       AppInteractor.waitLoading();
     });
   });
@@ -60,7 +59,7 @@ describe('License lifecycle', () => {
       });
     });
 
-    // this has to be 'function ()' and NOT '() =>' because otherwise the alias can't be accessed with this.*
+    // it has to be 'function ()' and NOT '() =>' because otherwise the alias can't be accessed with this.*
     it('should be possible to open and view licenseInfoRecordMetaContent', function () {
       cy.get('[id=licenseInfoRecordMeta]').click().within(() => {
         cy.contains('Record created: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
