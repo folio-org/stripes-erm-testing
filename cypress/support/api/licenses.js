@@ -19,7 +19,7 @@ Cypress.Commands.add('getLicense', (id, searchParams) => {
       isDefaultSearchParamsRequired: false,
     })
     .then(({ body }) => {
-      Cypress.env('licenses', body);
+      Cypress.env('license', body);
       return body;
     });
 });
