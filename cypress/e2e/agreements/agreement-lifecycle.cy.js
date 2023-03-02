@@ -29,7 +29,7 @@ describe('Agreement lifecycle', () => {
 
   it('should be possible to edit the agreement', () => {
     AgreementViewInteractor.paneExists(agreementName);
-    AgreementViewInteractor.edit();
+    AgreementViewInteractor.edit(agreementName);
 
     AgreementFormInteractor.waitLoading();
     AgreementFormInteractor.fillName(agreementName2);
@@ -40,7 +40,7 @@ describe('Agreement lifecycle', () => {
 
   it('should be possible to delete the agreement', () => {
     AgreementViewInteractor.paneExists(agreementName2);
-    AgreementViewInteractor.delete();
+    AgreementViewInteractor.delete(agreementName2);
     AgreementViewInteractor.paneDoesNotExist(agreementName2);
 
     // Check it also no longer shows in the MCL

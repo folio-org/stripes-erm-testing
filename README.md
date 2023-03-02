@@ -35,3 +35,6 @@ If similar set up/clean up commands are required in a number of tests, a helper 
 These tests are full integration tests, which mean that they will create actual objects through api calls on that running system. This means that running tests multiple times can cause a build up of items in the system, and not being careful about unique naming or alternatively cleaning up after a test has finished could lead to unique name constraint errors on the second run of tests.
 
 For example, if a test is written for Agreements which creates an agreement called "Test" and then does not subsequently delete that test, then at the end of the test run, an Agreement called "Test" will remain in the system. If the tests were then run again they would fail, as a new agreement with the name "Test" would be unable to be created.
+
+#### Testing permissions
+Generally the frontend should not run with `--hasAllPerms` parameter, but especially when testing permissions it's crucial not to use that option.

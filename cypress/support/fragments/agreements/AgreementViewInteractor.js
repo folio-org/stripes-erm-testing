@@ -1,7 +1,5 @@
 import {
   Button,
-  Dropdown,
-  DropdownMenu,
   including,
   Modal,
   Pane,
@@ -14,24 +12,19 @@ import {
  * ie more than once, in various tests, then we should add an action here and import to ensure consistency.
  */
 export default class AgreementViewInteractor {
-  static chooseAction(actionName) {
-    /* 'choose' command does not work properly in cypress,
-     * it tries to look for the dropdown after choosing option,
-     * which is normally no longer being rendered.
-     * The following is a more manual workaround.
-     */
+  static edit(agreementName) {
+    // EXAMPLE Dropdown 'Actions' - fails with more than one 'Actions' Dropdown
+    /*
     cy.do([
       Dropdown('Actions').open(),
-      DropdownMenu().find(Button(actionName)).click()
+      DropdownMenu().find(Button('Edit')).click()
     ]);
+    */
+    cy.do(Pane(including(agreementName)).clickAction('Edit'));
   }
 
-  static edit() {
-    this.chooseAction('Edit');
-  }
-
-  static delete() {
-    this.chooseAction('Delete');
+  static delete(agreementName) {
+    cy.do(Pane(including(agreementName)).clickAction('Delete'));
     cy.expect(Modal('Delete agreement').exists());
     cy.do(Button('Delete').click());
   }

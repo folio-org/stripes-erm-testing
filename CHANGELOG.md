@@ -14,6 +14,8 @@
   * Select interactor to fix broken default behaviour of chooseAndBlur
   * TestForm now accepts function children like Form
   * Removed all Bigtest dependencies and references in github actions yml
+  * ERM-2645 initial e2e cypress test for licenses
+  * add interactor for AppList
 
 ## 1.0.0 2022-11-11
   * Added mock files
