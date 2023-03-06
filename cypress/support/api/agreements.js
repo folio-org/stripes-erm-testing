@@ -22,7 +22,7 @@ Cypress.Commands.add('getRefdata', (searchParams) => {
   });
 });
 
-Cypress.Commands.add('getRefdataValues', (searchParams, desc) => {
+Cypress.Commands.add('getRefdataValues', (desc, searchParams) => {
   const descPath = desc.split('.').join('/');
   cy.okapiRequest({
     path: `erm/refdata/${descPath}`,
