@@ -26,7 +26,7 @@ Cypress.Commands.add('getLicense', (id, searchParams) => {
 
 Cypress.Commands.add('getRefdata', (searchParams) => {
   cy.okapiRequest({
-    path: 'erm/refdata',
+    path: 'licenses/refdata',
     searchParams,
     isDefaultSearchParamsRequired: false,
   }).then((response) => {
@@ -35,10 +35,10 @@ Cypress.Commands.add('getRefdata', (searchParams) => {
   });
 });
 
-Cypress.Commands.add('getRefdataValues', (searchParams, desc) => {
+Cypress.Commands.add('getRefdataValues', (desc, searchParams) => {
   const descPath = desc.split('.').join('/');
   cy.okapiRequest({
-    path: `erm/refdata/${descPath}`,
+    path: `licenses/refdata/${descPath}`,
     searchParams,
     isDefaultSearchParamsRequired: false,
   }).then((response) => {
