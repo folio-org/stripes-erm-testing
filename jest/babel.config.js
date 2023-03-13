@@ -7,7 +7,7 @@ module.exports = {
     '@babel/plugin-proposal-class-properties',
     [
       '@babel/plugin-proposal-decorators',
-      { decoratorsBeforeExport: false },
+      { decoratorsBeforeExport: true },
     ],
     '@babel/plugin-transform-runtime',
   ],
