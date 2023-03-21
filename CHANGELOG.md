@@ -1,6 +1,7 @@
 # Change history for stripes-erm-testing
 
 ## 1.2.0 In progress
+  * Added stripes-kint-components to dev deps
 
 ## 1.1.0 2023-02-22
   * Initial e2e cypress tests
