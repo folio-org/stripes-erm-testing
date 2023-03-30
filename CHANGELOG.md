@@ -1,5 +1,8 @@
 # Change history for stripes-erm-testing
 
+## 1.1.1 2023-03-30
+  * Updated test harness to include a mock for getBoundingClientRect in order to allow autosize components to render.
+
 ## 1.1.0 2023-02-22
   * Initial e2e cypress tests
   * Tweaks to test harness, to include ModuleHeirachyProvider and KintIntlHarness, to better handle some stripes/kint-components functionality within jest tests
