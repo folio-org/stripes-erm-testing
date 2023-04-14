@@ -2,6 +2,7 @@
 
 ## 1.2.0 In progress
   * Added stripes-kint-components to dev deps
+  * Tweaked Harnesses so that we can export *just* the base harness without the kint intl stuff. This means that kint-components can use the base harness as well.
 
 ## 1.1.0 2023-02-22
   * Initial e2e cypress tests
