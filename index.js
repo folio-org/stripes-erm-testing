@@ -1,6 +1,9 @@
 // Helpers
 export {
   Harness,
+  BaseHarness,
+  KintIntlHarness,
+  CalloutHarness,
   renderWithIntl,
   TestForm,
   translationsProperties
