@@ -1,0 +1,35 @@
+{
+	"header": {
+		"dataSchema": {
+			"name": "mod-agreements-package",
+			"version": 1
+		}
+	},
+	"records": [{
+		"source": "Folio Testing",
+		"reference": "simple_package_simple_title_no_start_coverage",
+		"name": "simple_package_simple_title_no_start_coverage Test Package",
+		"packageProvider": {
+			"name": "DIKU"
+		},
+		"contentItems": [{
+			"depth": "fulltext",
+			"coverage": [{
+
+			}],
+			"platformTitleInstance": {
+				"platform": "Academy of Management",
+				"platform_url": "http://aom.org/",
+				"url": "http://aom.org/amle/",
+				"titleInstance": {
+					"name": "Academy of Management Learning & Education",
+					"identifiers": [{
+						"value": "1944-9585",
+						"namespace": "eissn"
+					}],
+					"type": "Serial"
+				}
+			}
+		}]
+	}]
+}
