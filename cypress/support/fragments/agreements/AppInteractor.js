@@ -5,9 +5,12 @@ import {
   MultiColumnListCell,
   MultiColumnListRow,
   or,
+  Pane,
   SearchField,
   Section,
 } from '@folio/stripes-testing';
+
+import { AppListInteractor as AppList } from '../../../../interactors';
 
 /* We can import other interactors here and expose their functionality
  * to allow for a singular "AppInteractor" import in our tests.
@@ -52,5 +55,32 @@ export default class AppInteractor {
       this.section.find(MultiColumnListCell(agreementTitle)).absent(),
       this.section.find(HTML(including('No results found. Please check your filters.'))).exists()
     ));
+  };
+
+  static openAgreementsApp = () => {
+    cy.do(AppList().navTo('Agreements')).then(() => {
+      cy.url().should('include', '/erm/agreements');
+      cy.expect(Pane(including('Agreements')).exists());
+      cy.expect(Button('Agreements search').exists());
+      cy.expect(Button('Local KB search').exists());
+    });
+  };
+
+  static openLocalKbAdminApp = () => {
+    cy.do(AppList().navTo('Local KB admin')).then(() => {
+      cy.url().should('include', '/local-kb-admin');
+      cy.expect(Pane(including('Local KB admin')).exists());
+    });
+  };
+
+  static filterPanePresent = (paneId) => {
+    cy.expect(Pane({ id: paneId }).is({ visible: true, index: 0 }));
+  };
+
+  static searchPackage = (packageName) => {
+    cy.do([
+      SearchField({ id: 'input-package-search' }).fillIn(packageName),
+      Button('Search').click()
+    ]);
   };
 }

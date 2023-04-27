@@ -1,0 +1,89 @@
+{
+  "header": {
+    "dataSchema": {
+      "name": "mod-agreements-package",
+      "version": 1
+    }
+  },
+  "records": [
+    {
+      "source": "Folio Testing",
+      "reference": "simple_package_for_updates",
+      "name": "Simple package to test updating package metadata",
+      "packageProvider": {
+        "name": "DIKU"
+      },
+      "description": "This is a Simple package to test updating package metdata",
+      "lifecycleStatus": "Current",
+      "availabilityScope": "Local",
+      "availibilityConstraints": [
+        {
+          "body": {
+            "label": "availibility constraint 1"
+          }
+        },
+        {
+          "body": {
+            "label": "availibility constraint 2"
+          }
+        }
+      ],
+      "packageDescriptionUrls": [
+        {
+          "url": "http://example.org/1"
+        },
+        {
+          "url": "http://example.org/2"
+        }
+      ],
+      "alternateResourceNames": [
+        {
+          "name": "Alternative Name 1"
+        },
+        {
+          "name": "Alternative Name 2"
+        }
+      ],
+      "contentTypes": [
+        {
+          "contentType": "Book"
+        },
+        {
+          "contentType": "Journal"
+        }
+      ],
+      "sourceDataCreated": "2021-01-01T00:00:00Z",
+      "sourceDataUpdated": "2021-01-02T00:00:00Z",
+      "identifiers": [
+        {
+          "value": "ID1",
+          "namespace": "isil"
+        },
+        {
+          "value": "ID2",
+          "namespace": "ezb"
+        }
+      ],
+      "contentItems": [
+        {
+          "depth": "fulltext",
+          "platformTitleInstance": {
+            "platform": "Academy of Management",
+            "platform_url": "http://aom.org/",
+            "url": "http://aom.org/amle/",
+            "titleInstance": {
+              "name": "Academy of Management Learning & Education",
+              "identifiers": [
+                {
+                  "value": "1944-9585",
+                  "namespace": "eissn"
+                }
+              ],
+              "type": "Serial"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
