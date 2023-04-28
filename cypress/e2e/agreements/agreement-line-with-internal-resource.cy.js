@@ -1,20 +1,25 @@
 import {
+  Accordion,
   Button,
-  Dropdown,
   DropdownMenu,
   including,
   KeyValue,
+  MultiColumnList,
+  MultiColumnListCell,
   Pane,
-  SearchField,
 } from '@folio/stripes-testing';
 
+import { getRandomPostfix } from '../../support/utils/stringTools';
 import { AppListItem, HeadlineInteractor as Headline } from '../../../interactors';
 import AppInteractor from '../../support/fragments/agreements/AppInteractor';
-import { getRandomPostfix } from '../../support/utils/stringTools';
+import AgreementFormInteractor from '../../support/fragments/agreements/AgreementFormInteractor';
+import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
+import AgreementLineViewInteractor from '../../support/fragments/agreements/AgreementLineViewInteractor';
 
-// file - package
+// file - package - agreement
 const fileName = 'simple_package_for_updates_1.json';
 const packageName = 'Simple package to test updating package metadata';
+const agreementName = `Agreement line internal resource test ${getRandomPostfix()}`;
 
 // users
 const editUser = {
@@ -33,10 +38,17 @@ const viewPermissions = ['ui-agreements.agreements.view', 'ui-agreements.resourc
 
 // buttons
 const actionsButton = Pane(including('Local KB admin')).find(Button('Actions'));
+const addPackageToBasketButton = Button('Add package to basket');
+const chooseFileButton = Button('or choose file');
+const createNewAgreementButton = Button('Create new agreement');
 const jsonButton = DropdownMenu().find(Button('New JSON import job'));
 const kbartButton = DropdownMenu().find(Button('New KBART import job'));
-const chooseFileButton = Button('or choose file');
+const localKbSearchButton = Button('Local KB search');
+const packagesButton = Button('Packages');
+const platformsButton = Button('Platforms');
 const saveAndCloseButton = Button('Save & close');
+const titlesButton = Button('Titles');
+const openBasketButton = Button({ id: 'open-basket-button' });
 
 describe('Agreement line with internal resource', () => {
   before('create test users', () => {
@@ -49,40 +61,82 @@ describe('Agreement line with internal resource', () => {
 
   // });
 
-  after('delete test users', () => {
+  after('delete test users, agreement line and agreement', () => {
     console.log('delete users');
     cy.getAdminToken();
     cy.deleteUserViaApi(editUser.userId);
     cy.deleteUserViaApi(viewUser.userId);
+
+    console.log('delete agreement line and agreement');
+    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+    cy.visit('/erm/agreements');
+    AppInteractor.searchAgreement(agreementName);
+    AgreementViewInteractor.paneExists(agreementName);
+    cy.expect(Accordion('Agreement lines').exists());
+    cy.do(Accordion('Agreement lines').clickHeader());
+    cy.expect(MultiColumnList('agreement-lines').exists());
+    cy.do(MultiColumnList('agreement-lines').click({ row: 0, columnIndex: 1 }));
+    AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
+    AgreementLineViewInteractor.delete('pane-view-agreement-line');
+    AgreementViewInteractor.paneExists(agreementName);
+    AgreementViewInteractor.delete(agreementName);
+    cy.logout();
   });
 
   function testLocalKbSearch() {
     it('should select "Local KB search"', () => {
       // kb-tab-filter-pane
-      cy.do(Button('Local KB search').click()).then(() => {
+      cy.do(localKbSearchButton.click()).then(() => {
         AppInteractor.filterPanePresent('kb-tab-filter-pane');
-        cy.expect(Button('Packages').exists());
-        cy.expect(Button('Titles').exists());
-        cy.expect(Button('Platforms').absent());
+        cy.expect(packagesButton.exists());
+        cy.expect(titlesButton.exists());
+        cy.expect(platformsButton.absent());
       });
     });
   }
 
   function testSelectPackagesAndSearch(mode) {
     it('should select "Packages" tab, search and find package', () => {
-      cy.do(Button('Packages').click()).then(() => {
+      cy.do(packagesButton.click()).then(() => {
         AppInteractor.searchPackage(packageName);
         cy.expect(Pane(including(packageName)).is({ visible: true, index: 2 }));
         if (mode === 'edit') {
-          cy.expect(Button('Add package to basket').exists());
+          cy.expect(addPackageToBasketButton.exists());
         } else if (mode === 'view') {
-          cy.expect(Button('Add package to basket').absent());
+          cy.expect(addPackageToBasketButton.absent());
         }
       });
     });
   }
 
   describe('user actions', () => {
+    // describe('admin user actions', () => {
+    //   it('should delete agreement line and agreement', () => {
+    //     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+    //     cy.getAdminToken();
+    //     cy.visit('/erm/agreements');
+    //     // cy.expect(agreementLinesButton.exists());
+    //     // cy.do(agreementLinesButton.click());
+    //     // cy.expect(selectAgreementButton.exists());
+    //     // cy.do(selectAgreementButton.click());
+    //     AppInteractor.searchAgreement(agreementName);
+    //     AgreementViewInteractor.paneExists(agreementName);
+
+    //     cy.expect(Accordion('Agreement lines').exists());
+    //     cy.do(Accordion('Agreement lines').clickHeader());
+    //     cy.expect(MultiColumnList('agreement-lines').exists());
+    //     cy.do(MultiColumnList('agreement-lines').click({ row: 0, columnIndex: 1 }));
+    //     AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
+    //     // eslint-disable-next-line cypress/no-unnecessary-waiting
+    //     cy.wait(10000);
+    //     AgreementLineViewInteractor.delete('pane-view-agreement-line');
+    //     AgreementViewInteractor.paneExists(agreementName);
+    //     // eslint-disable-next-line cypress/no-unnecessary-waiting
+    //     cy.wait(20000);
+    //     AgreementViewInteractor.delete(agreementName);
+    //   });
+    // });
+
     describe('editUser actions', () => {
       before(() => {
         cy.login(editUser.username, editUser.password);
@@ -176,29 +230,15 @@ describe('Agreement line with internal resource', () => {
       //   // let jobEnded = false;
       //   // cy.expect(Pane(including(`Import package from ${fileName}`)).exists());
       //   // cy.expect(KeyValue('Running status').has({ value: 'Queued' }));
-      //   // while (!jobEnded) {
-      //   //   console.log('while loop', jobEnded);
-      //   //   // cy.contains(KeyValue('Running status').has({ value: 'Ended' }))
-      //   //   // eslint-disable-next-line no-loop-func
-      //   //   cy.contains('Queued').then(($text) => {
-      //   //     console.log('queued', $text);
-      //   //     if ($text.length > 0) {
-      //   //       jobEnded = true;
-      //   //     }
-      //   //   });
-      //   //   cy.reload();
-      //   //   // eslint-disable-next-line cypress/no-unnecessary-waiting
-      //   //   cy.wait(50000);
-      //   // }
       //   // cy.expect(KeyValue('Running status').has({ value: 'Ended' }));
       // });
 
-      it('should wait until package is submitted', () => {
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(60000);
-        cy.reload();
-        cy.expect(KeyValue('Running status').has({ value: 'Ended' }));
-      });
+      // it('should wait until package is submitted', () => {
+      //   // eslint-disable-next-line cypress/no-unnecessary-waiting
+      //   cy.wait(60000);
+      //   cy.reload();
+      //   cy.expect(KeyValue('Running status').has({ value: 'Ended' }));
+      // });
 
       it('should open the agreements app', () => {
         AppInteractor.openAgreementsApp();
@@ -208,18 +248,45 @@ describe('Agreement line with internal resource', () => {
       testSelectPackagesAndSearch('edit');
 
       it('should add package to basket', () => {
-        Button('Add package to basket').click().then(() => {
-          cy.expect(Button('View 1 item').exists());
+        addPackageToBasketButton.click().then(() => {
+          cy.expect(openBasketButton.exists());
         });
       });
 
       it('should view basket', () => {
-        Button('View 1 item').click().then(() => {
+        cy.do(openBasketButton.click().then(() => {
           cy.expect(Pane(including('ERM basket')).exists());
-          // TODO: package displayed in the MCL,
-          // the single MCL row is selected with the checkbox
-          cy.expect(Button('Create new agreement').exists());
-        });
+          cy.expect(MultiColumnList().exists());
+          console.log('MultiColumnListCell(packageName) %o', MultiColumnListCell(packageName));
+          cy.expect(MultiColumnListCell(packageName).is({ selected: false }));
+          cy.expect(createNewAgreementButton.exists());
+        }));
+      });
+
+      it('should create new agreement', () => {
+        cy.do(createNewAgreementButton.click().then(() => {
+          cy.expect(AgreementFormInteractor.paneExists());
+          // TODO In the Agreement line accordion there is one agreement line card for packageName
+        }));
+        AgreementFormInteractor.fill();
+        AgreementFormInteractor.fillName(agreementName);
+        cy.expect(saveAndCloseButton.exists());
+        cy.expect(saveAndCloseButton.is({ visible: true }));
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(5000);
+        cy.do(saveAndCloseButton.click());
+      });
+
+      it('should display agreement with agreement line and resource', () => {
+        AgreementViewInteractor.paneExists(agreementName);
+        cy.expect(Accordion('Agreement lines').exists());
+        cy.do(Accordion('Agreement lines').clickHeader());
+        cy.expect(MultiColumnList('agreement-lines').exists());
+        cy.expect(MultiColumnList('eresources-covered').exists());
+        // TODO
+        // cy.expect(MultiColumnListCell(packageName).is({ content: true }));
+        // eslint-disable-next-line cypress/no-unnecessary-waiting
+        cy.wait(5000);
       });
     });
 
@@ -244,5 +311,33 @@ describe('Agreement line with internal resource', () => {
       testLocalKbSearch();
       testSelectPackagesAndSearch('view');
     });
+
+    // describe('admin user actions', () => {
+    //   it('should delete agreement line and agreement', () => {
+    //     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+    //     cy.getAdminToken();
+    //     cy.visit('/erm/agreements');
+    //     // cy.expect(agreementLinesButton.exists());
+    //     // cy.do(agreementLinesButton.click());
+    //     // cy.expect(selectAgreementButton.exists());
+    //     // cy.do(selectAgreementButton.click());
+    //     AppInteractor.searchAgreement(agreementName);
+    //     AgreementViewInteractor.paneExists(agreementName);
+
+    //     cy.expect(Accordion('Agreement lines').exists());
+    //     cy.do(Accordion('Agreement lines').clickHeader());
+    //     cy.expect(MultiColumnList('agreement-lines').exists());
+    //     cy.do(MultiColumnList('agreement-lines').click({ row: 0, columnIndex: 1 }));
+    //     AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
+    //     // eslint-disable-next-line cypress/no-unnecessary-waiting
+    //     cy.wait(10000);
+    //     AgreementLineViewInteractor.delete('pane-view-agreement-line');
+    //     AgreementViewInteractor.paneExists(agreementName);
+    //     // eslint-disable-next-line cypress/no-unnecessary-waiting
+    //     cy.wait(20000);
+    //     AgreementViewInteractor.delete(agreementName);
+    //   });
+    // });
   });
 });
+

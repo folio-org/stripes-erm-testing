@@ -1,5 +1,7 @@
 import {
   Button,
+  including,
+  Pane,
   Select,
   TextField
 } from '@folio/stripes-testing';
@@ -15,6 +17,10 @@ import { getRandomPostfix, normalize } from '../../utils/stringTools';
  * ie more than once, in various tests, then we should add an action here and import to ensure consistency.
  */
 export default class AgreementFormInteractor {
+  static paneExists() {
+    cy.expect(Pane(including('New agreement')).is({ visible: true }));
+  }
+
   static fillName(name) {
     cy.do(TextField('Name*').fillIn(name));
   }

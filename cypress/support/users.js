@@ -11,6 +11,30 @@ Cypress.Commands.add('createUser', (userLastName, patronGroup, email) => {
   ]);
 });
 
+Cypress.Commands.add('createUserViaApi', (user) => {
+  cy.okapiRequest({
+    method: 'POST',
+    path: 'users',
+    body: user,
+    isDefaultSearchParamsRequired: false
+  }).then(response => ({
+    id: response.body.id,
+    username: response.body.username,
+    barcode: response.body.barcode,
+    lastName: response.body.personal.lastName,
+    firstName: response.body.personal.firstName,
+    middleName: response.body.personal.middleName
+  }));
+});
+
+Cypress.Commands.add('deleteUserViaApi', (userId) => {
+  cy.okapiRequest({
+    method: 'DELETE',
+    path: `bl-users/by-id/${userId}`,
+    isDefaultSearchParamsRequired: false
+  });
+});
+
 Cypress.Commands.add('createUserWithPwAndPerms', (userProperties, permissions, patronGroupName) => {
   cy.getAdminToken();
 
@@ -43,28 +67,4 @@ Cypress.Commands.add('createUserWithPwAndPerms', (userProperties, permissions, p
         });
     });
   return cy.get('@userProperties');
-});
-
-Cypress.Commands.add('deleteUserViaApi', (userId) => {
-  cy.okapiRequest({
-    method: 'DELETE',
-    path: `bl-users/by-id/${userId}`,
-    isDefaultSearchParamsRequired: false
-  });
-});
-
-Cypress.Commands.add('createUserViaApi', (user) => {
-  cy.okapiRequest({
-    method: 'POST',
-    path: 'users',
-    body: user,
-    isDefaultSearchParamsRequired: false
-  }).then(response => ({
-    id: response.body.id,
-    username: response.body.username,
-    barcode: response.body.barcode,
-    lastName: response.body.personal.lastName,
-    firstName: response.body.personal.firstName,
-    middleName: response.body.personal.middleName
-  }));
 });
