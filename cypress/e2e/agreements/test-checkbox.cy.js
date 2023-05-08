@@ -20,6 +20,7 @@ describe('Agreement line with internal resource', () => {
     // Check if the checkbox is checked, and uncheck it if it is
     // cy.get(hideKbCheckbox).then(($checkbox) => {
     //   if ($checkbox.prop('checked')) {
+    //   if ($checkbox.is({ checked: true })) {
     //     hideKbCheckbox.click();
     //   }
     // });
