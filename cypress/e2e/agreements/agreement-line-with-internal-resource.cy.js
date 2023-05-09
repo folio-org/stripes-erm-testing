@@ -110,33 +110,6 @@ describe('Agreement line with internal resource', () => {
   }
 
   describe('user actions', () => {
-    // describe('admin user actions', () => {
-    //   it('should delete agreement line and agreement', () => {
-    //     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-    //     cy.getAdminToken();
-    //     cy.visit('/erm/agreements');
-    //     // cy.expect(agreementLinesButton.exists());
-    //     // cy.do(agreementLinesButton.click());
-    //     // cy.expect(selectAgreementButton.exists());
-    //     // cy.do(selectAgreementButton.click());
-    //     AppInteractor.searchAgreement(agreementName);
-    //     AgreementViewInteractor.paneExists(agreementName);
-
-    //     cy.expect(Accordion('Agreement lines').exists());
-    //     cy.do(Accordion('Agreement lines').clickHeader());
-    //     cy.expect(MultiColumnList('agreement-lines').exists());
-    //     cy.do(MultiColumnList('agreement-lines').click({ row: 0, columnIndex: 1 }));
-    //     AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
-    //     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    //     cy.wait(10000);
-    //     AgreementLineViewInteractor.delete('pane-view-agreement-line');
-    //     AgreementViewInteractor.paneExists(agreementName);
-    //     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    //     cy.wait(20000);
-    //     AgreementViewInteractor.delete(agreementName);
-    //   });
-    // });
-
     describe('editUser actions', () => {
       before(() => {
         cy.login(editUser.username, editUser.password);
@@ -270,7 +243,6 @@ describe('Agreement line with internal resource', () => {
         }));
         AgreementFormInteractor.fill();
         AgreementFormInteractor.fillName(agreementName);
-        cy.expect(saveAndCloseButton.exists());
         cy.expect(saveAndCloseButton.is({ visible: true }));
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(5000);
@@ -311,33 +283,6 @@ describe('Agreement line with internal resource', () => {
       testLocalKbSearch();
       testSelectPackagesAndSearch('view');
     });
-
-    // describe('admin user actions', () => {
-    //   it('should delete agreement line and agreement', () => {
-    //     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-    //     cy.getAdminToken();
-    //     cy.visit('/erm/agreements');
-    //     // cy.expect(agreementLinesButton.exists());
-    //     // cy.do(agreementLinesButton.click());
-    //     // cy.expect(selectAgreementButton.exists());
-    //     // cy.do(selectAgreementButton.click());
-    //     AppInteractor.searchAgreement(agreementName);
-    //     AgreementViewInteractor.paneExists(agreementName);
-
-    //     cy.expect(Accordion('Agreement lines').exists());
-    //     cy.do(Accordion('Agreement lines').clickHeader());
-    //     cy.expect(MultiColumnList('agreement-lines').exists());
-    //     cy.do(MultiColumnList('agreement-lines').click({ row: 0, columnIndex: 1 }));
-    //     AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
-    //     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    //     cy.wait(10000);
-    //     AgreementLineViewInteractor.delete('pane-view-agreement-line');
-    //     AgreementViewInteractor.paneExists(agreementName);
-    //     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    //     cy.wait(20000);
-    //     AgreementViewInteractor.delete(agreementName);
-    //   });
-    // });
   });
 });
 

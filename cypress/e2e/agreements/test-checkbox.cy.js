@@ -21,9 +21,11 @@ describe('Agreement line with internal resource', () => {
     // Check if the checkbox is checked, and uncheck it if it is
     cy.get('input[type="checkbox"][name="hideEResourcesFunctionality"]').then(($checkbox) => {
       // console.log('$checkbox %o', $checkbox);
+      // console.log('$checkbox[0]:', $checkbox[0]);
       console.log('$checkbox:', $checkbox);
       console.log('checked:', $checkbox.prop('checked'));
       console.log('value:', $checkbox.attr('value'));
+      console.log('$checkbox.is(:checked)', $checkbox.is(':checked'));
       if ($checkbox.is(':checked')) {
         // if ($checkbox.prop('checked')) {
         isChecked = true;
