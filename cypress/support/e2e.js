@@ -3,6 +3,7 @@ import { setInteractorTimeout } from '@interactors/globals';
 // adding of methods do and expect
 import '@interactors/with-cypress';
 import 'cypress-file-upload';
+import 'cypress-wait-until';
 
 setInteractorTimeout(100_000);
 require('./api'); // I have NO idea why but these need to be require not import

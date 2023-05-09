@@ -1,6 +1,7 @@
 import {
   Accordion,
   Button,
+  Checkbox,
   DropdownMenu,
   including,
   KeyValue,
@@ -50,18 +51,31 @@ const saveAndCloseButton = Button('Save & close');
 const titlesButton = Button('Titles');
 const openBasketButton = Button({ id: 'open-basket-button' });
 
+// checkbox
+const hideKbCheckbox = Checkbox('Hide internal agreements knowledgebase'); // Checkbox({ id: 'hideEResourcesFunctionality' })
+let isChecked = false; // variable to store checkbox state
+
 describe('Agreement line with internal resource', () => {
-  before('create test users', () => {
+  before(() => {
     console.log('createUser');
     cy.createUserWithPwAndPerms(editUser, editPermissions);
     cy.createUserWithPwAndPerms(viewUser, viewPermissions);
+
+    console.log('do not hide internal agreements knowledgebase');
+    cy.getAdminToken();
+    cy.getAgreementsGeneralSettings().then((settings) => {
+      if (settings.hideEResourcesFunctionality === true) {
+        // remember value and set to false
+        isChecked = true;
+        cy.setAgreementsGeneralSettings({ hideEResourcesFunctionality: false });
+      }
+    });
+    // TODO: check if hideKbCheckbox is unchecked
+    // cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+    // cy.getAdminToken();
   });
 
-  // before('do not hide internal agreements knowledgebase', () => {
-
-  // });
-
-  after('delete test users, agreement line and agreement', () => {
+  after(() => {
     console.log('delete users');
     cy.getAdminToken();
     cy.deleteUserViaApi(editUser.userId);
@@ -81,6 +95,12 @@ describe('Agreement line with internal resource', () => {
     AgreementViewInteractor.paneExists(agreementName);
     AgreementViewInteractor.delete(agreementName);
     cy.logout();
+
+    console.log('set hideEResourcesFunctionality checkbox back to its original state');
+    if (isChecked === true) {
+      cy.setAgreementsGeneralSettings({ hideEResourcesFunctionality: true });
+      cy.getAgreementsGeneralSettings();
+    }
   });
 
   function testLocalKbSearch() {
@@ -114,48 +134,13 @@ describe('Agreement line with internal resource', () => {
       before(() => {
         cy.login(editUser.username, editUser.password);
         cy.getToken(editUser.username, editUser.password);
-        // cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-        // cy.getAdminToken();
       });
 
       after(() => {
         cy.logout();
       });
 
-      function reloadPaneUntilTextAppears(paneSelector, text) {
-        // cy.get(paneSelector).then(($pane) => {
-        // if (!$pane.text().includes(text)) {
-        // if (KeyValue('Running status').has({ value: 'Queued' })) {
-        // if (cy.contains('Some weird text').should('not.be.visible')) {
-        if (cy.get('#pane-view-job').should('not.have.text', 'Some weird text')) {
-          // console.log('pane.text %o', $pane.text);
-          cy.reload();
-          console.log('reload');
-          // eslint-disable-next-line cypress/no-unnecessary-waiting
-          cy.wait(5000); // Wait for 5 seconds before reloading again
-          console.log('reload again');
-          reloadPaneUntilTextAppears(paneSelector, text); // Recursively call the function until the text appears
-        }
-        // });
-      }
-
-      function reloadUntilTextAppears() {
-        // cy.get(Pane(including('Import package from'))).then(($pane) => {
-        //   console.log('pane: ', $pane);
-        // if (!$pane.text().includes(text)) {
-        cy.get(Pane(including('Import package from')));
-        console.log('reloadUntilTextAppears');
-        if (cy.expect(KeyValue('Running status').has({ value: 'Ended' }).absent())) {
-          cy.reload();
-          console.log('reload');
-          // eslint-disable-next-line cypress/no-unnecessary-waiting
-          cy.wait(10000); // Wait for 5 seconds before reloading again
-          reloadUntilTextAppears(); // Recursively call the function until the text appears
-        }
-        // });
-      }
-
-      it('should be possible to open the Local KB admin app', () => {
+      it('should open the Local KB admin app', () => {
         AppInteractor.openLocalKbAdminApp();
       });
 
@@ -188,30 +173,21 @@ describe('Agreement line with internal resource', () => {
         cy.expect(KeyValue('Job Type').has({ value: 'File import' }));
       });
 
-      // it('should reload the page until "Running status" is "Ended"', () => {
-      //   // const paneSelector = '#pane-view-job';
-      //   // cy.expect(paneSelector.exists());
-      //   // cy.expect(KeyValue('Running status').has({ value: 'Queued' }));
-      //   // reloadUntilTextAppears();
-      //   // cy.get(paneSelector).focus();
-      //   // reloadPaneUntilTextAppears(paneSelector, 'Ended');
-      //   // eslint-disable-next-line cypress/no-unnecessary-waiting
-      //   cy.wait(60000);
-      //   cy.reload();
-      //   cy.expect(KeyValue('Running status').has({ value: 'Ended' }));
-      //   // cy.contains('my text').should('be.visible'); // Confirm that the text is visible on the page
-      //   // let jobEnded = false;
-      //   // cy.expect(Pane(including(`Import package from ${fileName}`)).exists());
-      //   // cy.expect(KeyValue('Running status').has({ value: 'Queued' }));
-      //   // cy.expect(KeyValue('Running status').has({ value: 'Ended' }));
-      // });
-
-      // it('should wait until package is submitted', () => {
-      //   // eslint-disable-next-line cypress/no-unnecessary-waiting
-      //   cy.wait(60000);
-      //   cy.reload();
-      //   cy.expect(KeyValue('Running status').has({ value: 'Ended' }));
-      // });
+      it('should wait until package is submitted', () => {
+        cy.get(Pane(including(`Import package from ${fileName}`)));
+        // cy.waitUntil(() => cy.get(Pane(including(`Import package from ${fileName}`)))
+        //   // .then(cy.expect(KeyValue('Running status').has({ value: 'Ended' }))), { timeout: 60000, interval: 5000 });
+        //   .then(cy.contains('Ended').should('be.visible')), { timeout: 60000, interval: 5000 });
+        // cy.waitUntil(() => cy.get(Pane(including(`Import package from ${fileName}`)))
+        cy.waitUntil(() => cy.reload()
+          .then(() => {
+            // return cy.contains('Expected Content').should('be.visible');
+            console.log('reload');
+            // cy.reload().then(() => cy.expect(KeyValue('Running status').has({ value: 'Ended' })));
+            // cy.expect(KeyValue('Running status').has({ value: 'Ended' }));
+            cy.expect(KeyValue('Running status').has({ value: 'Ended' }));
+          }), { timeout: 60000, interval: 5000 });
+      });
 
       it('should open the agreements app', () => {
         AppInteractor.openAgreementsApp();
@@ -230,8 +206,11 @@ describe('Agreement line with internal resource', () => {
         cy.do(openBasketButton.click().then(() => {
           cy.expect(Pane(including('ERM basket')).exists());
           cy.expect(MultiColumnList().exists());
+          // TODO:
+          // package packageName displayed in the MCL,
+          // the single MCL row is selected with the checkbox
           console.log('MultiColumnListCell(packageName) %o', MultiColumnListCell(packageName));
-          cy.expect(MultiColumnListCell(packageName).is({ selected: false }));
+          cy.expect(MultiColumnListCell(packageName).is({ selected: false })); // TODO: this is not working
           cy.expect(createNewAgreementButton.exists());
         }));
       });
@@ -256,6 +235,7 @@ describe('Agreement line with internal resource', () => {
         cy.expect(MultiColumnList('agreement-lines').exists());
         cy.expect(MultiColumnList('eresources-covered').exists());
         // TODO
+        // There is one Agreement line with the packageName in the agreement-lines MCL
         // cy.expect(MultiColumnListCell(packageName).is({ content: true }));
         // eslint-disable-next-line cypress/no-unnecessary-waiting
         cy.wait(5000);
@@ -272,7 +252,7 @@ describe('Agreement line with internal resource', () => {
         cy.logout();
       });
 
-      it('should not be possible to open the Local KB admin app', () => {
+      it('should not open the Local KB admin app', () => {
         cy.expect(AppListItem('Local KB admin').absent());
       });
 
