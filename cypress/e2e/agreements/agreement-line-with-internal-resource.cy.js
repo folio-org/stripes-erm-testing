@@ -1,6 +1,7 @@
 import {
   Accordion,
   Button,
+  Callout,
   Checkbox,
   DropdownMenu,
   including,
@@ -19,8 +20,10 @@ import AgreementLineViewInteractor from '../../support/fragments/agreements/Agre
 
 // file - package - agreement
 const fileName = 'simple_package_for_updates_1.json';
+const calloutText = `JSON package import job created : Import package from ${fileName}`;
 const packageName = 'Simple package to test updating package metadata';
 const agreementName = `Agreement line internal resource test ${getRandomPostfix()}`;
+
 
 // users
 const editUser = {
@@ -56,7 +59,7 @@ const hideKbCheckbox = Checkbox('Hide internal agreements knowledgebase'); // Ch
 let isChecked = false; // variable to store checkbox state
 
 describe('Agreement line with internal resource', () => {
-  before(() => {
+  before('before hook', () => {
     console.log('createUser');
     cy.createUserWithPwAndPerms(editUser, editPermissions);
     cy.createUserWithPwAndPerms(viewUser, viewPermissions);
@@ -70,9 +73,14 @@ describe('Agreement line with internal resource', () => {
         cy.setAgreementsGeneralSettings({ hideEResourcesFunctionality: false });
       }
     });
-    // TODO: check if hideKbCheckbox is unchecked
-    // cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-    // cy.getAdminToken();
+
+    console.log('check if hideKbCheckbox is unchecked');
+    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+    cy.getAdminToken();
+    cy.visit('/settings/erm/general');
+    cy.expect(hideKbCheckbox.exists());
+    cy.expect(hideKbCheckbox.is({ checked: false }));
+    cy.logout();
   });
 
   after(() => {
@@ -99,13 +107,11 @@ describe('Agreement line with internal resource', () => {
     console.log('set hideEResourcesFunctionality checkbox back to its original state');
     if (isChecked === true) {
       cy.setAgreementsGeneralSettings({ hideEResourcesFunctionality: true });
-      cy.getAgreementsGeneralSettings();
     }
   });
 
   function testLocalKbSearch() {
     it('should select "Local KB search"', () => {
-      // kb-tab-filter-pane
       cy.do(localKbSearchButton.click()).then(() => {
         AppInteractor.filterPanePresent('kb-tab-filter-pane');
         cy.expect(packagesButton.exists());
@@ -166,7 +172,7 @@ describe('Agreement line with internal resource', () => {
 
       it('should click "Save & close" button to upload the file', () => {
         cy.do(saveAndCloseButton.click());
-        // TODO: 'should display a toast message'
+        cy.expect(Callout(calloutText).exists());
         cy.expect(Pane(including(`Import package from ${fileName}`)).exists());
         cy.expect(Headline(`Import package from ${fileName}`).exists());
         cy.expect(KeyValue('Running status').has({ value: 'Queued' }));
@@ -174,19 +180,12 @@ describe('Agreement line with internal resource', () => {
       });
 
       it('should wait until package is submitted', () => {
-        cy.get(Pane(including(`Import package from ${fileName}`)));
-        // cy.waitUntil(() => cy.get(Pane(including(`Import package from ${fileName}`)))
-        //   // .then(cy.expect(KeyValue('Running status').has({ value: 'Ended' }))), { timeout: 60000, interval: 5000 });
-        //   .then(cy.contains('Ended').should('be.visible')), { timeout: 60000, interval: 5000 });
-        // cy.waitUntil(() => cy.get(Pane(including(`Import package from ${fileName}`)))
-        cy.waitUntil(() => cy.reload()
-          .then(() => {
-            // return cy.contains('Expected Content').should('be.visible');
-            console.log('reload');
-            // cy.reload().then(() => cy.expect(KeyValue('Running status').has({ value: 'Ended' })));
-            // cy.expect(KeyValue('Running status').has({ value: 'Ended' }));
-            cy.expect(KeyValue('Running status').has({ value: 'Ended' }));
-          }), { timeout: 60000, interval: 5000 });
+        cy.waitUntil(() => {
+          cy.reload();
+          return cy.get('[data-test-job-status]').then($el => $el[0].innerText === 'Ended');
+        }, { timeout: 60000, interval: 5000 });
+
+        cy.expect(KeyValue('Running status').has({ value: 'Ended' }));
       });
 
       it('should open the agreements app', () => {
@@ -206,25 +205,21 @@ describe('Agreement line with internal resource', () => {
         cy.do(openBasketButton.click().then(() => {
           cy.expect(Pane(including('ERM basket')).exists());
           cy.expect(MultiColumnList().exists());
-          // TODO:
-          // package packageName displayed in the MCL,
-          // the single MCL row is selected with the checkbox
-          console.log('MultiColumnListCell(packageName) %o', MultiColumnListCell(packageName));
-          cy.expect(MultiColumnListCell(packageName).is({ selected: false })); // TODO: this is not working
+          cy.expect(MultiColumnListCell(packageName).exists());
+          cy.get('input[type="checkbox"]').eq(1).should('be.checked');
           cy.expect(createNewAgreementButton.exists());
         }));
       });
 
       it('should create new agreement', () => {
+        // TODO: refactor this test after ERM-2421, see Scenario 4
+        // https://issues.folio.org/browse/ERM-2421
         cy.do(createNewAgreementButton.click().then(() => {
           cy.expect(AgreementFormInteractor.paneExists());
-          // TODO In the Agreement line accordion there is one agreement line card for packageName
         }));
         AgreementFormInteractor.fill();
         AgreementFormInteractor.fillName(agreementName);
         cy.expect(saveAndCloseButton.is({ visible: true }));
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(5000);
         cy.do(saveAndCloseButton.click());
       });
 
@@ -234,11 +229,9 @@ describe('Agreement line with internal resource', () => {
         cy.do(Accordion('Agreement lines').clickHeader());
         cy.expect(MultiColumnList('agreement-lines').exists());
         cy.expect(MultiColumnList('eresources-covered').exists());
-        // TODO
-        // There is one Agreement line with the packageName in the agreement-lines MCL
-        // cy.expect(MultiColumnListCell(packageName).is({ content: true }));
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(5000);
+        cy.get('#agreement-lines')
+          .contains('div', packageName)
+          .should('have.text', packageName);
       });
     });
 
