@@ -1,8 +1,5 @@
 import {
-  Button,
   including,
-  MultiColumnList,
-  MultiColumnListCell,
   Pane,
 } from '@folio/stripes-testing';
 
@@ -14,6 +11,8 @@ import AgreementLineViewInteractor from '../../support/fragments/agreements/Agre
 import AgreementsSettingsInteractor from '../../support/fragments/agreements/AgreementsSettingsInteractor';
 
 import LocalKBAdminAppInteractor from '../../support/fragments/local-kb-admin/AppInteractor';
+import BasketInteractor from '../../support/fragments/agreements/BasketInteractor';
+import PackageViewInteractor from '../../support/fragments/agreements/PackageViewInteractor';
 
 // file - package - agreement
 const fileName = 'simple_package_for_updates_1.json';
@@ -34,16 +33,6 @@ const viewUser = {
 };
 
 const viewPermissions = ['ui-agreements.agreements.view', 'ui-agreements.resources.view'];
-
-// buttons
-// FIXME these should be split up between more interactors, such as BasketInterator, LocalKBAdminInteractor, AgreementViewInteractor
-const addPackageToBasketButton = Button('Add package to basket');
-const createNewAgreementButton = Button('Create new agreement');
-const localKbSearchButton = Button('Local KB search');
-const packagesButton = Button('Packages');
-const platformsButton = Button('Platforms');
-const titlesButton = Button('Titles');
-const openBasketButton = Button({ id: 'open-basket-button' });
 
 // checkbox
 let isChecked = false; // variable to store checkbox state
@@ -82,7 +71,7 @@ describe('Agreement line with internal resource', () => {
     cy.visit('/erm/agreements');
     AgreementAppInteractor.searchAgreement(agreementName);
     AgreementViewInteractor.paneExists(agreementName);
-    AgreementViewInteractor.oepnFirstAgreementLine();
+    AgreementViewInteractor.openFirstAgreementLine();
     AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
     AgreementLineViewInteractor.delete('pane-view-agreement-line');
     AgreementViewInteractor.paneExists(agreementName);
@@ -97,26 +86,24 @@ describe('Agreement line with internal resource', () => {
 
   function testLocalKbSearch() {
     it('should select "Local KB search"', () => {
-      cy.do(localKbSearchButton.click()).then(() => {
-        AgreementAppInteractor.filterPanePresent('kb-tab-filter-pane');
-        cy.expect(packagesButton.exists());
-        cy.expect(titlesButton.exists());
-        cy.expect(platformsButton.absent());
-      });
+      AgreementAppInteractor.openLocalKB();
+      AgreementAppInteractor.filterPanePresent('kb-tab-filter-pane');
+      cy.expect(AgreementAppInteractor.packagesButton.exists());
+      cy.expect(AgreementAppInteractor.titlesButton.exists());
+      cy.expect(AgreementAppInteractor.platformsButton.absent());
     });
   }
 
   function testSelectPackagesAndSearch(mode) {
     it('should select "Packages" tab, search and find package', () => {
-      cy.do(packagesButton.click()).then(() => {
-        AgreementAppInteractor.searchPackage(packageName);
-        cy.expect(Pane(including(packageName)).is({ visible: true, index: 2 }));
-        if (mode === 'edit') {
-          cy.expect(addPackageToBasketButton.exists());
-        } else if (mode === 'view') {
-          cy.expect(addPackageToBasketButton.absent());
-        }
-      });
+      cy.do(AgreementAppInteractor.packagesButton.click());
+      AgreementAppInteractor.searchPackage(packageName);
+      cy.expect(Pane(including(packageName)).is({ visible: true, index: 2 }));
+      if (mode === 'edit') {
+        cy.expect(PackageViewInteractor.addPackageToBasketButton.exists());
+      } else if (mode === 'view') {
+        cy.expect(PackageViewInteractor.addPackageToBasketButton.absent());
+      }
     });
   }
 
@@ -147,25 +134,21 @@ describe('Agreement line with internal resource', () => {
       testSelectPackagesAndSearch('edit');
 
       it('should add package to basket', () => {
-        addPackageToBasketButton.click().then(() => {
-          cy.expect(openBasketButton.exists());
-        });
+        PackageViewInteractor.addToBasket();
+        cy.expect(AgreementAppInteractor.openBasketButton.exists());
       });
 
       it('should view basket', () => {
-        cy.do(openBasketButton.click().then(() => {
-          cy.expect(Pane(including('ERM basket')).exists());
-          cy.expect(MultiColumnList().exists());
-          cy.expect(MultiColumnListCell(packageName).exists());
-          cy.get('input[type="checkbox"]').eq(1).should('be.checked');
-          cy.expect(createNewAgreementButton.exists());
-        }));
+        AgreementAppInteractor.openBasket();
+        BasketInteractor.waitLoading();
+        BasketInteractor.checkResourceIsInBasket(packageName);
+        BasketInteractor.ensureBasketResourceIsSelected();
       });
 
       it('should create new agreement', () => {
         // TODO: refactor this test after ERM-2421, see Scenario 4
         // https://issues.folio.org/browse/ERM-2421
-        AgreementAppInteractor.createAgreement({
+        BasketInteractor.createAgreement({
           name: agreementName,
         });
       });

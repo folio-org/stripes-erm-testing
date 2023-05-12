@@ -27,6 +27,13 @@ export default class AppInteractor {
 
   static newButton = Button('New');
 
+  static localKbSearchButton = Button('Local KB search');
+  static packagesButton = Button('Packages');
+  static platformsButton = Button('Platforms');
+  static titlesButton = Button('Titles');
+
+  static openBasketButton = Button({ id: 'open-basket-button' });
+
   static waitLoading = () => {
     cy.expect(or(
       this.section.find(MultiColumnListRow()).exists(),
@@ -34,6 +41,14 @@ export default class AppInteractor {
     ));
     cy.expect(this.newButton.exists());
   };
+
+  static openLocalKB = () => {
+    cy.do(this.localKbSearchButton.click());
+  }
+
+  static openBasket = () => {
+    cy.do(this.openBasketButton.click());
+  }
 
   static createAgreement = (agreement) => {
     cy.do(this.newButton.click());
