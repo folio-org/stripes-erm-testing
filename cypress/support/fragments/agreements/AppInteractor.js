@@ -65,6 +65,13 @@ export default class AppInteractor {
     ]);
   };
 
+  // Assumes we only match 1 package and it automatically opens
+  static searchForPackage = (packageName) => {
+    cy.do(this.packagesButton.click());
+    this.searchPackage(packageName);
+    cy.expect(Pane(including(packageName)).is({ visible: true, index: 2 }));
+  }
+
   static agreementNotVisible = (agreementTitle) => {
     cy.expect(or(
       this.section.find(MultiColumnListCell(agreementTitle)).absent(),

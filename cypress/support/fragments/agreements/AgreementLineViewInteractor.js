@@ -1,6 +1,5 @@
 import {
   Button,
-  including,
   Modal,
   Pane,
 } from '@folio/stripes-testing';

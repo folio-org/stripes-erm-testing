@@ -1,8 +1,3 @@
-import {
-  including,
-  Pane,
-} from '@folio/stripes-testing';
-
 import { getRandomPostfix } from '../../support/utils/stringTools';
 import { AppListItem } from '../../../interactors';
 import AgreementAppInteractor from '../../support/fragments/agreements/AppInteractor';
@@ -96,13 +91,11 @@ describe('Agreement line with internal resource', () => {
 
   function testSelectPackagesAndSearch(mode) {
     it('should select "Packages" tab, search and find package', () => {
-      cy.do(AgreementAppInteractor.packagesButton.click());
-      AgreementAppInteractor.searchPackage(packageName);
-      cy.expect(Pane(including(packageName)).is({ visible: true, index: 2 }));
+      AgreementAppInteractor.searchForPackage(packageName);
       if (mode === 'edit') {
-        cy.expect(PackageViewInteractor.addPackageToBasketButton.exists());
+        cy.expect(PackageViewInteractor.addToBasketButton.exists());
       } else if (mode === 'view') {
-        cy.expect(PackageViewInteractor.addPackageToBasketButton.absent());
+        cy.expect(PackageViewInteractor.addToBasketButton.absent());
       }
     });
   }

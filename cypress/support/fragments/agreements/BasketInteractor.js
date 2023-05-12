@@ -6,7 +6,6 @@ import {
   including,
 } from '@folio/stripes-testing';
 import AgreementFormInteractor from './AgreementFormInteractor';
-import { IconButtonInteractor as IconButton } from '../../../../interactors';
 
 
 /* The cypressinteractor for the Basket View pane
