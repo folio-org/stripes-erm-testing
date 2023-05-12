@@ -96,7 +96,9 @@ Cypress.Commands.add('updateUser', (userData) => {
   });
 });
 
-Cypress.Commands.add('createTempUser', (permissions = [], patronGroupName) => {
+// This is now mostly repeated code from support/users createUserWithPwAndPerms
+// If we end up needing it we can uncomment and see if we can rework to avoid duplication
+/* Cypress.Commands.add('createTempUser', (permissions = [], patronGroupName) => {
   const userProperties = {
     username: `cypressTestUser${getRandomPostfix()}`,
     password: `Password${getRandomPostfix()}`
@@ -144,7 +146,7 @@ Cypress.Commands.add('createTempUser', (permissions = [], patronGroupName) => {
         });
     });
   return cy.get('@userProperties');
-});
+}); */
 
 Cypress.Commands.add('getAddressTypesApi', (searchParams) => {
   cy.okapiRequest({

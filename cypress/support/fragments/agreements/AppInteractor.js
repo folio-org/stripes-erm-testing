@@ -66,13 +66,6 @@ export default class AppInteractor {
     });
   };
 
-  static openLocalKbAdminApp = () => {
-    cy.do(AppList().navTo('Local KB admin')).then(() => {
-      cy.url().should('include', '/local-kb-admin');
-      cy.expect(Pane(including('Local KB admin')).exists());
-    });
-  };
-
   static filterPanePresent = (paneId) => {
     cy.expect(Pane({ id: paneId }).is({ visible: true, index: 0 }));
   };
