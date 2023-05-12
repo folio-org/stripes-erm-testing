@@ -29,6 +29,18 @@ Cypress.Commands.add('getUserServicePoints', (userId) => {
     });
 });
 
+// Added extra step to ensure there's always at least 1 user group
+Cypress.Commands.add('ensureUserGroup', (patronGroupName = 'Group 1') => {
+  cy.okapiRequest({
+    method: 'POST',
+    path: 'groups',
+    body: {
+      desc: 'Patron group description',
+      group: patronGroupName,
+    }
+  });
+});
+
 Cypress.Commands.add('getUserGroups', (searchParams) => {
   cy
     .okapiRequest({
@@ -46,10 +58,16 @@ Cypress.Commands.add('getFirstUserGroupId', (searchParams, patronGroupName) => {
     path: 'groups',
     searchParams,
   }).then((response) => {
+    if (response.body.usergroups?.length < 1) {
+      cy.ensureUserGroup(patronGroupName);
+      return cy.getFirstUserGroupId(searchParams, patronGroupName);
+    }
+
     let userGroupIdx = 0;
     if (patronGroupName) {
       userGroupIdx = response.body.usergroups.findIndex(({ group }) => group === patronGroupName) || 0;
     }
+
     return response.body.usergroups[userGroupIdx].id;
   });
 });
