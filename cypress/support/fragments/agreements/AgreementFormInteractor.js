@@ -25,21 +25,21 @@ export default class AgreementFormInteractor {
     cy.do(TextField('Name*').fillIn(name));
   }
 
-  // We default the fill to a very basic agreement
-  static fill(fillAgreement = {
-    name: `autotest_agreement_${getRandomPostfix()}`,
-    status: 'Draft',
-    startDate: DateTools.getCurrentDate()
-  }) {
+  static fill(fillAgreement = {}) {
+    // Default the necessary options so they always exist, no matter if only a subset gets passed in;
+    const fillName = fillAgreement.name ?? `autotest_agreement_${getRandomPostfix()}`;
+    const fillStatus = fillAgreement.status ?? 'Draft';
+    const fillStartDate = fillAgreement.startDate ?? DateTools.getCurrentDate();
+
     // Fill in field, then check it filled in as expected
-    this.fillName(fillAgreement.name);
-    cy.expect(TextField('Name*').has({ value: fillAgreement.name }));
+    this.fillName(fillName);
+    cy.expect(TextField('Name*').has({ value: fillName }));
 
-    cy.do(Select('Status*').choose(fillAgreement.status));
-    cy.expect(Select('Status*').has({ value: normalize(fillAgreement.status) }));
+    cy.do(Select('Status*').choose(fillStatus));
+    cy.expect(Select('Status*').has({ value: normalize(fillStatus) }));
 
-    cy.do(Datepicker({ id: 'period-start-date-0' }).fillIn(fillAgreement.startDate));
-    cy.expect(Datepicker({ id: 'period-start-date-0' }).has({ inputValue: fillAgreement.startDate }));
+    cy.do(Datepicker({ id: 'period-start-date-0' }).fillIn(fillStartDate));
+    cy.expect(Datepicker({ id: 'period-start-date-0' }).has({ inputValue: fillStartDate }));
 
     /* If we need more fields in order to set up frequently tested agreement properties,
      * they can be added here. Otherwise we can treat this as "fill basic agreement" and

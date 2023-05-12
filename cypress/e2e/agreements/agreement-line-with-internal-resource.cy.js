@@ -1,5 +1,4 @@
 import {
-  Accordion,
   Button,
   including,
   MultiColumnList,
@@ -10,7 +9,6 @@ import {
 import { getRandomPostfix } from '../../support/utils/stringTools';
 import { AppListItem } from '../../../interactors';
 import AgreementAppInteractor from '../../support/fragments/agreements/AppInteractor';
-import AgreementFormInteractor from '../../support/fragments/agreements/AgreementFormInteractor';
 import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
 import AgreementLineViewInteractor from '../../support/fragments/agreements/AgreementLineViewInteractor';
 import AgreementsSettingsInteractor from '../../support/fragments/agreements/AgreementsSettingsInteractor';
@@ -44,7 +42,6 @@ const createNewAgreementButton = Button('Create new agreement');
 const localKbSearchButton = Button('Local KB search');
 const packagesButton = Button('Packages');
 const platformsButton = Button('Platforms');
-const saveAndCloseButton = Button('Save & close');
 const titlesButton = Button('Titles');
 const openBasketButton = Button({ id: 'open-basket-button' });
 
@@ -85,10 +82,7 @@ describe('Agreement line with internal resource', () => {
     cy.visit('/erm/agreements');
     AgreementAppInteractor.searchAgreement(agreementName);
     AgreementViewInteractor.paneExists(agreementName);
-    cy.expect(Accordion('Agreement lines').exists());
-    cy.do(Accordion('Agreement lines').clickHeader());
-    cy.expect(MultiColumnList('agreement-lines').exists());
-    cy.do(MultiColumnList('agreement-lines').click({ row: 0, columnIndex: 1 }));
+    AgreementViewInteractor.oepnFirstAgreementLine();
     AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
     AgreementLineViewInteractor.delete('pane-view-agreement-line');
     AgreementViewInteractor.paneExists(agreementName);
@@ -171,21 +165,14 @@ describe('Agreement line with internal resource', () => {
       it('should create new agreement', () => {
         // TODO: refactor this test after ERM-2421, see Scenario 4
         // https://issues.folio.org/browse/ERM-2421
-        cy.do(createNewAgreementButton.click().then(() => {
-          cy.expect(AgreementFormInteractor.paneExists());
-        }));
-        AgreementFormInteractor.fill();
-        AgreementFormInteractor.fillName(agreementName);
-        cy.expect(saveAndCloseButton.is({ visible: true }));
-        cy.do(saveAndCloseButton.click());
+        AgreementAppInteractor.createAgreement({
+          name: agreementName,
+        });
       });
 
       it('should display agreement with agreement line and resource', () => {
         AgreementViewInteractor.paneExists(agreementName);
-        cy.expect(Accordion('Agreement lines').exists());
-        cy.do(Accordion('Agreement lines').clickHeader());
-        cy.expect(MultiColumnList('agreement-lines').exists());
-        cy.expect(MultiColumnList('eresources-covered').exists());
+        AgreementViewInteractor.openAgreementLinesAccordion();
         cy.get('#agreement-lines')
           .contains('div', packageName)
           .should('have.text', packageName);
