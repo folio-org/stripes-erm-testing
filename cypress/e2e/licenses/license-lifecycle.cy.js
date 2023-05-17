@@ -9,12 +9,15 @@ import DateTools from '../../support/utils/dateTools';
 import AppInteractor from '../../support/fragments/licenses/AppInteractor';
 import LicenseFormInteractor from '../../support/fragments/licenses/LicenseFormInteractor';
 import LicenseViewInteractor from '../../support/fragments/licenses/LicenseViewInteractor';
+import LicensesSettingsInteractor from '../../support/fragments/licenses/LicensesSettingsInteractor';
 
 import generateItemBarcode from '../../support/utils/generateItemBarcode';
 
 describe('License lifecycle', () => {
   const licenseName = 'Test: ' + generateItemBarcode();
   const licenseName2 = 'lifecycle test: ' + generateItemBarcode();
+  const refdataTypeDesc = 'License.Type';
+  const refdataStatusDesc = 'License.Status';
 
   const license = {
     name: licenseName,
@@ -23,9 +26,31 @@ describe('License lifecycle', () => {
     type: 'Local'
   };
 
+  let typeCreated = false;
+
   before(() => {
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
     cy.getAdminToken();
+    cy.getLicensesRefdataValues(refdataTypeDesc).then((refdata) => {
+      if (refdata.every(obj => obj.label !== license.type)) {
+        LicensesSettingsInteractor.setLicensesRefdataValue(refdataTypeDesc, license.type);
+        typeCreated = true;
+      }
+    });
+    cy.getLicensesRefdataValues(refdataStatusDesc).then((refdata) => {
+      if (refdata.every(obj => obj.label !== license.status)) {
+        cy.getFirstLicensesRefdataLabel(refdataStatusDesc)
+          .then((refdataLabel) => {
+            license.status = refdataLabel;
+          });
+      }
+    });
+  });
+
+  after(() => {
+    if (typeCreated === true) {
+      LicensesSettingsInteractor.deleteLicensesRefdataValue(refdataTypeDesc, license.type);
+    }
   });
 
   describe('open licenses app', () => {

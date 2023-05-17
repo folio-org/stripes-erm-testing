@@ -24,7 +24,7 @@ Cypress.Commands.add('getLicense', (id, searchParams) => {
     });
 });
 
-Cypress.Commands.add('getRefdata', (searchParams) => {
+Cypress.Commands.add('getLicensesRefdata', (searchParams) => {
   cy.okapiRequest({
     path: 'licenses/refdata',
     searchParams,
@@ -35,7 +35,7 @@ Cypress.Commands.add('getRefdata', (searchParams) => {
   });
 });
 
-Cypress.Commands.add('getRefdataValues', (desc, searchParams) => {
+Cypress.Commands.add('getLicensesRefdataValues', (desc, searchParams) => {
   const descPath = desc.split('.').join('/');
   cy.okapiRequest({
     path: `licenses/refdata/${descPath}`,
@@ -44,6 +44,17 @@ Cypress.Commands.add('getRefdataValues', (desc, searchParams) => {
   }).then((response) => {
     Cypress.env(desc, response.body);
     return response.body;
+  });
+});
+
+Cypress.Commands.add('getFirstLicensesRefdataLabel', (desc, searchParams) => {
+  const descPath = desc.split('.').join('/');
+  cy.okapiRequest({
+    path: `licenses/refdata/${descPath}`,
+    searchParams,
+    isDefaultSearchParamsRequired: false,
+  }).then((response) => {
+    return response.body[0].label;
   });
 });
 
