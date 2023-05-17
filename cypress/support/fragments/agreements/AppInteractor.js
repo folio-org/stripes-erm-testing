@@ -5,9 +5,12 @@ import {
   MultiColumnListCell,
   MultiColumnListRow,
   or,
+  Pane,
   SearchField,
   Section,
 } from '@folio/stripes-testing';
+
+import { AppListInteractor as AppList } from '../../../../interactors';
 
 /* We can import other interactors here and expose their functionality
  * to allow for a singular "AppInteractor" import in our tests.
@@ -24,6 +27,13 @@ export default class AppInteractor {
 
   static newButton = Button('New');
 
+  static localKbSearchButton = Button('Local KB search');
+  static packagesButton = Button('Packages');
+  static platformsButton = Button('Platforms');
+  static titlesButton = Button('Titles');
+
+  static openBasketButton = Button({ id: 'open-basket-button' });
+
   static waitLoading = () => {
     cy.expect(or(
       this.section.find(MultiColumnListRow()).exists(),
@@ -31,6 +41,14 @@ export default class AppInteractor {
     ));
     cy.expect(this.newButton.exists());
   };
+
+  static openLocalKB = () => {
+    cy.do(this.localKbSearchButton.click());
+  }
+
+  static openBasket = () => {
+    cy.do(this.openBasketButton.click());
+  }
 
   static createAgreement = (agreement) => {
     cy.do(this.newButton.click());
@@ -47,10 +65,37 @@ export default class AppInteractor {
     ]);
   };
 
+  // Assumes we only match 1 package and it automatically opens
+  static searchForPackage = (packageName) => {
+    cy.do(this.packagesButton.click());
+    this.searchPackage(packageName);
+    cy.expect(Pane(including(packageName)).is({ visible: true, index: 2 }));
+  }
+
   static agreementNotVisible = (agreementTitle) => {
     cy.expect(or(
       this.section.find(MultiColumnListCell(agreementTitle)).absent(),
       this.section.find(HTML(including('No results found. Please check your filters.'))).exists()
     ));
+  };
+
+  static openAgreementsApp = () => {
+    cy.do(AppList().navTo('Agreements')).then(() => {
+      cy.url().should('include', '/erm/agreements');
+      cy.expect(Pane(including('Agreements')).exists());
+      cy.expect(Button('Agreements search').exists());
+      cy.expect(Button('Local KB search').exists());
+    });
+  };
+
+  static filterPanePresent = (paneId) => {
+    cy.expect(Pane({ id: paneId }).is({ visible: true, index: 0 }));
+  };
+
+  static searchPackage = (packageName) => {
+    cy.do([
+      SearchField({ id: 'input-package-search' }).fillIn(packageName),
+      Button('Search').click()
+    ]);
   };
 }

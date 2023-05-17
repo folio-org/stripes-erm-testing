@@ -1,7 +1,9 @@
 import {
+  Accordion,
   Button,
   including,
   Modal,
+  MultiColumnList,
   Pane,
 } from '@folio/stripes-testing';
 
@@ -35,5 +37,17 @@ export default class AgreementViewInteractor {
 
   static paneDoesNotExist(agreementName) {
     cy.expect(Pane(including(agreementName)).absent());
+  }
+
+  static openAgreementLinesAccordion = () => {
+    cy.expect(Accordion('Agreement lines').exists());
+    cy.do(Accordion('Agreement lines').clickHeader());
+    cy.expect(MultiColumnList('agreement-lines').exists());
+    cy.expect(MultiColumnList('eresources-covered').exists());
+  }
+
+  static openFirstAgreementLine = () => {
+    this.openAgreementLinesAccordion();
+    cy.do(MultiColumnList('agreement-lines').click({ row: 0, columnIndex: 1 }));
   }
 }

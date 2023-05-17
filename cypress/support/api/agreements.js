@@ -34,3 +34,39 @@ Cypress.Commands.add('getRefdataValues', (desc, searchParams) => {
   });
 });
 
+Cypress.Commands.add('getAgreementsGeneralSettings', () => {
+  cy.okapiRequest({
+    method: 'GET',
+    path: 'configurations/entries?query=(module==AGREEMENTS%20and%20configName==general)',
+    isDefaultSearchParamsRequired: false,
+  })
+    .then((response) => {
+      const configs = response.body.configs[0];
+      const value = { ...JSON.parse(configs.value) };
+      return value;
+    });
+});
+
+Cypress.Commands.add('setAgreementsGeneralSettings', (params) => {
+  cy.okapiRequest({
+    method: 'GET',
+    path: 'configurations/entries?query=(module==AGREEMENTS%20and%20configName==general)',
+    isDefaultSearchParamsRequired: false,
+  })
+    .then((response) => {
+      const configs = response.body.configs[0];
+      const newValue = { ...JSON.parse(configs.value), ...params };
+      cy.okapiRequest({
+        method: 'PUT',
+        path: `configurations/entries/${configs.id}`,
+        body: {
+          id: configs.id,
+          module: configs.module,
+          configName: configs.configName,
+          enabled: configs.enabled,
+          value: JSON.stringify(newValue),
+        },
+        isDefaultSearchParamsRequired: false,
+      });
+    });
+});
