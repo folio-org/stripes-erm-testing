@@ -71,7 +71,7 @@ export default class AppInteractor {
   // local-kb-admin itself we can step through more manually in individual tests
   static uploadJsonFileAndAwaitCompletion = (fileName) => {
     this.uploadJsonFile(fileName);
-    JobViewInteractor.expectInitialImportJobPane(fileName);
+    JobViewInteractor.expectImportJobPane(fileName);
     JobViewInteractor.waitForJobCompletion(fileName);
   }
 }
