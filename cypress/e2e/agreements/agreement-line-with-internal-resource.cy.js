@@ -41,7 +41,7 @@ describe('Agreement line with internal resource', () => {
     console.log('do not hide internal agreements knowledgebase');
     cy.getAdminToken();
     cy.getAgreementsGeneralSettings().then((settings) => {
-      if (settings.hideEResourcesFunctionality === true) {
+      if (settings?.hideEResourcesFunctionality === true) {
         // remember value and set to false
         isChecked = true;
         cy.setAgreementsGeneralSettings({ hideEResourcesFunctionality: false });

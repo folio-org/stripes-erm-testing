@@ -11,7 +11,7 @@ Cypress.Commands.add('getAgreements', (searchParams) => {
     });
 });
 
-Cypress.Commands.add('getRefdata', (searchParams) => {
+Cypress.Commands.add('getAgreementsRefdata', (searchParams) => {
   cy.okapiRequest({
     path: 'erm/refdata',
     searchParams,
@@ -22,7 +22,7 @@ Cypress.Commands.add('getRefdata', (searchParams) => {
   });
 });
 
-Cypress.Commands.add('getRefdataValues', (desc, searchParams) => {
+Cypress.Commands.add('getAgreementsRefdataValues', (desc, searchParams) => {
   const descPath = desc.split('.').join('/');
   cy.okapiRequest({
     path: `erm/refdata/${descPath}`,

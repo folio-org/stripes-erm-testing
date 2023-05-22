@@ -9,12 +9,15 @@ import DateTools from '../../support/utils/dateTools';
 import AppInteractor from '../../support/fragments/licenses/AppInteractor';
 import LicenseFormInteractor from '../../support/fragments/licenses/LicenseFormInteractor';
 import LicenseViewInteractor from '../../support/fragments/licenses/LicenseViewInteractor';
+import LicensesSettingsInteractor from '../../support/fragments/licenses/LicensesSettingsInteractor';
 
 import generateItemBarcode from '../../support/utils/generateItemBarcode';
 
 describe('License lifecycle', () => {
   const licenseName = 'Test: ' + generateItemBarcode();
   const licenseName2 = 'lifecycle test: ' + generateItemBarcode();
+  const refdataTypeDesc = 'License.Type';
+  const refdataStatusDesc = 'License.Status';
 
   const license = {
     name: licenseName,
@@ -23,9 +26,46 @@ describe('License lifecycle', () => {
     type: 'Local'
   };
 
+  let typeCreated = false;
+
   before(() => {
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
     cy.getAdminToken();
+    cy.getLicensesRefdataValues(refdataTypeDesc).then((refdata) => {
+      /*
+       * FIXME for now we will use refdata label
+       *
+       * Long term I'm not 100% sure what we should do here, as we test based on labels, but
+       * labels can and will change in a running system, leading to potentially flaky tests
+       * in edge cases. Hopefully we won't hit those, but food for thought.
+       *
+       * Potential failure case - label has been changed, so "Active" no longer exists, but
+       * instead we have { value: 'active', label: "Wibble" }. At this point we try to create
+       * { value: 'active', label: "Active" }, but hit clashing value so no creation and test
+       * fails.
+       *
+       * See also comment in LicensesSettingsInteractor
+       */
+      if (refdata.every(obj => obj.label !== license.type)) {
+        LicensesSettingsInteractor.createLicensesRefdataValue(refdataTypeDesc, license.type);
+        typeCreated = true;
+      }
+    });
+    cy.getLicensesRefdataValues(refdataStatusDesc).then((refdata) => {
+      // FIXME same as above
+      if (refdata.every(obj => obj.value !== license.status)) {
+        cy.getFirstLicensesRefdataLabel(refdataStatusDesc)
+          .then((refdataLabel) => {
+            license.status = refdataLabel;
+          });
+      }
+    });
+  });
+
+  after(() => {
+    if (typeCreated === true) {
+      LicensesSettingsInteractor.deleteLicensesRefdataValue(refdataTypeDesc, license.type);
+    }
   });
 
   describe('open licenses app', () => {

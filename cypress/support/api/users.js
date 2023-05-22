@@ -1,6 +1,6 @@
-import uuid from 'uuid';
-import { getRandomPostfix } from '../utils/stringTools';
-import defaultUser from '../utils/defaultUser';
+// import uuid from 'uuid';
+// import { getRandomPostfix } from '../utils/stringTools';
+// import defaultUser from '../utils/defaultUser';
 
 Cypress.Commands.add('getUsers', (searchParams) => {
   cy
