@@ -34,6 +34,7 @@ Cypress.Commands.add('getAgreementsRefdataValues', (desc, searchParams) => {
   });
 });
 
+// TODO if we end up needing the same again for another app we should abstract the meat of these to general methods
 Cypress.Commands.add('getAgreementsGeneralSettings', () => {
   cy.okapiRequest({
     method: 'GET',
@@ -42,7 +43,7 @@ Cypress.Commands.add('getAgreementsGeneralSettings', () => {
   })
     .then((response) => {
       const configs = response.body.configs[0];
-      const value = { ...JSON.parse(configs.value) };
+      const value = { ...JSON.parse(configs?.value ?? '{}') };
       return value;
     });
 });
