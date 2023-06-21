@@ -139,8 +139,6 @@ describe('Agreement line with internal resource', () => {
       });
 
       it('should create new agreement', () => {
-        // TODO: refactor this test after ERM-2421, see Scenario 4
-        // https://issues.folio.org/browse/ERM-2421
         BasketInteractor.createAgreement({
           name: agreementName,
         });
