@@ -5,7 +5,7 @@ import {
   Pane,
   including,
 } from '@folio/stripes-testing';
-import AgreementFormInteractor from './AgreementFormInteractor';
+import AgreementModalFormInteractor from './AgreementModalFormInteractor';
 
 
 /* The cypressinteractor for the Basket View pane
@@ -28,8 +28,9 @@ export default class BasketInteractor {
 
   static createAgreement = (fillAgreement) => {
     cy.do(this.createNewAgreementButton.click());
-    AgreementFormInteractor.fill(fillAgreement);
-    AgreementFormInteractor.save();
+    AgreementModalFormInteractor.modalExists();
+    AgreementModalFormInteractor.fill(fillAgreement);
+    AgreementModalFormInteractor.save();
   }
 
   static checkResourceIsInBasket = (resourceName) => {
