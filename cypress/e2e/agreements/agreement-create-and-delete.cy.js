@@ -39,7 +39,7 @@ describe('Agreement create and delete', () => {
     cy.createUserWithPwAndPerms(viewUser, viewPermissions);
     cy.getAdminToken();
     cy.getAgreementsRefdataValues(refdataStatusDesc).then((refdata) => {
-      if (refdata.every(obj => obj.value !== agreement.status)) {
+      if (refdata.every(obj => obj.label !== agreement.status)) {
         cy.getFirstAgreementsRefdataLabel(refdataStatusDesc)
           .then((refdataLabel) => {
             agreement.status = refdataLabel;
