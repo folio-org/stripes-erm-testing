@@ -11,6 +11,19 @@ Cypress.Commands.add('getAgreements', (searchParams) => {
     });
 });
 
+Cypress.Commands.add('getAgreement', (id, searchParams) => {
+  cy
+    .okapiRequest({
+      path: `erm/sas/${id}`,
+      searchParams,
+      isDefaultSearchParamsRequired: false,
+    })
+    .then(({ body }) => {
+      Cypress.env('agreement', body);
+      return body;
+    });
+});
+
 Cypress.Commands.add('getAgreementsRefdata', (searchParams) => {
   cy.okapiRequest({
     path: 'erm/refdata',
