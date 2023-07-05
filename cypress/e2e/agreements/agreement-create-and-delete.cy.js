@@ -13,7 +13,7 @@ const agreementName = 'Test: ' + generateItemBarcode();
 const agreement = {
   name: agreementName,
   status: 'Active',
-  startDate: DateTools.getCurrentDate(),
+  startDate: DateTools.getCurrentDate()
 };
 
 const refdataStatusDesc = 'SubscriptionAgreement.AgreementStatus';
@@ -24,7 +24,14 @@ const editUser = {
   password: 'editTest'
 };
 
-const editPermissions = ['ui-agreements.agreements.delete', 'ui-agreements.agreements.edit'];
+const editPermissions = ['ui-agreements.agreements.edit'];
+
+const editDeleteUser = {
+  username: `editDeleteTest${getRandomPostfix()}`,
+  password: 'editDeleteTest'
+};
+
+const editDeletePermissions = ['ui-agreements.agreements.delete', 'ui-agreements.agreements.edit'];
 
 const viewUser = {
   username: `viewTest${getRandomPostfix()}`,
@@ -36,7 +43,9 @@ const viewPermissions = ['ui-agreements.agreements.view'];
 describe('Agreement create and delete', () => {
   before(() => {
     cy.createUserWithPwAndPerms(editUser, editPermissions);
+    cy.createUserWithPwAndPerms(editDeleteUser, editDeletePermissions);
     cy.createUserWithPwAndPerms(viewUser, viewPermissions);
+
     cy.getAdminToken();
     cy.getAgreementsRefdataValues(refdataStatusDesc).then((refdata) => {
       if (refdata.every(obj => obj.label !== agreement.status)) {
@@ -51,35 +60,11 @@ describe('Agreement create and delete', () => {
   after(() => {
     cy.getAdminToken();
     cy.deleteUserViaApi(editUser.userId);
+    cy.deleteUserViaApi(editDeleteUser.userId);
     cy.deleteUserViaApi(viewUser.userId);
   });
 
-  describe('view user actions', () => {
-    before(() => {
-      cy.login(viewUser.username, viewUser.password);
-      cy.getToken(viewUser.username, viewUser.password);
-    });
-
-    after(() => {
-      cy.logout();
-    });
-
-    it('should open the agreements app and do NOT see "New" button', () => {
-      AppInteractor.openAgreementsApp();
-      cy.expect(AppInteractor.newButton.absent());
-    });
-  });
-
-  describe('edit user actions', () => {
-    before(() => {
-      cy.login(editUser.username, editUser.password);
-      cy.getToken(editUser.username, editUser.password);
-    });
-
-    after(() => {
-      cy.logout();
-    });
-
+  function createAgreement() {
     describe('create agreement', () => {
       it('should open the agreements app and see "New" button', () => {
         AppInteractor.openAgreementsApp();
@@ -90,7 +75,9 @@ describe('Agreement create and delete', () => {
         AppInteractor.createAgreement(agreement);
       });
     });
+  }
 
+  function viewAgreement() {
     describe('view agreement', () => {
       before(() => {
         cy.url().then(($url) => {
@@ -116,9 +103,72 @@ describe('Agreement create and delete', () => {
         });
       });
     });
+  }
+
+  describe('view user actions', () => {
+    before(() => {
+      cy.login(viewUser.username, viewUser.password);
+      cy.getToken(viewUser.username, viewUser.password);
+    });
+
+    after(() => {
+      cy.logout();
+    });
+
+    it('should open the agreements app and do NOT see "New" button', () => {
+      AppInteractor.openAgreementsApp();
+      cy.expect(AppInteractor.newButton.absent());
+    });
+  });
+
+  describe('edit user actions', () => {
+    before(() => {
+      cy.login(editUser.username, editUser.password);
+      cy.getToken(editUser.username, editUser.password);
+    });
+
+    after(() => {
+      cy.logout();
+
+      // delete created agreement as admin because user has no delete permission
+      cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+      cy.visit('/erm/agreements');
+      AppInteractor.searchAgreement(agreementName);
+      AgreementViewInteractor.paneExists(agreementName);
+      AgreementViewInteractor.delete(agreementName);
+      cy.logout();
+    });
+
+    createAgreement();
+    viewAgreement();
+
+    describe('actions dropdown', () => {
+      it('should open actions dropdown w/o delete option', () => {
+        cy.expect(AgreementViewInteractor.actionsButton.exists());
+        cy.do(AgreementViewInteractor.actionsButton.click());
+        cy.expect(AgreementViewInteractor.deleteButton.absent());
+        cy.expect(AgreementViewInteractor.duplicateButton.exists());
+        cy.expect(AgreementViewInteractor.editButton.exists());
+        cy.expect(AgreementViewInteractor.exportJsonButton.exists());
+      });
+    });
+  });
+
+  describe('editDelete user actions', () => {
+    before(() => {
+      cy.login(editDeleteUser.username, editDeleteUser.password);
+      cy.getToken(editDeleteUser.username, editDeleteUser.password);
+    });
+
+    after(() => {
+      cy.logout();
+    });
+
+    createAgreement();
+    viewAgreement();
 
     describe('delete agreement', () => {
-      it('should open actions button with options', () => {
+      it('should open actions dropdown with options', () => {
         AgreementViewInteractor.openOptions();
         // close options because in next step Actions button will be clicked again
         cy.do(AgreementViewInteractor.actionsButton.click());
