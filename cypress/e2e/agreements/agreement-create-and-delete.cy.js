@@ -4,7 +4,6 @@ import DateTools from '../../support/utils/dateTools';
 import { getRandomPostfix } from '../../support/utils/stringTools';
 
 import AppInteractor from '../../support/fragments/agreements/AppInteractor';
-import AgreementFormInteractor from '../../support/fragments/agreements/AgreementFormInteractor';
 import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
 
 import generateItemBarcode from '../../support/utils/generateItemBarcode';
@@ -25,7 +24,7 @@ const editUser = {
   password: 'editTest'
 };
 
-const editPermissions = ['ui-agreements.agreements.edit'];
+const editPermissions = ['ui-agreements.agreements.delete', 'ui-agreements.agreements.edit'];
 
 const viewUser = {
   username: `viewTest${getRandomPostfix()}`,
@@ -55,6 +54,22 @@ describe('Agreement create and delete', () => {
     cy.deleteUserViaApi(viewUser.userId);
   });
 
+  describe('view user actions', () => {
+    before(() => {
+      cy.login(viewUser.username, viewUser.password);
+      cy.getToken(viewUser.username, viewUser.password);
+    });
+
+    after(() => {
+      cy.logout();
+    });
+
+    it('should open the agreements app and do NOT see "New" button', () => {
+      AppInteractor.openAgreementsApp();
+      cy.expect(AppInteractor.newButton.absent());
+    });
+  });
+
   describe('edit user actions', () => {
     before(() => {
       cy.login(editUser.username, editUser.password);
@@ -72,8 +87,17 @@ describe('Agreement create and delete', () => {
       });
 
       it('should create agreement', () => {
-        // createAgreement is set in appInteractor and will bootstrap a basic agreement
         AppInteractor.createAgreement(agreement);
+      });
+    });
+
+    describe('view agreement', () => {
+      before(() => {
+        cy.url().then(($url) => {
+          const regex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
+          const agreementId = $url.match(regex)[0];
+          cy.getAgreement(agreementId).its('dateCreated').as('dateCreated');
+        });
       });
 
       it('should see correct agreement values in view pane', () => {
@@ -84,15 +108,8 @@ describe('Agreement create and delete', () => {
         cy.expect(Headline(agreement.name).exists());
       });
 
-      it('should open "Record last updated" information and see correct values', () => {
-        before(() => {
-          cy.url().then(($url) => {
-            const regex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
-            const agreementId = $url.match(regex)[0];
-            cy.getAgreement(agreementId).its('dateCreated').as('dateCreated');
-          });
-        });
-
+      // it has to be 'function ()' and NOT '() =>' because otherwise the alias can't be accessed with this.*
+      it('should open "Record last updated" information and see correct values', function () {
         cy.get('[id=agreementInfoRecordMeta]').click().within(() => {
           cy.contains('Record created: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
           cy.contains('Record last updated: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
@@ -103,10 +120,11 @@ describe('Agreement create and delete', () => {
     describe('delete agreement', () => {
       it('should open actions button with options', () => {
         AgreementViewInteractor.openOptions();
+        // close options because in next step Actions button will be clicked again
+        cy.do(AgreementViewInteractor.actionsButton.click());
       });
 
       it('should delete the agreement', () => {
-        AgreementViewInteractor.paneExists(agreementName);
         AgreementViewInteractor.delete(agreementName);
         AgreementViewInteractor.paneDoesNotExist(agreementName);
         // Check it also no longer shows in the MCL

@@ -47,6 +47,17 @@ Cypress.Commands.add('getAgreementsRefdataValues', (desc, searchParams) => {
   });
 });
 
+Cypress.Commands.add('getFirstAgreementsRefdataLabel', (desc, searchParams) => {
+  const descPath = desc.split('.').join('/');
+  cy.okapiRequest({
+    path: `erm/refdata/${descPath}`,
+    searchParams,
+    isDefaultSearchParamsRequired: false,
+  }).then((response) => {
+    return response.body[0].label;
+  });
+});
+
 // TODO if we end up needing the same again for another app we should abstract the meat of these to general methods
 Cypress.Commands.add('getAgreementsGeneralSettings', () => {
   cy.okapiRequest({
