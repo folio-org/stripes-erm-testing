@@ -9,7 +9,7 @@ import {
 import { DatepickerInteractor as Datepicker } from '../../../../interactors';
 
 import DateTools from '../../utils/dateTools';
-import { getRandomPostfix, normalize } from '../../utils/stringTools';
+import { getRandomPostfix } from '../../utils/stringTools';
 
 /* The interactor for the create/edit page form
  *
@@ -36,15 +36,17 @@ export default class AgreementFormInteractor {
     cy.expect(TextField('Name*').has({ value: fillName }));
 
     cy.do(Select('Status*').choose(fillStatus));
-    cy.expect(Select('Status*').has({ value: normalize(fillStatus) }));
+    cy.get('#edit-agreement-status').invoke('val').then(selectedValue => {
+      cy.get(`#edit-agreement-status option[value="${selectedValue}"]`).invoke('text').should('equal', fillStatus);
+    });
 
     cy.do(Datepicker({ id: 'period-start-date-0' }).fillIn(fillStartDate));
     cy.expect(Datepicker({ id: 'period-start-date-0' }).has({ inputValue: fillStartDate }));
 
     /* If we need more fields in order to set up frequently tested agreement properties,
-     * they can be added here. Otherwise we can treat this as "fill basic agreement" and
-     * fill more fields per test.
-     */
+       * they can be added here. Otherwise we can treat this as "fill basic agreement" and
+       * fill more fields per test.
+       */
   }
 
   static save() {
