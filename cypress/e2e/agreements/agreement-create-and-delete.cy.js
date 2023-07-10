@@ -16,8 +16,6 @@ const agreement = {
   startDate: DateTools.getCurrentDate()
 };
 
-const refdataStatusDesc = 'SubscriptionAgreement.AgreementStatus';
-
 // users
 const editUser = {
   username: `editTest${getRandomPostfix()}`,
@@ -47,14 +45,7 @@ describe('Agreement create and delete', () => {
     cy.createUserWithPwAndPerms(viewUser, viewPermissions);
 
     cy.getAdminToken();
-    cy.getAgreementsRefdataValues(refdataStatusDesc).then((refdata) => {
-      if (refdata.every(obj => obj.label !== agreement.status)) {
-        cy.getFirstAgreementsRefdataLabel(refdataStatusDesc)
-          .then((refdataLabel) => {
-            agreement.status = refdataLabel;
-          });
-      }
-    });
+    AppInteractor.fetchStatusLabel(agreement);
   });
 
   after(() => {
@@ -92,7 +83,7 @@ describe('Agreement create and delete', () => {
         cy.expect(KeyValue('Status').has({ value: agreement.status }));
         cy.expect(KeyValue('Start date').has({ value: DateTools.getDateNoZeros(agreement.startDate) }));
         cy.expect(KeyValue('Period start').has({ value: DateTools.getDateNoZeros(agreement.startDate) }));
-        cy.expect(Headline(agreement.name).exists());
+        cy.expect(Headline(agreementName).exists());
       });
 
       // it has to be 'function ()' and NOT '() =>' because otherwise the alias can't be accessed with this.*

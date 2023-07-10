@@ -58,3 +58,14 @@ Cypress.Commands.add('getFirstLicensesRefdataLabel', (desc, searchParams) => {
   });
 });
 
+Cypress.Commands.add('getLicensesRefdataLabelFromValue', (desc, value) => {
+  const descPath = desc.split('.').join('/');
+  cy.okapiRequest({
+    path: `licenses/refdata/${descPath}`,
+    isDefaultSearchParamsRequired: false,
+  }).then((response) => {
+    // return label which has value
+    return response.body.find((item) => item.value === value).label;
+  });
+});
+

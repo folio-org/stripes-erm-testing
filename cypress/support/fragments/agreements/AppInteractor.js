@@ -11,6 +11,7 @@ import {
 } from '@folio/stripes-testing';
 
 import { AppListInteractor as AppList } from '../../../../interactors';
+import { normalize } from '../../utils/stringTools';
 
 /* We can import other interactors here and expose their functionality
  * to allow for a singular "AppInteractor" import in our tests.
@@ -98,4 +99,16 @@ export default class AppInteractor {
       Button('Search').click()
     ]);
   };
+
+  static fetchStatusLabel = (agreement) => {
+    const refdataDesc = 'SubscriptionAgreement.AgreementStatus';
+    cy.getAgreementsRefdataValues(refdataDesc).then((refdata) => {
+      if (refdata.every(obj => obj.label !== agreement.status)) {
+        cy.getAgreementsRefdataLabelFromValue(refdataDesc, normalize(agreement.status))
+          .then((refdataLabel) => {
+            agreement.status = refdataLabel;
+          });
+      }
+    });
+  }
 }

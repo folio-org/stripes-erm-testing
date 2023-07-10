@@ -17,7 +17,6 @@ describe('License lifecycle', () => {
   const licenseName = 'Test: ' + generateItemBarcode();
   const licenseName2 = 'lifecycle test: ' + generateItemBarcode();
   const refdataTypeDesc = 'License.Type';
-  const refdataStatusDesc = 'License.Status';
 
   const license = {
     name: licenseName,
@@ -51,15 +50,8 @@ describe('License lifecycle', () => {
         typeCreated = true;
       }
     });
-    cy.getLicensesRefdataValues(refdataStatusDesc).then((refdata) => {
-      // FIXME same as above
-      if (refdata.every(obj => obj.value !== license.status)) {
-        cy.getFirstLicensesRefdataLabel(refdataStatusDesc)
-          .then((refdataLabel) => {
-            license.status = refdataLabel;
-          });
-      }
-    });
+
+    AppInteractor.fetchStatusLabel(license);
   });
 
   after(() => {
