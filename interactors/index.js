@@ -3,5 +3,4 @@ export { default as IconButtonInteractor } from './icon-button';
 export { default as DatepickerInteractor } from './datepicker';
 export { default as FormattedDateTimeInteractor } from './formatted-date-time';
 export { default as SelectInteractor } from './select';
-export { default as AppListInteractor } from './app-list';
-export { AppListItem } from './app-list';
+export { default as AppListInteractor, AppListItem as AppListItemInteractor } from './app-list';
