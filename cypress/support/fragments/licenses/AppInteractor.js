@@ -63,9 +63,9 @@ export default class AppInteractor {
 
   static fetchStatusLabel = (license) => {
     const refdataDesc = 'License.Status';
-    cy.getAgreementsRefdataValues(refdataDesc).then((refdata) => {
+    cy.getLicensesRefdataValues(refdataDesc).then((refdata) => {
       if (refdata.every(obj => obj.label !== license.status)) {
-        cy.getAgreementsRefdataLabelFromValue(refdataDesc, normalize(license.status))
+        cy.getLicensesRefdataLabelFromValue(refdataDesc, normalize(license.status))
           .then((refdataLabel) => {
             license.status = refdataLabel;
           });
