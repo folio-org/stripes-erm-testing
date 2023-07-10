@@ -8,10 +8,9 @@ import {
   Pane,
 } from '@folio/stripes-testing';
 
-import { AppListInteractor as AppList } from '../../../../interactors';
-
 import JsonImportJobFormInteractor from './JsonImportJobFormInteractor';
 import JobViewInteractor from './JobViewInteractor';
+import HomeInteractor from '../HomeInteractor';
 
 /* We can import other interactors here and expose their functionality
  * to allow for a singular "AppInteractor" import in our tests.
@@ -37,10 +36,9 @@ export default class AppInteractor {
   };
 
   static openLocalKbAdminApp = () => {
-    cy.do(AppList().navTo('Local KB admin')).then(() => {
-      cy.url().should('include', '/local-kb-admin');
-      cy.expect(Pane(including('Local KB admin')).exists());
-    });
+    HomeInteractor.navToApp('Local KB admin');
+    cy.url().should('include', '/local-kb-admin');
+    cy.expect(Pane(including('Local KB admin')).exists());
   };
 
   static filterPanePresent = (paneId) => {

@@ -10,8 +10,6 @@ import {
   Section,
 } from '@folio/stripes-testing';
 
-import { AppListInteractor as AppList } from '../../../../interactors';
-
 /* We can import other interactors here and expose their functionality
  * to allow for a singular "AppInteractor" import in our tests.
  * I'm not sure if that's a good idea or not, I quite like the idea that different
@@ -19,6 +17,7 @@ import { AppListInteractor as AppList } from '../../../../interactors';
  * such as creating a new agreement, to be controlled via the AppInteractor does make some sense.
  */
 import AgreementFormInteractor from './AgreementFormInteractor';
+import HomeInteractor from '../HomeInteractor';
 
 // Making Appinteractor a class so it is consistent and clear where each action is coming from
 // The main interactor for the agreements 3 pane main landing page
@@ -80,12 +79,11 @@ export default class AppInteractor {
   };
 
   static openAgreementsApp = () => {
-    cy.do(AppList().navTo('Agreements')).then(() => {
-      cy.url().should('include', '/erm/agreements');
-      cy.expect(Pane(including('Agreements')).exists());
-      cy.expect(Button('Agreements search').exists());
-      cy.expect(Button('Local KB search').exists());
-    });
+    HomeInteractor.navToApp('Agreements');
+    cy.url().should('include', '/erm/agreements');
+    cy.expect(Pane(including('Agreements')).exists());
+    cy.expect(Button('Agreements search').exists());
+    cy.expect(Button('Local KB search').exists());
   };
 
   static filterPanePresent = (paneId) => {
