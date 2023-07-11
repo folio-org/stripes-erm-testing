@@ -1,4 +1,5 @@
-import AppInteractor from '../../support/fragments/agreements/AppInteractor';
+import HomeInteractor from '../../support/fragments/HomeInteractor';
+import AppInteractor from '../../support/fragments/licenses/AppInteractor';
 
 describe('Opening agreements', () => {
   before(() => {
@@ -7,7 +8,7 @@ describe('Opening agreements', () => {
   });
 
   it('visiting agreements renders the correct page', () => {
-    cy.visit('/erm/agreements');
+    HomeInteractor.navToApp('Agreements');
     AppInteractor.waitLoading();
   });
 });

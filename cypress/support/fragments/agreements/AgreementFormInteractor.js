@@ -2,11 +2,10 @@ import {
   Button,
   including,
   Pane,
-  Select,
   TextField
 } from '@folio/stripes-testing';
 
-import { DatepickerInteractor as Datepicker } from '../../../../interactors';
+import { DatepickerInteractor as Datepicker, SelectInteractor as Select } from '../../../../interactors';
 
 import DateTools from '../../utils/dateTools';
 import { getRandomPostfix } from '../../utils/stringTools';
@@ -36,9 +35,8 @@ export default class AgreementFormInteractor {
     cy.expect(TextField('Name*').has({ value: fillName }));
 
     cy.do(Select('Status*').choose(fillStatus));
-    cy.get('#edit-agreement-status').invoke('val').then(selectedValue => {
-      cy.get(`#edit-agreement-status option[value="${selectedValue}"]`).invoke('text').should('equal', fillStatus);
-    });
+    cy.expect(Select('Status*').has({ selectedContent: fillStatus }));
+    cy.wait(10000);
 
     cy.do(Datepicker({ id: 'period-start-date-0' }).fillIn(fillStartDate));
     cy.expect(Datepicker({ id: 'period-start-date-0' }).has({ inputValue: fillStartDate }));

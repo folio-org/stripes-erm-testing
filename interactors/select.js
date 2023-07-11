@@ -16,4 +16,11 @@ export default Select.extend('selectNew')
       await intr.choose(value);
       await blur(intr);
     }
+  })
+  .filters({
+    selectedContent: el => {
+      const selectElement = el.querySelector('select');
+      const selectedOption = selectElement.options[selectElement.selectedIndex];
+      return selectedOption ? selectedOption.textContent : undefined;
+    }
   });
