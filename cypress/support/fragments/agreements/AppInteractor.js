@@ -86,7 +86,6 @@ export default class AppInteractor {
     cy.expect(Pane(including('Agreements')).exists());
     cy.expect(Button('Agreements search').exists());
     cy.expect(Button('Local KB search').exists());
-    this.waitLoading();
   };
 
   static filterPanePresent = (paneId) => {

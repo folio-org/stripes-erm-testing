@@ -9,5 +9,6 @@ describe('Opening agreements', () => {
   it('visiting agreements renders the correct page', () => {
     // This already has assertions that it has opened the correct app, use those
     AppInteractor.openAgreementsApp();
+    AppInteractor.waitLoading();
   });
 });
