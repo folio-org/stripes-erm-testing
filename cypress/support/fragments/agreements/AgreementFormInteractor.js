@@ -36,7 +36,6 @@ export default class AgreementFormInteractor {
 
     cy.do(Select('Status*').choose(fillStatus));
     cy.expect(Select('Status*').has({ selectedContent: fillStatus }));
-    cy.wait(10000);
 
     cy.do(Datepicker({ id: 'period-start-date-0' }).fillIn(fillStartDate));
     cy.expect(Datepicker({ id: 'period-start-date-0' }).has({ inputValue: fillStartDate }));
