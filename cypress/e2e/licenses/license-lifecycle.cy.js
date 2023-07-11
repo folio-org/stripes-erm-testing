@@ -2,7 +2,7 @@ import {
   KeyValue,
 } from '@folio/stripes-testing';
 
-import { AppListInteractor as AppList, HeadlineInteractor as Headline } from '../../../interactors';
+import { HeadlineInteractor as Headline } from '../../../interactors';
 
 import DateTools from '../../support/utils/dateTools';
 
@@ -12,6 +12,7 @@ import LicenseViewInteractor from '../../support/fragments/licenses/LicenseViewI
 import LicensesSettingsInteractor from '../../support/fragments/licenses/LicensesSettingsInteractor';
 
 import generateItemBarcode from '../../support/utils/generateItemBarcode';
+import HomeInteractor from '../../support/fragments/HomeInteractor';
 
 describe('License lifecycle', () => {
   const licenseName = 'Test: ' + generateItemBarcode();
@@ -62,7 +63,7 @@ describe('License lifecycle', () => {
 
   describe('open licenses app', () => {
     it('should locate and select license app in navbar', () => {
-      cy.do(AppList().navTo('Licenses'));
+      HomeInteractor.navToApp('Licenses');
       AppInteractor.waitLoading();
     });
   });
