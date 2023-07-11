@@ -1,10 +1,9 @@
 import {
   Button,
-  Select,
   TextField
 } from '@folio/stripes-testing';
 
-import { DatepickerInteractor as Datepicker } from '../../../../interactors';
+import { DatepickerInteractor as Datepicker, SelectInteractor as Select } from '../../../../interactors';
 
 import DateTools from '../../utils/dateTools';
 import { getRandomPostfix, normalize } from '../../utils/stringTools';
@@ -28,7 +27,7 @@ export default class LicenseFormInteractor {
   }) {
     // Fill in field, then check it filled in as expected
     cy.do(Select('Status*').choose(fillLicense.status));
-    cy.expect(Select('Status*').has({ value: normalize(fillLicense.status) }));
+    cy.expect(Select('Status*').has({ selectedContent: fillLicense.status }));
 
     cy.do(Select('Type*').choose(fillLicense.type));
     cy.expect(Select('Type*').has({ value: normalize(fillLicense.type) }));

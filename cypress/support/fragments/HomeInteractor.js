@@ -1,4 +1,4 @@
-import { AppListInteractor as AppList, AppListItemInteractor as AppListItem } from "../../../interactors";
+import { AppListInteractor as AppList, AppListItemInteractor as AppListItem } from '../../../interactors';
 
 /* The interactor for the home page */
 export default class HomeInteractor {

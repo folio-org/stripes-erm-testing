@@ -12,7 +12,7 @@ export default class JobViewInteractor {
     cy.expect(Pane(including(`Import package from ${fileName}`)).exists());
     cy.expect(Headline(`Import package from ${fileName}`).exists());
     // Race condition here, commenting out -- can be in progress or even ended by the time we get here
-    //cy.expect(KeyValue('Running status').has({ value: 'Queued' }));
+    // cy.expect(KeyValue('Running status').has({ value: 'Queued' }));
     cy.expect(KeyValue('Job Type').has({ value: 'File import' }));
   }
 

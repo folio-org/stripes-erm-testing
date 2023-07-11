@@ -1,6 +1,7 @@
 import {
   Accordion,
   Button,
+  DropdownMenu,
   including,
   Modal,
   MultiColumnList,
@@ -14,6 +15,12 @@ import {
  * ie more than once, in various tests, then we should add an action here and import to ensure consistency.
  */
 export default class AgreementViewInteractor {
+  static actionsButton = Button('Actions');
+  static deleteButton = DropdownMenu().find(Button('Delete'));
+  static duplicateButton = DropdownMenu().find(Button('Duplicate'));
+  static editButton = DropdownMenu().find(Button('Edit'));
+  static exportJsonButton = DropdownMenu().find(Button('Export agreement (JSON)'));
+
   static edit(agreementName) {
     // EXAMPLE Dropdown 'Actions' - fails with more than one 'Actions' Dropdown
     /*
@@ -49,5 +56,14 @@ export default class AgreementViewInteractor {
   static openFirstAgreementLine = () => {
     this.openAgreementLinesAccordion();
     cy.do(MultiColumnList('agreement-lines').click({ row: 0, columnIndex: 1 }));
+  }
+
+  static openOptions = () => {
+    cy.expect(this.actionsButton.exists());
+    cy.do(this.actionsButton.click());
+    cy.expect(this.deleteButton.exists());
+    cy.expect(this.duplicateButton.exists());
+    cy.expect(this.editButton.exists());
+    cy.expect(this.exportJsonButton.exists());
   }
 }

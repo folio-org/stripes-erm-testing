@@ -11,6 +11,19 @@ Cypress.Commands.add('getAgreements', (searchParams) => {
     });
 });
 
+Cypress.Commands.add('getAgreement', (id, searchParams) => {
+  cy
+    .okapiRequest({
+      path: `erm/sas/${id}`,
+      searchParams,
+      isDefaultSearchParamsRequired: false,
+    })
+    .then(({ body }) => {
+      Cypress.env('agreement', body);
+      return body;
+    });
+});
+
 Cypress.Commands.add('getAgreementsRefdata', (searchParams) => {
   cy.okapiRequest({
     path: 'erm/refdata',
@@ -31,6 +44,28 @@ Cypress.Commands.add('getAgreementsRefdataValues', (desc, searchParams) => {
   }).then((response) => {
     Cypress.env(desc, response.body);
     return response.body;
+  });
+});
+
+Cypress.Commands.add('getFirstAgreementsRefdataLabel', (desc, searchParams) => {
+  const descPath = desc.split('.').join('/');
+  cy.okapiRequest({
+    path: `erm/refdata/${descPath}`,
+    searchParams,
+    isDefaultSearchParamsRequired: false,
+  }).then((response) => {
+    return response.body[0].label;
+  });
+});
+
+Cypress.Commands.add('getAgreementsRefdataLabelFromValue', (desc, value) => {
+  const descPath = desc.split('.').join('/');
+  cy.okapiRequest({
+    path: `erm/refdata/${descPath}`,
+    isDefaultSearchParamsRequired: false,
+  }).then((response) => {
+    // return label which has value
+    return response.body.find((item) => item.value === value).label;
   });
 });
 

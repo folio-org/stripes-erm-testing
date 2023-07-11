@@ -1,15 +1,14 @@
 import {
   Button,
   including,
-  Select,
   TextField,
   Modal
 } from '@folio/stripes-testing';
 
-import { DatepickerInteractor as Datepicker } from '../../../../interactors';
+import { DatepickerInteractor as Datepicker, SelectInteractor as Select } from '../../../../interactors';
 
 import DateTools from '../../utils/dateTools';
-import { getRandomPostfix, normalize } from '../../utils/stringTools';
+import { getRandomPostfix } from '../../utils/stringTools';
 
 // The interactor for the agreement modal creation form
 
@@ -33,7 +32,7 @@ export default class AgreementModalFormInteractor {
     cy.expect(TextField('Name*').has({ value: fillName }));
 
     cy.do(Select('Status*').choose(fillStatus));
-    cy.expect(Select('Status*').has({ value: normalize(fillStatus) }));
+    cy.expect(Select('Status*').has({ selectedContent: fillStatus }));
 
     cy.do(Datepicker({ id: 'period-start-date' }).fillIn(fillStartDate));
     cy.expect(Datepicker({ id: 'period-start-date' }).has({ inputValue: fillStartDate }));

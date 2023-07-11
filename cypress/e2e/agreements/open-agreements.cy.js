@@ -7,7 +7,8 @@ describe('Opening agreements', () => {
   });
 
   it('visiting agreements renders the correct page', () => {
-    cy.visit('/erm/agreements');
+    // This already has assertions that it has opened the correct app, use those
+    AppInteractor.openAgreementsApp();
     AppInteractor.waitLoading();
   });
 });

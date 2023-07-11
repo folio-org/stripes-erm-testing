@@ -9,20 +9,22 @@ import generateItemBarcode from '../../support/utils/generateItemBarcode';
 describe('Agreement lifecycle', () => {
   const agreementName = 'Test: ' + generateItemBarcode();
   const agreementName2 = 'lifecycle test: ' + generateItemBarcode();
+  const agreement = {
+    name: agreementName,
+    status: 'Active',
+    startDate: DateTools.getCurrentDate()
+  };
 
   before(() => {
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
     cy.getAdminToken();
+    AppInteractor.fetchStatusLabel(agreement);
   });
 
   it('should be possible to fill in the "Create agreement" form and submit it', () => {
     cy.visit('/erm/agreements');
     // createAgreement is set in appInteractor and will bootstrap a basic agreement
-    AppInteractor.createAgreement({
-      name: agreementName,
-      status: 'Active',
-      startDate: DateTools.getCurrentDate()
-    });
+    AppInteractor.createAgreement(agreement);
 
     AgreementViewInteractor.paneExists(agreementName);
   });
