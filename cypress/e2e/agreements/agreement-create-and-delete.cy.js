@@ -71,9 +71,7 @@ describe('Agreement create and delete', () => {
   function viewAgreement() {
     describe('view agreement', () => {
       before(() => {
-        cy.url().then(($url) => {
-          const regex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
-          const agreementId = $url.match(regex)[0];
+        cy.getIdFromURL().then(agreementId => {
           cy.getAgreement(agreementId).its('dateCreated').as('dateCreated');
         });
       });

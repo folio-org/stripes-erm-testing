@@ -85,9 +85,7 @@ describe('License lifecycle', () => {
   describe('manipulating license', () => {
     before(() => {
       LicenseViewInteractor.paneExists(license.name);
-      cy.url().then(($url) => {
-        const regex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i;
-        const licenseId = $url.match(regex)[0];
+      cy.getIdFromURL().then(licenseId => {
         cy.getLicense(licenseId).its('dateCreated').as('dateCreated');
       });
     });

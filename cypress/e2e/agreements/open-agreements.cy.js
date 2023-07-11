@@ -1,5 +1,4 @@
-import HomeInteractor from '../../support/fragments/HomeInteractor';
-import AppInteractor from '../../support/fragments/licenses/AppInteractor';
+import AppInteractor from '../../support/fragments/agreements/AppInteractor';
 
 describe('Opening agreements', () => {
   before(() => {
@@ -8,7 +7,7 @@ describe('Opening agreements', () => {
   });
 
   it('visiting agreements renders the correct page', () => {
-    HomeInteractor.navToApp('Agreements');
-    AppInteractor.waitLoading();
+    // This already has assertions that it has opened the correct app, use those
+    AppInteractor.openAgreementsApp();
   });
 });
