@@ -1,5 +1,6 @@
 import {
   Button,
+  DropdownMenu,
   including,
   Modal,
   Pane
@@ -12,6 +13,10 @@ import {
  * ie more than once, in various tests, then we should add an action here and import to ensure consistency.
  */
 export default class LicenseViewInteractor {
+  static deleteButton = DropdownMenu().find(Button('Delete'));
+  static duplicateButton = DropdownMenu().find(Button('Duplicate'));
+  static editButton = DropdownMenu().find(Button('Edit'));
+
   static edit(licenseName) {
     cy.do(Pane(including(licenseName)).clickAction('Edit'));
   }

@@ -19,24 +19,25 @@ export default class LicenseFormInteractor {
   }
 
   // We default the fill to a very basic license
-  static fill(fillLicense = {
-    name: `autotest_license_${getRandomPostfix()}`,
-    status: 'Not yet active',
-    type: 'Consortial',
-    startDate: DateTools.getCurrentDate()
-  }) {
+  static fill(fillLicense = {}) {
+    // Default the necessary options so they always exist, no matter if only a subset gets passed in;
+    const fillName = fillLicense.name ?? `autotest_agreement_${getRandomPostfix()}`;
+    const fillStatus = fillLicense.status ?? 'Draft';
+    const fillType = fillLicense.type ?? 'Local';
+    const fillStartDate = fillLicense.startDate ?? DateTools.getCurrentDate();
+
     // Fill in field, then check it filled in as expected
-    cy.do(Select('Status*').choose(fillLicense.status));
-    cy.expect(Select('Status*').has({ selectedContent: fillLicense.status }));
+    cy.do(Select('Status*').choose(fillStatus));
+    cy.expect(Select('Status*').has({ selectedContent: fillStatus }));
 
-    cy.do(Select('Type*').choose(fillLicense.type));
-    cy.expect(Select('Type*').has({ value: normalize(fillLicense.type) }));
+    cy.do(Select('Type*').choose(fillType));
+    cy.expect(Select('Type*').has({ value: normalize(fillType) }));
 
-    cy.do(Datepicker({ id: 'edit-license-start-date' }).fillIn(fillLicense.startDate));
-    cy.expect(Datepicker({ id: 'edit-license-start-date' }).has({ inputValue: fillLicense.startDate }));
+    cy.do(Datepicker({ id: 'edit-license-start-date' }).fillIn(fillStartDate));
+    cy.expect(Datepicker({ id: 'edit-license-start-date' }).has({ inputValue: fillStartDate }));
 
-    this.fillName(fillLicense.name);
-    cy.expect(TextField('Name*').has({ value: fillLicense.name }));
+    this.fillName(fillName);
+    cy.expect(TextField('Name*').has({ value: fillName }));
 
     /* If we need more fields in order to set up frequently tested license properties,
      * they can be added here. Otherwise we can treat this as "fill basic license" and

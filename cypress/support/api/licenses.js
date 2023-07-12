@@ -69,3 +69,11 @@ Cypress.Commands.add('getLicensesRefdataLabelFromValue', (desc, value) => {
   });
 });
 
+Cypress.Commands.add('deleteLicenseViaApi', (licenseId) => {
+  cy.okapiRequest({
+    method: 'DELETE',
+    path: `licenses/licenses/${licenseId}`,
+    isDefaultSearchParamsRequired: false
+  });
+});
+
