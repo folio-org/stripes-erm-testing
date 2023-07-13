@@ -20,6 +20,7 @@ import { normalize } from '../../utils/stringTools';
  * such as creating a new license, to be controlled via the AppInteractor does make some sense.
  */
 import LicenseFormInteractor from './LicenseFormInteractor';
+import LicenseViewInteractor from './LicenseViewInteractor';
 import HomeInteractor from '../HomeInteractor';
 
 // Making Appinteractor a class so it is consistent and clear where each action is coming from
@@ -27,10 +28,8 @@ import HomeInteractor from '../HomeInteractor';
 export default class AppInteractor {
   static section = Section({ id: 'pane-license-list' });
 
-  static actionsButton = Button('Actions');
+  static actionsButton = Pane(including('Licenses')).find(Button('Actions'));
   static newButton = DropdownMenu().find(Button('New'));
-  // static exportCSVButton = DropdownMenu().find(Button('#export-licenses-csv'));
-  // static exportCSVButton = DropdownMenu().find(Button('Export selected as CSV (0 items)'));
   static exportCSVButton = DropdownMenu().find(Button({ id: 'export-licenses-csv' }));
 
   static waitLoading = () => {
@@ -60,11 +59,24 @@ export default class AppInteractor {
     ]);
   };
 
+  /*
+  unlike in agreements app
+  license is not selected automatically after a search with single result
+  */
+  static selectLicense = (licenseName) => {
+    cy.do(this.section.find(MultiColumnListCell(licenseName)).click());
+    LicenseViewInteractor.paneExists(licenseName);
+  }
+
   static licenseNotVisible = (licenseTitle) => {
     cy.expect(or(
       this.section.find(MultiColumnListCell(licenseTitle)).absent(),
       this.section.find(HTML(including('No results found. Please check your filters.'))).exists()
     ));
+  };
+
+  static licenseVisible = (licenseTitle) => {
+    cy.expect(this.section.find(MultiColumnListCell(licenseTitle)).exists());
   };
 
   static fetchStatusLabel = (license) => {

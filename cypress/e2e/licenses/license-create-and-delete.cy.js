@@ -1,4 +1,9 @@
-import { Button, Dropdown, DropdownMenu, including, KeyValue, Pane } from '@folio/stripes-testing';
+import {
+  Button,
+  including,
+  KeyValue,
+  Pane
+} from '@folio/stripes-testing';
 import { HeadlineInteractor as Headline } from '../../../interactors';
 import DateTools from '../../support/utils/dateTools';
 import { getRandomPostfix } from '../../support/utils/stringTools';
@@ -8,7 +13,6 @@ import LicenseViewInteractor from '../../support/fragments/licenses/LicenseViewI
 import LicensesSettingsInteractor from '../../support/fragments/licenses/LicensesSettingsInteractor';
 
 import generateItemBarcode from '../../support/utils/generateItemBarcode';
-import HomeInteractor from '../../support/fragments/HomeInteractor';
 
 const licenseName = 'Test: ' + generateItemBarcode();
 
@@ -80,13 +84,11 @@ describe('License create and delete', () => {
 
       it('should open actions dropdown with export option disabled', () => {
         cy.expect(AppInteractor.actionsButton.exists());
-        cy.do(AppInteractor.actionsButton.click());
-        cy.expect(AppInteractor.newButton.exists());
-        /*
-        TODO
-        test if AppInteractor.exportCSVButton is disabled
-        */
-        // close options because in next step Actions button will be clicked again
+        cy.do(AppInteractor.actionsButton.click()).then(() => {
+          cy.expect(AppInteractor.newButton.exists());
+          cy.expect(AppInteractor.exportCSVButton.is({ disabled: true }));
+        });
+        // close dropdown because in next step Actions button will be clicked again
         cy.do(AppInteractor.actionsButton.click());
       });
 
@@ -135,20 +137,10 @@ describe('License create and delete', () => {
     it('should open the licenses app and see "Actions" button w/o "New" option', () => {
       AppInteractor.openLicensesApp();
       AppInteractor.waitLoading();
-      cy.do(AppInteractor.actionsButton.click());
-      cy.expect(AppInteractor.newButton.absent());
-      /*
-      TODO
-      test if AppInteractor.exportCSVButton is disabled
-      */
-      // cy.expect(AppInteractor.exportCSVButton.is{{ disabled: true }});
-      // cy.get(AppInteractor.exportCSVButton.selector).should('be.disabled');
-      // cy.get(AppInteractor.exportCSVButton.selector)
-      //   .as('exportCSVButton')
-      //   .should(($button) => {
-      //     expect($button).to.have.attr('disabled');
-      //   });
-      // cy.expect(AppInteractor.exportCSVButton.should('be.disabled'));
+      cy.do(AppInteractor.actionsButton.click()).then(() => {
+        cy.expect(AppInteractor.newButton.absent());
+        cy.expect(AppInteractor.exportCSVButton.is({ disabled: true }));
+      });
     });
   });
 
@@ -171,19 +163,12 @@ describe('License create and delete', () => {
 
     describe('actions dropdown', () => {
       it('should open actions dropdown w/o delete option', () => {
-        /*
-        TODO
-        test if actions button exists,
-        click it and then edit, duplicate exist, delete absent
-        */
-        // cy.do(Pane(including(licenseName)).find(Dropdown('Actions')).choose());
-        // cy.do(Pane(including(licenseName)).find(Dropdown('Actions')));
-        // // cy.do(Pane(including(licenseName)).find(Dropdown('Actions')).click());
-        // // cy.expect(LicenseViewInteractor.actionsButton.exists());
-        // // cy.do(LicenseViewInteractor.actionsButton.click());
-        // cy.expect(DropdownMenu().find(Button('Delete')).absent());
-        // cy.expect(LicenseViewInteractor.duplicateButton.exists());
-        // cy.expect(LicenseViewInteractor.editButton.exists());
+        cy.do(Pane(including(licenseName)).find(Button('Actions')).click())
+          .then(() => {
+            cy.expect(LicenseViewInteractor.deleteButton.absent());
+            cy.expect(LicenseViewInteractor.duplicateButton.exists());
+            cy.expect(LicenseViewInteractor.editButton.exists());
+          });
       });
     });
   });
@@ -203,11 +188,14 @@ describe('License create and delete', () => {
 
     describe('delete license', () => {
       it('should open actions dropdown with options', () => {
-        /*
-        TODO
-        test if actions button exists,
-        click it and then edit, duplicate, delete exist
-        */
+        cy.do(Pane(including(licenseName)).find(Button('Actions')).click())
+          .then(() => {
+            cy.expect(LicenseViewInteractor.deleteButton.exists());
+            cy.expect(LicenseViewInteractor.duplicateButton.exists());
+            cy.expect(LicenseViewInteractor.editButton.exists());
+          });
+        // close dropdown because in next step Actions button will be clicked again
+        cy.do(Pane(including(licenseName)).find(Button('Actions')).click());
       });
 
       it('should delete the license', () => {

@@ -1,5 +1,6 @@
 import {
   Button,
+  Callout,
   DropdownMenu,
   including,
   Modal,
@@ -24,7 +25,11 @@ export default class LicenseViewInteractor {
   static delete(licenseName) {
     cy.do(Pane(including(licenseName)).clickAction('Delete'));
     cy.expect(Modal('Delete license').exists());
+    cy.contains(`License ${licenseName} and any attached amendments will be deleted.`);
+    cy.expect(Button('Cancel').exists());
+    cy.expect(Button('Delete').exists());
     cy.do(Button('Delete').click());
+    cy.expect(Callout(`Deleted license: ${licenseName}`).exists());
   }
 
   static paneExists(licenseName) {
