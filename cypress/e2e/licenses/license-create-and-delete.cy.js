@@ -1,11 +1,5 @@
-import {
-  Button,
-  including,
-  KeyValue,
-  Pane
-} from '@folio/stripes-testing';
+import { KeyValue } from '@folio/stripes-testing';
 import { HeadlineInteractor as Headline } from '../../../interactors';
-import DateTools from '../../support/utils/dateTools';
 import { getRandomPostfix } from '../../support/utils/stringTools';
 
 import AppInteractor from '../../support/fragments/licenses/AppInteractor';
@@ -116,10 +110,7 @@ describe('License create and delete', () => {
 
       // it has to be 'function ()' and NOT '() =>' because otherwise the alias can't be accessed with this.*
       it('should open "Record last updated" information and see correct values', function () {
-        cy.get('[id=licenseInfoRecordMeta]').click().within(() => {
-          cy.contains('Record created: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
-          cy.contains('Record last updated: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
-        });
+        LicenseViewInteractor.recordMetadataInfo(this.dateCreated);
       });
     });
   }
@@ -163,7 +154,7 @@ describe('License create and delete', () => {
 
     describe('actions dropdown', () => {
       it('should open actions dropdown w/o delete option', () => {
-        cy.do(Pane(including(licenseName)).find(Button('Actions')).click())
+        cy.do(LicenseViewInteractor.actionsButton(licenseName).click())
           .then(() => {
             cy.expect(LicenseViewInteractor.deleteButton.absent());
             cy.expect(LicenseViewInteractor.duplicateButton.exists());
@@ -188,14 +179,14 @@ describe('License create and delete', () => {
 
     describe('delete license', () => {
       it('should open actions dropdown with options', () => {
-        cy.do(Pane(including(licenseName)).find(Button('Actions')).click())
+        cy.do(LicenseViewInteractor.actionsButton(licenseName).click())
           .then(() => {
             cy.expect(LicenseViewInteractor.deleteButton.exists());
             cy.expect(LicenseViewInteractor.duplicateButton.exists());
             cy.expect(LicenseViewInteractor.editButton.exists());
           });
         // close dropdown because in next step Actions button will be clicked again
-        cy.do(Pane(including(licenseName)).find(Button('Actions')).click());
+        cy.do(LicenseViewInteractor.actionsButton(licenseName).click());
       });
 
       it('should delete the license', () => {

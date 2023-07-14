@@ -92,10 +92,7 @@ describe('License lifecycle', () => {
 
     // it has to be 'function ()' and NOT '() =>' because otherwise the alias can't be accessed with this.*
     it('should be possible to open and view licenseInfoRecordMetaContent', function () {
-      cy.get('[id=licenseInfoRecordMeta]').click().within(() => {
-        cy.contains('Record created: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
-        cy.contains('Record last updated: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
-      });
+      LicenseViewInteractor.recordMetadataInfo(this.dateCreated);
     });
 
     it('should wait 60 seconds between create and edit', () => {
@@ -113,7 +110,7 @@ describe('License lifecycle', () => {
     });
 
     it('should be possible to view that the licenseInfoMetaRecord is updated', function () {
-      cy.get('[id=licenseInfoRecordMeta]').should('not.have.text', 'Record last updated: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
+      LicenseViewInteractor.recordMetadataInfoUpdated(this.dateCreated);
     });
   });
 
