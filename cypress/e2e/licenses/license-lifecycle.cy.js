@@ -4,8 +4,6 @@ import {
 
 import { HeadlineInteractor as Headline } from '../../../interactors';
 
-import DateTools from '../../support/utils/dateTools';
-
 import AppInteractor from '../../support/fragments/licenses/AppInteractor';
 import LicenseFormInteractor from '../../support/fragments/licenses/LicenseFormInteractor';
 import LicenseViewInteractor from '../../support/fragments/licenses/LicenseViewInteractor';
@@ -22,7 +20,6 @@ describe('License lifecycle', () => {
   const license = {
     name: licenseName,
     status: 'Active',
-    startDate: DateTools.getCurrentDate(),
     type: 'Local'
   };
 
@@ -77,7 +74,6 @@ describe('License lifecycle', () => {
       LicenseViewInteractor.paneExists(license.name);
       cy.expect(KeyValue('Type').has({ value: license.type }));
       cy.expect(KeyValue('Status').has({ value: license.status }));
-      cy.expect(KeyValue('Start date').has({ value: DateTools.getDateNoZeros(license.startDate) }));
       cy.expect(Headline(license.name).exists());
     });
   });

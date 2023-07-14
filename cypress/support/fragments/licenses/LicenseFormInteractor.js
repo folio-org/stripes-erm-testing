@@ -3,9 +3,8 @@ import {
   TextField
 } from '@folio/stripes-testing';
 
-import { DatepickerInteractor as Datepicker, SelectInteractor as Select } from '../../../../interactors';
+import { SelectInteractor as Select } from '../../../../interactors';
 
-import DateTools from '../../utils/dateTools';
 import { getRandomPostfix, normalize } from '../../utils/stringTools';
 
 /* The interactor for the create/edit page form
@@ -22,9 +21,8 @@ export default class LicenseFormInteractor {
   static fill(fillLicense = {}) {
     // Default the necessary options so they always exist, no matter if only a subset gets passed in;
     const fillName = fillLicense.name ?? `autotest_agreement_${getRandomPostfix()}`;
-    const fillStatus = fillLicense.status ?? 'Draft';
+    const fillStatus = fillLicense.status ?? 'Active';
     const fillType = fillLicense.type ?? 'Local';
-    const fillStartDate = fillLicense.startDate ?? DateTools.getCurrentDate();
 
     // Fill in field, then check it filled in as expected
     cy.do(Select('Status*').choose(fillStatus));
@@ -32,9 +30,6 @@ export default class LicenseFormInteractor {
 
     cy.do(Select('Type*').choose(fillType));
     cy.expect(Select('Type*').has({ value: normalize(fillType) }));
-
-    cy.do(Datepicker({ id: 'edit-license-start-date' }).fillIn(fillStartDate));
-    cy.expect(Datepicker({ id: 'edit-license-start-date' }).has({ inputValue: fillStartDate }));
 
     this.fillName(fillName);
     cy.expect(TextField('Name*').has({ value: fillName }));
