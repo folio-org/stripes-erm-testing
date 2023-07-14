@@ -86,10 +86,7 @@ describe('Agreement create and delete', () => {
 
       // it has to be 'function ()' and NOT '() =>' because otherwise the alias can't be accessed with this.*
       it('should open "Record last updated" information and see correct values', function () {
-        cy.get('[id=agreementInfoRecordMeta]').click().within(() => {
-          cy.contains('Record created: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
-          cy.contains('Record last updated: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
-        });
+        AgreementViewInteractor.recordMetadataInfo(this.dateCreated);
       });
     });
   }
