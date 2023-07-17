@@ -47,6 +47,9 @@ These tests are full integration tests, which mean that they will create actual 
 
 For example, if a test is written for Agreements which creates an agreement called "Test" and then does not subsequently delete that test, then at the end of the test run, an Agreement called "Test" will remain in the system. If the tests were then run again they would fail, as a new agreement with the name "Test" would be unable to be created.
 
+#### Default test language
+In `cypress/support/e2e.js` a before and after hook is added to ensure that the systems locale is `en-US`.
+
 ### File upload
 
 If it's necessary to upload a file into the system during a test, place that file in the `cypress/fixtures` directory.
