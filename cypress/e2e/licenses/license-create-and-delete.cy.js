@@ -17,7 +17,6 @@ const license = {
 };
 
 const refdataTypeDesc = 'License.Type';
-let typeCreated = false;
 
 // users
 const editUser = {
@@ -48,25 +47,22 @@ describe('License create and delete', () => {
     cy.createUserWithPwAndPerms(viewUser, viewPermissions);
 
     cy.getAdminToken();
-    cy.getLicensesRefdataValues(refdataTypeDesc).then((refdata) => {
-      if (refdata.every(obj => obj.label !== license.type)) {
-        LicensesSettingsInteractor.createLicensesRefdataValue(refdataTypeDesc, license.type);
-        typeCreated = true;
-      }
-    });
-
-    AppInteractor.fetchStatusLabel(license);
+    // the following sets Cypress.env('licenseTypeCreated') to true if a License.Type entry is created
+    LicensesSettingsInteractor.ensureLicenseTypeExists(license);
+    LicensesSettingsInteractor.fetchStatusLabel(license);
   });
 
   after(() => {
+    if (Cypress.env('licenseTypeCreated') === true) {
+      cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+      LicensesSettingsInteractor.deleteLicensesRefdataValue(refdataTypeDesc, license.type);
+      cy.logout();
+    }
+
     cy.getAdminToken();
     cy.deleteUserViaApi(editUser.userId);
     cy.deleteUserViaApi(editDeleteUser.userId);
     cy.deleteUserViaApi(viewUser.userId);
-
-    if (typeCreated === true) {
-      LicensesSettingsInteractor.deleteLicensesRefdataValue(refdataTypeDesc, license.type);
-    }
   });
 
   function createLicense() {

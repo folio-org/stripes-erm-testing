@@ -5,7 +5,7 @@ import {
 
 import { SelectInteractor as Select } from '../../../../interactors';
 
-import { getRandomPostfix, normalize } from '../../utils/stringTools';
+import { getRandomPostfix } from '../../utils/stringTools';
 
 /* The interactor for the create/edit page form
  *
@@ -29,7 +29,7 @@ export default class LicenseFormInteractor {
     cy.expect(Select('Status*').has({ selectedContent: fillStatus }));
 
     cy.do(Select('Type*').choose(fillType));
-    cy.expect(Select('Type*').has({ value: normalize(fillType) }));
+    cy.expect(Select('Type*').has({ selectedContent: fillType }));
 
     this.fillName(fillName);
     cy.expect(TextField('Name*').has({ value: fillName }));

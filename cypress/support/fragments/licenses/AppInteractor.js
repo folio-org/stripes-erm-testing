@@ -11,8 +11,6 @@ import {
   Section,
 } from '@folio/stripes-testing';
 
-import { normalize } from '../../utils/stringTools';
-
 /* We can import other interactors here and expose their functionality
  * to allow for a singular "AppInteractor" import in our tests.
  * I'm not sure if that's a good idea or not, I quite like the idea that different
@@ -77,18 +75,6 @@ export default class AppInteractor {
 
   static licenseVisible = (licenseTitle) => {
     cy.expect(this.section.find(MultiColumnListCell(licenseTitle)).exists());
-  };
-
-  static fetchStatusLabel = (license) => {
-    const refdataDesc = 'License.Status';
-    cy.getLicensesRefdataValues(refdataDesc).then((refdata) => {
-      if (refdata.every(obj => obj.label !== license.status)) {
-        cy.getLicensesRefdataLabelFromValue(refdataDesc, normalize(license.status))
-          .then((refdataLabel) => {
-            license.status = refdataLabel;
-          });
-      }
-    });
   };
 
   static openLicensesApp = () => {

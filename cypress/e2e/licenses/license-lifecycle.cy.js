@@ -23,38 +23,20 @@ describe('License lifecycle', () => {
     type: 'Local'
   };
 
-  let typeCreated = false;
-
   before(() => {
-    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
     cy.getAdminToken();
-    cy.getLicensesRefdataValues(refdataTypeDesc).then((refdata) => {
-      /*
-       * FIXME for now we will use refdata label
-       *
-       * Long term I'm not 100% sure what we should do here, as we test based on labels, but
-       * labels can and will change in a running system, leading to potentially flaky tests
-       * in edge cases. Hopefully we won't hit those, but food for thought.
-       *
-       * Potential failure case - label has been changed, so "Active" no longer exists, but
-       * instead we have { value: 'active', label: "Wibble" }. At this point we try to create
-       * { value: 'active', label: "Active" }, but hit clashing value so no creation and test
-       * fails.
-       *
-       * See also comment in LicensesSettingsInteractor
-       */
-      if (refdata.every(obj => obj.label !== license.type)) {
-        LicensesSettingsInteractor.createLicensesRefdataValue(refdataTypeDesc, license.type);
-        typeCreated = true;
-      }
-    });
+    // the following sets Cypress.env('licenseTypeCreated') to true if a License.Type entry is created
+    LicensesSettingsInteractor.ensureLicenseTypeExists(license);
+    LicensesSettingsInteractor.fetchStatusLabel(license);
 
-    AppInteractor.fetchStatusLabel(license);
+    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
   });
 
   after(() => {
-    if (typeCreated === true) {
+    if (Cypress.env('licenseTypeCreated') === true) {
+      cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
       LicensesSettingsInteractor.deleteLicensesRefdataValue(refdataTypeDesc, license.type);
+      cy.logout();
     }
   });
 
