@@ -1,6 +1,7 @@
 const mockErmComponents = {
   useTags: jest.fn().mockReturnValue({ data: { tags: [] } }),
   useBatchedFetch: jest.fn().mockReturnValue({ results: [], total: 0 }),
+  useParallelBatchFetch: jest.fn().mockReturnValue({ items: [], total: 0 }),
   useInfiniteFetch: jest.fn().mockReturnValue({
     infiniteQueryObject: {
       error: '',
