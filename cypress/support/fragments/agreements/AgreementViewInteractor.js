@@ -8,6 +8,7 @@ import {
   Pane,
 } from '@folio/stripes-testing';
 
+import DateTools from '../../utils/dateTools';
 
 /* The cypressinteractor for the Agreement View pane
  *
@@ -65,5 +66,12 @@ export default class AgreementViewInteractor {
     cy.expect(this.duplicateButton.exists());
     cy.expect(this.editButton.exists());
     cy.expect(this.exportJsonButton.exists());
+  }
+
+  static recordMetadataInfo(dateCreated) {
+    cy.get('[id=agreementInfoRecordMeta]').click().within(() => {
+      cy.contains('Record created: ' + DateTools.getFormattedDateWithTime(dateCreated));
+      cy.contains('Record last updated: ' + DateTools.getFormattedDateWithTime(dateCreated));
+    });
   }
 }

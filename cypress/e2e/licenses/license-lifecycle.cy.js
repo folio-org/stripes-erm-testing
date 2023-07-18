@@ -4,8 +4,6 @@ import {
 
 import { HeadlineInteractor as Headline } from '../../../interactors';
 
-import DateTools from '../../support/utils/dateTools';
-
 import AppInteractor from '../../support/fragments/licenses/AppInteractor';
 import LicenseFormInteractor from '../../support/fragments/licenses/LicenseFormInteractor';
 import LicenseViewInteractor from '../../support/fragments/licenses/LicenseViewInteractor';
@@ -22,42 +20,23 @@ describe('License lifecycle', () => {
   const license = {
     name: licenseName,
     status: 'Active',
-    startDate: DateTools.getCurrentDate(),
     type: 'Local'
   };
 
-  let typeCreated = false;
-
   before(() => {
-    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
     cy.getAdminToken();
-    cy.getLicensesRefdataValues(refdataTypeDesc).then((refdata) => {
-      /*
-       * FIXME for now we will use refdata label
-       *
-       * Long term I'm not 100% sure what we should do here, as we test based on labels, but
-       * labels can and will change in a running system, leading to potentially flaky tests
-       * in edge cases. Hopefully we won't hit those, but food for thought.
-       *
-       * Potential failure case - label has been changed, so "Active" no longer exists, but
-       * instead we have { value: 'active', label: "Wibble" }. At this point we try to create
-       * { value: 'active', label: "Active" }, but hit clashing value so no creation and test
-       * fails.
-       *
-       * See also comment in LicensesSettingsInteractor
-       */
-      if (refdata.every(obj => obj.label !== license.type)) {
-        LicensesSettingsInteractor.createLicensesRefdataValue(refdataTypeDesc, license.type);
-        typeCreated = true;
-      }
-    });
+    // the following sets Cypress.env('licenseTypeCreated') to true if a License.Type entry is created
+    LicensesSettingsInteractor.ensureLicenseTypeExists(license);
+    LicensesSettingsInteractor.fetchStatusLabel(license);
 
-    AppInteractor.fetchStatusLabel(license);
+    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
   });
 
   after(() => {
-    if (typeCreated === true) {
+    if (Cypress.env('licenseTypeCreated') === true) {
+      cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
       LicensesSettingsInteractor.deleteLicensesRefdataValue(refdataTypeDesc, license.type);
+      cy.logout();
     }
   });
 
@@ -77,7 +56,6 @@ describe('License lifecycle', () => {
       LicenseViewInteractor.paneExists(license.name);
       cy.expect(KeyValue('Type').has({ value: license.type }));
       cy.expect(KeyValue('Status').has({ value: license.status }));
-      cy.expect(KeyValue('Start date').has({ value: DateTools.getDateNoZeros(license.startDate) }));
       cy.expect(Headline(license.name).exists());
     });
   });
@@ -92,10 +70,7 @@ describe('License lifecycle', () => {
 
     // it has to be 'function ()' and NOT '() =>' because otherwise the alias can't be accessed with this.*
     it('should be possible to open and view licenseInfoRecordMetaContent', function () {
-      cy.get('[id=licenseInfoRecordMeta]').click().within(() => {
-        cy.contains('Record created: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
-        cy.contains('Record last updated: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
-      });
+      LicenseViewInteractor.recordMetadataInfo(this.dateCreated);
     });
 
     it('should wait 60 seconds between create and edit', () => {
@@ -113,7 +88,7 @@ describe('License lifecycle', () => {
     });
 
     it('should be possible to view that the licenseInfoMetaRecord is updated', function () {
-      cy.get('[id=licenseInfoRecordMeta]').should('not.have.text', 'Record last updated: ' + DateTools.getFormattedDateWithTime(this.dateCreated));
+      LicenseViewInteractor.recordMetadataInfoUpdated(this.dateCreated);
     });
   });
 

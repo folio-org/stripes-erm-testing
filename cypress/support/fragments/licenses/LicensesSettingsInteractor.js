@@ -4,6 +4,8 @@ import {
   Select,
 } from '@folio/stripes-testing';
 
+import { normalize } from '../../utils/stringTools';
+
 /* The cypressinteractor for the License Settings page
  *
  * If we find ourselves doing a certain action on License Settings a lot,
@@ -25,26 +27,45 @@ export default class LicensesSettingsInteractor {
     cy.do(this.pickListSelect.choose(refdataDesc));
   }
 
+  static fetchStatusLabel = (license) => {
+    const refdataDesc = 'License.Status';
+    cy.getLicensesRefdataValues(refdataDesc).then((refdata) => {
+      if (refdata.every(obj => obj.label !== license.status)) {
+        cy.getLicensesRefdataLabelFromValue(refdataDesc, normalize(license.status))
+          .then((refdataLabel) => {
+            license.status = refdataLabel;
+          });
+      }
+    });
+  };
 
-  /* FIXME I'm not sure I like that these are entirely label based.
-   * On the one hand, the component is filled in label first.
-   * On the other hand, refdata labels are changeable and values are static
-   * One potential solution is to make decisions based on values (potentially on
-   * test side) and then creating label first, and deleting based
-   * on value not label. This likely requires the centralised refdata values
-   * mentioned in other issues, so we can combine expected value/label pairs
-   * and do work based on those.
-   *
-   * For integration tests though maybe that is not ideal and we should instead
-   * just use labels -- with appropriate checks for pre-existing values to satisfy
-   * failure cases.
-   *
-   * ie create refdata "Active" -- first check that there is no normalised value "active"
-   * If there IS then either change the label back instead (How do we return to normal
-   * after?) or create new refdata with "Active1", then change label to "Active" so
-   * tests can pass (difficult again to track after the fact)
-   * Potentially call "ensureRefdata" and have it return a cleanup method to run afterwards?
-   */
+  static fetchTypeLabel = (license) => {
+    const refdataDesc = 'License.Type';
+    cy.getLicensesRefdataValues(refdataDesc).then((refdata) => {
+      if (refdata.every(obj => obj.label !== license.type)) {
+        cy.getLicensesRefdataLabelFromValue(refdataDesc, normalize(license.type))
+          .then((refdataLabel) => {
+            license.type = refdataLabel;
+          });
+      }
+    });
+  };
+
+  static ensureLicenseTypeExists = (license) => {
+    const refdataDesc = 'License.Type';
+    cy.getLicensesRefdataValues(refdataDesc).then((refdata) => {
+      if (refdata.every(obj => obj.value !== normalize(license.type))) {
+        cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+        this.createLicensesRefdataValue(refdataDesc, license.type);
+        cy.logout();
+        Cypress.env('licenseTypeCreated', true);
+      } else if (refdata) {
+        this.fetchTypeLabel(license);
+      }
+    });
+  };
+
+  // if you want to check if value already exists before creating, use ensureLicenseTypeExists
   static createLicensesRefdataValue(refdataDesc, refdataLabel) {
     this.navigateToPickListValuesSettings();
     this.selectPickList(refdataDesc);

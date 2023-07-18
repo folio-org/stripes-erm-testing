@@ -3,6 +3,7 @@ import DateTools from '../../support/utils/dateTools';
 import AppInteractor from '../../support/fragments/agreements/AppInteractor';
 import AgreementFormInteractor from '../../support/fragments/agreements/AgreementFormInteractor';
 import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
+import AgreementsSettingsInteractor from '../../support/fragments/agreements/AgreementsSettingsInteractor';
 
 import generateItemBarcode from '../../support/utils/generateItemBarcode';
 
@@ -16,9 +17,10 @@ describe('Agreement lifecycle', () => {
   };
 
   before(() => {
-    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
     cy.getAdminToken();
-    AppInteractor.fetchStatusLabel(agreement);
+    AgreementsSettingsInteractor.fetchStatusLabel(agreement);
+
+    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
   });
 
   it('should be possible to fill in the "Create agreement" form and submit it', () => {

@@ -2,6 +2,7 @@ import {
   Checkbox,
 } from '@folio/stripes-testing';
 
+import { normalize } from '../../utils/stringTools';
 
 /* The cypressinteractor for the Agreement Settings page
  *
@@ -20,6 +21,18 @@ export default class AgreementsSettingsInteractor {
     this.navigateToAgreementsSettings();
     cy.expect(this.hideKbCheckbox.exists());
     cy.expect(this.hideKbCheckbox.is({ checked: false }));
+  }
+
+  static fetchStatusLabel = (agreement) => {
+    const refdataDesc = 'SubscriptionAgreement.AgreementStatus';
+    cy.getAgreementsRefdataValues(refdataDesc).then((refdata) => {
+      if (refdata.every(obj => obj.label !== agreement.status)) {
+        cy.getAgreementsRefdataLabelFromValue(refdataDesc, normalize(agreement.status))
+          .then((refdataLabel) => {
+            agreement.status = refdataLabel;
+          });
+      }
+    });
   }
 }
 
