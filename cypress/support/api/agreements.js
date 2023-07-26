@@ -1,3 +1,6 @@
+import { normalize } from '../utils/stringTools';
+import DateTools from '../utils/dateTools';
+
 Cypress.Commands.add('getAgreements', (searchParams) => {
   cy
     .okapiRequest({
@@ -105,4 +108,32 @@ Cypress.Commands.add('setAgreementsGeneralSettings', (params) => {
         isDefaultSearchParamsRequired: false,
       });
     });
+});
+
+Cypress.Commands.add('createAgreementViaApi', (agreement) => {
+  const agreementStatus = agreement.status ? normalize(agreement.status) : 'active';
+  const startDate = agreement.startDate ? DateTools.getApiDate(agreement.startDate) : DateTools.getApiDate();
+  cy.okapiRequest({
+    method: 'POST',
+    path: 'erm/sas',
+    body: {
+      agreementStatus,
+      name: agreement.name,
+      periods: [{ startDate }]
+    },
+    isDefaultSearchParamsRequired: false
+  })
+    .then(response => {
+      agreement.id = response.body.id;
+      cy.wrap(agreement).as('agreement');
+    });
+  return cy.get('@agreement');
+});
+
+Cypress.Commands.add('deleteAgreementViaApi', (agreementId) => {
+  cy.okapiRequest({
+    method: 'DELETE',
+    path: `erm/sas/${agreementId}`,
+    isDefaultSearchParamsRequired: false
+  });
 });

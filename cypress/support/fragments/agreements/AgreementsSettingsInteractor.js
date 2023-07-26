@@ -34,5 +34,15 @@ export default class AgreementsSettingsInteractor {
       }
     });
   }
+
+  static fetchOtherStatusLabel = (agreementStatus) => {
+    const refdataDesc = 'SubscriptionAgreement.AgreementStatus';
+    cy.getAgreementsRefdataValues(refdataDesc).then((refdata) => {
+      const firstObjWithDifferentLabel = refdata.find(obj => obj.label !== agreementStatus);
+      if (firstObjWithDifferentLabel) {
+        cy.wrap(firstObjWithDifferentLabel.label).as('otherStatusLabel');
+      }
+    });
+  }
 }
 
