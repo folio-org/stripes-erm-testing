@@ -26,10 +26,7 @@ import HomeInteractor from '../HomeInteractor';
 // Making Appinteractor a class so it is consistent and clear where each action is coming from
 // The main interactor for the agreements 3 pane main landing page
 export default class AppInteractor {
-  // static section = Section({ id: 'pane-agreement-list' });
   static section = Section({ id: 'agreements-tab-pane' });
-
-  static statusFilterSection = Section({ id: 'filter-accordion-agreementStatus' });
 
   static newButton = Button('New');
 

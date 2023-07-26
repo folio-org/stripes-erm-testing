@@ -41,60 +41,66 @@ describe('Agreement search and filter', () => {
       cy.logout();
     });
 
-    it('should see Agreements Search & filter', () => {
-      AppInteractor.openAgreementsApp();
-      AppInteractor.filterPanePresent('agreements-tab-filter-pane');
-    });
-
-    it('should search for agreement and see agreement in results list', () => {
-      AppInteractor.resetFilter('agreementStatus');
-      AppInteractor.searchAgreement(agreement.name);
-      AppInteractor.agreementVisible(agreement.name);
-    });
-
-    it('should check "Description" and "Alternative name" and do not see agreement in results list', () => {
-      AppInteractor.clickCheckbox('Alternative name');
-      AppInteractor.clickCheckbox('Description');
-      AppInteractor.agreementNotVisible(agreement.name);
-    });
-
-    it('should check "Name" and see agreement in results list again', () => {
-      AppInteractor.clickCheckbox('Name');
-      AppInteractor.agreementVisible(agreement.name);
-    });
-
-    it('should check other status filter and do not see agreement in results list', () => {
-      AgreementsSettingsInteractor.fetchOtherStatusLabel(agreement.status);
-      cy.get('@otherStatusLabel').then((otherStatusLabel) => {
-        AppInteractor.clickCheckbox(otherStatusLabel);
+    describe('Search agreement', () => {
+      it('should see Agreements Search & filter', () => {
+        AppInteractor.openAgreementsApp();
+        AppInteractor.filterPanePresent('agreements-tab-filter-pane');
       });
-      AppInteractor.agreementNotVisible(agreement.name);
+
+      it('should search for agreement and see agreement in results list', () => {
+        AppInteractor.resetFilter('agreementStatus');
+        AppInteractor.searchAgreement(agreement.name);
+        AppInteractor.agreementVisible(agreement.name);
+      });
+
+      it('should check "Description" and "Alternative name" and do not see agreement in results list', () => {
+        AppInteractor.clickCheckbox('Alternative name');
+        AppInteractor.clickCheckbox('Description');
+        AppInteractor.agreementNotVisible(agreement.name);
+      });
+
+      it('should check "Name" and see agreement in results list again', () => {
+        AppInteractor.clickCheckbox('Name');
+        AppInteractor.agreementVisible(agreement.name);
+      });
     });
 
-    it(`should check "${agreement.status}" status filter and see agreement in results list again`, () => {
-      AppInteractor.clickCheckbox(agreement.status);
-      AppInteractor.agreementVisible(agreement.name);
+    describe('Status filter', () => {
+      it('should check other status filter and do not see agreement in results list', () => {
+        AgreementsSettingsInteractor.fetchOtherStatusLabel(agreement.status);
+        cy.get('@otherStatusLabel').then((otherStatusLabel) => {
+          AppInteractor.clickCheckbox(otherStatusLabel);
+        });
+        AppInteractor.agreementNotVisible(agreement.name);
+      });
+
+      it(`should check "${agreement.status}" status filter and see agreement in results list again`, () => {
+        AppInteractor.clickCheckbox(agreement.status);
+        AppInteractor.agreementVisible(agreement.name);
+      });
     });
 
-    it('should set "On or after" filter after agreements start date and do not see agreement in results list', () => {
-      AppInteractor.clickFilterAccordion('Start date');
-      AppInteractor.setDateFilter('On or after', DateTools.getDateAfter(agreement.startDate));
-      AppInteractor.agreementNotVisible(agreement.name);
-    });
+    describe('Start date filter', () => {
+      it('should set "On or after" filter after agreements start date and do not see agreement in results list', () => {
+        AppInteractor.clickFilterAccordion('Start date');
+        AppInteractor.setDateFilter('On or after', DateTools.getDateAfter(agreement.startDate));
+        AppInteractor.agreementNotVisible(agreement.name);
+      });
 
-    it('should set "On or after" filter before agreements start date and see agreement in results list', () => {
-      AppInteractor.setDateFilter('On or after', DateTools.getDateBefore(agreement.startDate));
-      AppInteractor.agreementVisible(agreement.name);
-    });
+      it('should set "On or after" filter before agreements start date and see agreement in results list', () => {
+        AppInteractor.setDateFilter('On or after', DateTools.getDateBefore(agreement.startDate));
+        AppInteractor.agreementVisible(agreement.name);
+      });
 
-    it('should set "On or before" filter before agreements start date and do not see agreement in results list', () => {
-      AppInteractor.setDateFilter('On or before', DateTools.getDateBefore(agreement.startDate));
-      AppInteractor.agreementNotVisible(agreement.name);
-    });
+      it('should set "On or before" filter before agreements start date and do not see agreement in results list', () => {
+        AppInteractor.setDateFilter('On or before', DateTools.getDateBefore(agreement.startDate));
+        AppInteractor.agreementNotVisible(agreement.name);
+      });
 
-    it('should set "On or before" filter after agreements start date and see agreement in results list', () => {
-      AppInteractor.setDateFilter('On or before', DateTools.getDateAfter(agreement.startDate));
-      AppInteractor.agreementVisible(agreement.name);
+      it('should set "On or before" filter after agreements start date and see agreement in results list', () => {
+        AppInteractor.setDateFilter('On or before', DateTools.getDateAfter(agreement.startDate));
+        AppInteractor.agreementVisible(agreement.name);
+      });
     });
   });
 });
