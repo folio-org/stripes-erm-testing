@@ -10,5 +10,8 @@ const label = (el) => {
 
 export default TextField.extend('text field new')
   .selector('div[class^=textField]')
-  .locator(label);
+  .locator(label)
+  .filters({
+    id: (el) => el.querySelector('input')?.id,
+  });
 

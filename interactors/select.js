@@ -7,7 +7,7 @@ import { Select } from '@folio/stripes-testing';
 const blur = async (intr) => await intr.perform((el) => el.querySelector('select').blur());
 
 export default Select.extend('selectNew')
-  .selector('[class^=select]')
+  .selector('[class^=select inputGroup]')
   .actions({
     blur,
     chooseAndBlur: async (intr, value) => {

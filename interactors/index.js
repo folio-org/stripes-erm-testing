@@ -13,6 +13,7 @@ export { default as Checkbox } from './checkbox';
 export { default as Card } from './card';
 export { default as TextField } from './text-field';
 export { default as TextArea } from './textArea';
+export { default as MultiSelect, MultiSelectOption } from './multi-select';
 
 export {
   MultiColumnList,
