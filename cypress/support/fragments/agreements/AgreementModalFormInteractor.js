@@ -5,7 +5,7 @@ import {
   Modal
 } from '@folio/stripes-testing';
 
-import { DatepickerInteractor as Datepicker, SelectInteractor as Select } from '../../../../interactors';
+import { Datepicker, Select } from '../../../../interactors';
 
 import DateTools from '../../utils/dateTools';
 import { getRandomPostfix } from '../../utils/stringTools';

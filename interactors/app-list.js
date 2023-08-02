@@ -4,7 +4,7 @@ import { HTML } from '@interactors/html';
 const label = (el) => el.textContent.trim();
 
 export const AppListItem = HTML.extend('App List Item')
-  .selector('[id^=app-list-item-clickable], [class^=NavListItem]')
+.selector('[id^=app-list-item-clickable], [class^=NavListItem]')
   .locator(label)
   .filters({
     label,

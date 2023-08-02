@@ -3,7 +3,7 @@ import {
   TextField
 } from '@folio/stripes-testing';
 
-import { SelectInteractor as Select } from '../../../../interactors';
+import { Select } from '../../../../interactors';
 
 import { getRandomPostfix } from '../../utils/stringTools';
 
