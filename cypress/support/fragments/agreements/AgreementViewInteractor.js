@@ -6,6 +6,8 @@ import {
   Modal,
   MultiColumnList,
   Pane,
+  or,
+  HTML,
 } from '@folio/stripes-testing';
 
 import DateTools from '../../utils/dateTools';
@@ -20,7 +22,9 @@ export default class AgreementViewInteractor {
   static deleteButton = DropdownMenu().find(Button('Delete'));
   static duplicateButton = DropdownMenu().find(Button('Duplicate'));
   static editButton = DropdownMenu().find(Button('Edit'));
-  static exportJsonButton = DropdownMenu().find(Button('Export agreement (JSON)'));
+  static exportJsonButton = DropdownMenu().find(
+    Button('Export agreement (JSON)')
+  );
 
   static edit(agreementName) {
     // EXAMPLE Dropdown 'Actions' - fails with more than one 'Actions' Dropdown
@@ -50,14 +54,24 @@ export default class AgreementViewInteractor {
   static openAgreementLinesAccordion = () => {
     cy.expect(Accordion('Agreement lines').exists());
     cy.do(Accordion('Agreement lines').clickHeader());
-    cy.expect(MultiColumnList('agreement-lines').exists());
-    cy.expect(MultiColumnList('eresources-covered').exists());
-  }
+    cy.expect(
+      or(
+        MultiColumnList('agreement-lines').exists(),
+        HTML(including('No results found. Please check your filters.')).exists()
+      )
+    );
+    cy.expect(
+      or(
+        MultiColumnList('eresources-covered').exists(),
+        HTML(including('No results found. Please check your filters.')).exists()
+      )
+    );
+  };
 
   static openFirstAgreementLine = () => {
     this.openAgreementLinesAccordion();
     cy.do(MultiColumnList('agreement-lines').click({ row: 0, columnIndex: 1 }));
-  }
+  };
 
   static openOptions = () => {
     cy.expect(this.actionsButton.exists());
@@ -66,12 +80,30 @@ export default class AgreementViewInteractor {
     cy.expect(this.duplicateButton.exists());
     cy.expect(this.editButton.exists());
     cy.expect(this.exportJsonButton.exists());
-  }
+  };
+
+  // Unsure about formatting of these two functions
+  static newAgreementLine = () => {
+    cy.get('[data-testid=line-listing-action-dropdown]').click();
+    cy.get('[id=add-agreement-line-button]').click();
+  };
+
+  static viewAgreementLineSearch = () => {
+    cy.get('[data-testid=line-listing-action-dropdown]').click();
+    cy.get('[id=agreement-line-search]').click();
+  };
 
   static recordMetadataInfo(dateCreated) {
-    cy.get('[id=agreementInfoRecordMeta]').click().within(() => {
-      cy.contains('Record created: ' + DateTools.getFormattedDateWithTime(dateCreated));
-      cy.contains('Record last updated: ' + DateTools.getFormattedDateWithTime(dateCreated));
-    });
+    cy.get('[id=agreementInfoRecordMeta]')
+      .click()
+      .within(() => {
+        cy.contains(
+          'Record created: ' + DateTools.getFormattedDateWithTime(dateCreated)
+        );
+        cy.contains(
+          'Record last updated: ' +
+            DateTools.getFormattedDateWithTime(dateCreated)
+        );
+      });
   }
 }

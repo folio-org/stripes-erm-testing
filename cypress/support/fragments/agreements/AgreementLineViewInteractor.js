@@ -1,9 +1,4 @@
-import {
-  Button,
-  Modal,
-  Pane,
-} from '@folio/stripes-testing';
-
+import { Button, Modal, Pane } from '@folio/stripes-testing';
 
 /* The cypressinteractor for the Agreement View pane
  *
@@ -23,5 +18,11 @@ export default class AgreementLineViewInteractor {
 
   static paneDoesNotExist(paneId) {
     cy.expect(Pane({ id: paneId }).absent());
+  }
+
+  static closePane(paneId) {
+    this.paneExists(paneId);
+    cy.do(Pane({ id: paneId }).dismiss());
+    this.paneDoesNotExist(paneId);
   }
 }
