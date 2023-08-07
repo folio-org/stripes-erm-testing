@@ -1,6 +1,6 @@
 import {
   Checkbox,
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 
 import { normalize } from '../../utils/stringTools';
 

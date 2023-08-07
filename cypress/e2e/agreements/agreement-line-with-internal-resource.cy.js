@@ -1,5 +1,5 @@
 import { getRandomPostfix } from '../../support/utils/stringTools';
-import { AppListItemInteractor as AppListItem } from '../../../interactors';
+import { AppListItem } from '../../../interactors';
 import AgreementAppInteractor from '../../support/fragments/agreements/AppInteractor';
 import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
 import AgreementLineViewInteractor from '../../support/fragments/agreements/AgreementLineViewInteractor';

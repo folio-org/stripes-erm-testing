@@ -6,7 +6,7 @@ import {
   Modal,
   MultiColumnList,
   Pane,
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 
 import DateTools from '../../utils/dateTools';
 

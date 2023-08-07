@@ -1,6 +1,12 @@
 import localforage from 'localforage';
 
-import { Button, Dropdown, TextField, Heading, including } from '@folio/stripes-testing';
+import {
+  Button,
+  Dropdown,
+  Heading,
+  including,
+  TextField,
+} from '../../interactors';
 
 Cypress.Commands.add('login', (username, password, visitPath = { path: '/', waiter: () => cy.expect(Heading(including('Welcome')).exists()) }) => {
   // We use a behind-the-scenes method of ensuring we are logged

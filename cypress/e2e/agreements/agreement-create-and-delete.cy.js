@@ -1,5 +1,4 @@
-import { KeyValue } from '@folio/stripes-testing';
-import { HeadlineInteractor as Headline } from '../../../interactors';
+import { Headline, KeyValue } from '../../../interactors';
 import DateTools from '../../support/utils/dateTools';
 import { getRandomPostfix } from '../../support/utils/stringTools';
 

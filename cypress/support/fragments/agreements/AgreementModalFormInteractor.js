@@ -1,11 +1,11 @@
 import {
   Button,
+  Datepicker,
   including,
+  Modal,
+  Select,
   TextField,
-  Modal
-} from '@folio/stripes-testing';
-
-import { Datepicker, Select } from '../../../../interactors';
+} from '../../../../interactors';
 
 import DateTools from '../../utils/dateTools';
 import { getRandomPostfix } from '../../utils/stringTools';
