@@ -4,7 +4,7 @@ import {
   MultiColumnListCell,
   Pane,
   including,
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 import AgreementModalFormInteractor from './AgreementModalFormInteractor';
 
 

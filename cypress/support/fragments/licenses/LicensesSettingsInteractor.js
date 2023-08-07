@@ -2,7 +2,7 @@ import {
   Button,
   Modal,
   Select,
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 
 import { normalize } from '../../utils/stringTools';
 

@@ -5,7 +5,7 @@ import {
   including,
   Modal,
   Pane
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 
 import DateTools from '../../utils/dateTools';
 /* The cypressinteractor for the License View pane

@@ -4,7 +4,7 @@ import {
   including,
   KeyValue,
   Pane,
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 
 // The main interactor for the json import job form
 export default class JsonImportJobFormInteractor {

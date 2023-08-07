@@ -1,6 +1,6 @@
 import {
   Button,
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 
 
 /* The cypressinteractor for the Package View pane

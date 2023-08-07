@@ -1,10 +1,9 @@
 import {
-  KeyValue,
+  Headline,
   including,
-  Pane,
-} from '@folio/stripes-testing';
-
-import { HeadlineInteractor as Headline } from '../../../../interactors';
+  KeyValue,
+  Pane
+} from '../../../../interactors';
 
 // The main interactor for the job view
 export default class JobViewInteractor {
