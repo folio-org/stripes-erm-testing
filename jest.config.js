@@ -3,13 +3,16 @@
 const path = require('path');
 const config = require('@folio/jest-config-stripes');
 
-// Default config defines some esModules, put any extras specific to our modules here
+/* Default config defines some esModules,
+ * we overwrite here entirely because it is negative regex
+ * In case of failure, check modules included in default config here:
+ * https://github.com/folio-org/jest-config-stripes/blob/main/index.js
+ */
 const extraESModules = ['@folio', 'ky', '@k-int'].join('|');
 
 module.exports = {
   ...config,
   transformIgnorePatterns: [
-    ...config.transformIgnorePatterns,
     `/node_modules/(?!${extraESModules})`
   ],
   moduleNameMapper: {
