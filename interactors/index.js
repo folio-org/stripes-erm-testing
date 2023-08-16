@@ -1,6 +1,10 @@
-export { default as HeadlineInteractor } from './headline';
-export { default as IconButtonInteractor } from './icon-button';
-export { default as DatepickerInteractor } from './datepicker';
-export { default as FormattedDateTimeInteractor } from './formatted-date-time';
-export { default as SelectInteractor } from './select';
-export { default as AppListInteractor, AppListItem as AppListItemInteractor } from './app-list';
+/* Export existing interactors as is */
+export * from '@folio/stripes-testing/interactors';
+
+/* Override those we need special behaviour for */
+export { default as Headline } from './headline';
+export { default as IconButton } from './icon-button';
+export { default as Datepicker } from './datepicker';
+export { default as FormattedDateTime } from './formatted-date-time';
+export { default as Select } from './select';
+export { default as AppList, AppListItem } from './app-list';

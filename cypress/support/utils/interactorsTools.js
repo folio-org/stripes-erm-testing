@@ -8,7 +8,7 @@ import {
   TextArea,
   TextField,
   calloutTypes
-} from '@folio/stripes-testing';
+} from '../../../interactors';
 
 const deleteButton = Button({ ariaLabel: 'remove fields for ' });
 

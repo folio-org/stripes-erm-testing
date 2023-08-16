@@ -1,5 +1,11 @@
-import { Button, Select, TextField } from '@folio/stripes-testing';
 import uuid from 'uuid';
+
+import {
+  Button,
+  Select,
+  TextField
+} from '../../interactors';
+
 import defaultUser from './utils/defaultUser';
 
 Cypress.Commands.add('createUser', (userLastName, patronGroup, email) => {

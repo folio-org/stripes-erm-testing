@@ -6,7 +6,7 @@ import HTML from './baseHTML';
 const ariaLabel = el => el.getAttribute('aria-label');
 
 export default HTML.extend('icon button')
-  .selector('[class^=iconButton]')
+  .selector('[class^=iconButton-]')
   .locator(ariaLabel)
   .filters({
     href: (el) => el.getAttribute('href'),

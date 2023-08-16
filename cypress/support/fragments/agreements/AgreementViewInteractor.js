@@ -7,8 +7,8 @@ import {
   MultiColumnList,
   Pane,
   or,
-  HTML,
-} from '@folio/stripes-testing';
+  HTML
+} from '../../../../interactors';
 
 import DateTools from '../../utils/dateTools';
 

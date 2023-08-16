@@ -1,9 +1,8 @@
 import {
   Button,
+  Select,
   TextField
-} from '@folio/stripes-testing';
-
-import { SelectInteractor as Select } from '../../../../interactors';
+} from '../../../../interactors';
 
 import { getRandomPostfix } from '../../utils/stringTools';
 
