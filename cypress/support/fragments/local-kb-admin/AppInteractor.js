@@ -6,7 +6,7 @@ import {
   MultiColumnListRow,
   or,
   Pane,
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 
 import JsonImportJobFormInteractor from './JsonImportJobFormInteractor';
 import JobViewInteractor from './JobViewInteractor';

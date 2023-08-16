@@ -9,7 +9,7 @@ import {
   Pane,
   SearchField,
   Section,
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 
 /* We can import other interactors here and expose their functionality
  * to allow for a singular "AppInteractor" import in our tests.

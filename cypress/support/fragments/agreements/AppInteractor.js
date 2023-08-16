@@ -10,7 +10,7 @@ import {
   Pane,
   SearchField,
   Section,
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 
 import { DatepickerInteractor as Datepicker } from '../../../../interactors';
 

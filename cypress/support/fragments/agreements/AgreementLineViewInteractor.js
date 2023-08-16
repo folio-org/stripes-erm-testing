@@ -2,7 +2,7 @@ import {
   Button,
   Modal,
   Pane,
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 
 
 /* The cypressinteractor for the Agreement View pane

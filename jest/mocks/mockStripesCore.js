@@ -85,6 +85,7 @@ const mockKy = () => ({ json: () => Promise.resolve(true) });
 
 const mockStripesCore = {
   stripesConnect,
+  useChunkedCQLFetch: jest.fn().mockReturnValue({ items: [], isLoading: false, itemQueries: [] }),
   useStripes: jest.fn(() => STRIPES),
   useOkapiKy: jest.fn().mockReturnValue({
     delete: mockKy,
