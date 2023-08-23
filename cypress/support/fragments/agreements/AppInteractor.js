@@ -1,5 +1,7 @@
 import {
+  Accordion,
   Button,
+  Checkbox,
   HTML,
   including,
   MultiColumnListCell,
@@ -9,6 +11,8 @@ import {
   SearchField,
   Section,
 } from '../../../../interactors';
+
+import { DatepickerInteractor as Datepicker } from '../../../../interactors';
 
 /* We can import other interactors here and expose their functionality
  * to allow for a singular "AppInteractor" import in our tests.
@@ -22,7 +26,7 @@ import HomeInteractor from '../HomeInteractor';
 // Making Appinteractor a class so it is consistent and clear where each action is coming from
 // The main interactor for the agreements 3 pane main landing page
 export default class AppInteractor {
-  static section = Section({ id: 'pane-agreement-list' });
+  static section = Section({ id: 'agreements-tab-pane' });
 
   static newButton = Button('New');
 
@@ -32,6 +36,8 @@ export default class AppInteractor {
   static titlesButton = Button('Titles');
 
   static openBasketButton = Button({ id: 'open-basket-button' });
+
+  // static descriptionCheckbox =
 
   static waitLoading = () => {
     cy.expect(or(
@@ -72,10 +78,16 @@ export default class AppInteractor {
   }
 
   static agreementNotVisible = (agreementTitle) => {
-    cy.expect(or(
-      this.section.find(MultiColumnListCell(agreementTitle)).absent(),
-      this.section.find(HTML(including('No results found. Please check your filters.'))).exists()
-    ));
+    cy.expect(this.section.find(HTML(including(`No results found for "${agreementTitle}".`))).exists());
+    // the following is not working correctly: it passes even when MultiColumnListCell(agreementTitle) exists
+    // cy.expect(or(
+    //   this.section.find(MultiColumnListCell(agreementTitle)).absent(),
+    //   this.section.find(HTML(including(`No results found for "${agreementTitle}".`))).exists()
+    // ));
+  };
+
+  static agreementVisible = (agreementTitle) => {
+    cy.expect(this.section.find(MultiColumnListCell(agreementTitle)).exists());
   };
 
   static openAgreementsApp = () => {
@@ -96,4 +108,27 @@ export default class AppInteractor {
       Button('Search').click()
     ]);
   };
+
+  static clickCheckbox = (label) => {
+    cy.expect(Checkbox(label).exists());
+    cy.do(Checkbox(label).click());
+  }
+
+  static resetFilter = (filter) => {
+    const sectionId = `filter-accordion-${filter}`;
+    cy.get(`#${sectionId}`)
+      .find('button[data-test-clear-button="true"]')
+      .click();
+  }
+
+  static clickFilterAccordion = (filter) => {
+    cy.expect(Accordion(filter).exists());
+    cy.do(Accordion(filter).clickHeader());
+  }
+
+  static setDateFilter = (label, date) => {
+    cy.expect(Datepicker(label).is({ visible: true }));
+    cy.do(Datepicker(label).fillIn(date));
+    cy.do(Button('Apply').click());
+  }
 }

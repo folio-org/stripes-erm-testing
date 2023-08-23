@@ -67,10 +67,12 @@ export default class AppInteractor {
   }
 
   static licenseNotVisible = (licenseTitle) => {
-    cy.expect(or(
-      this.section.find(MultiColumnListCell(licenseTitle)).absent(),
-      this.section.find(HTML(including('No results found. Please check your filters.'))).exists()
-    ));
+    cy.expect(this.section.find(HTML(including(`No results found for "${licenseTitle}".`))).exists());
+    // the following is not working correctly: it passes even when MultiColumnListCell(licenseTitle) exists
+    // cy.expect(or(
+    //   this.section.find(MultiColumnListCell(licenseTitle)).absent(),
+    //   this.section.find(HTML(including('No results found. Please check your filters.'))).exists()
+    // ));
   };
 
   static licenseVisible = (licenseTitle) => {
