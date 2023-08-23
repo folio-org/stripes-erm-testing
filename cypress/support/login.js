@@ -40,7 +40,9 @@ Cypress.Commands.add('login', (username, password, visitPath = { path: '/', wait
 Cypress.Commands.add('logout', () => {
   cy.do([
     Dropdown('My profile').open(),
-    Button('Log out').click(),
+    // Sometimes button says "log out", sometimes it says Log out from FOLIO, keep SSO session
+    // Use ID instead
+    Button({ id: 'clickable-logout' }).click(),
   ]);
 
   cy.expect(Button('Log in', { disabled: true }).exists());
