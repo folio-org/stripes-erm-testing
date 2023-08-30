@@ -69,9 +69,12 @@ describe('Agreement line test', () => {
       }
     });
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-    cy.getAdminToken();
-    LocalKBAdminAppInteractor.openLocalKbAdminApp();
-    LocalKBAdminAppInteractor.uploadJsonFileAndAwaitCompletion(fileName);
+    cy.getPackages(`?query=${packageName}&sort=name`).then((packages) => {
+      if (packages?.length === 0) {
+        LocalKBAdminAppInteractor.openLocalKbAdminApp();
+        LocalKBAdminAppInteractor.uploadJsonFileAndAwaitCompletion(fileName);
+      }
+    });
     AgreementAppInteractor.openAgreementsApp();
     AgreementAppInteractor.createAgreement(agreement);
     AgreementAppInteractor.openLocalKB();
