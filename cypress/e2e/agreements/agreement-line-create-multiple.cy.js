@@ -44,8 +44,6 @@ const viewPermissions = [
   'ui-agreements.resources.view',
 ];
 
-let isChecked = true;
-
 function deleteFirstAgreementLine() {
   AgreementViewInteractor.paneExists(agreementName);
   AgreementViewInteractor.openFirstAgreementLine();
@@ -60,16 +58,12 @@ describe('Agreement line test', () => {
     cy.createUserWithPwAndPerms(editUser, editPermissions);
     cy.createUserWithPwAndPerms(viewUser, viewPermissions);
 
-    console.log('do not hide internal agreements knowledgebase');
     cy.getAdminToken();
-    cy.getAgreementsGeneralSettings().then((settings) => {
-      if (settings?.hideEResourcesFunctionality === true) {
-        isChecked = false;
-        cy.setAgreementsGeneralSettings({ hideEResourcesFunctionality: false });
-      }
-    });
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-    cy.getPackages(`?query=${packageName}&sort=name`).then((packages) => {
+    cy.getPackages({
+      match: 'name',
+      term: packageName,
+    }).then((packages) => {
       if (packages?.length === 0) {
         LocalKBAdminAppInteractor.openLocalKbAdminApp();
         LocalKBAdminAppInteractor.uploadJsonFileAndAwaitCompletion(fileName);
@@ -94,18 +88,12 @@ describe('Agreement line test', () => {
     cy.visit('/erm/agreements');
     AgreementAppInteractor.searchAgreement(agreementName);
     AgreementViewInteractor.paneExists(agreementName);
-    // Potential reformatting
     deleteFirstAgreementLine();
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(6000);
     deleteFirstAgreementLine();
     AgreementViewInteractor.delete(agreementName);
     cy.logout();
-
-    console.log(
-      'set hideEResourcesFunctionality checkbox back to its original state'
-    );
-    if (isChecked === true) {
-      cy.setAgreementsGeneralSettings({ hideEResourcesFunctionality: true });
-    }
   });
 
   describe('user actions', () => {
@@ -164,9 +152,7 @@ describe('Agreement line test', () => {
 
       it('uncheck "create another" and save & close agreementline form', () => {
         AgreementLineFormInteractor.checkCreateAnother(false);
-        // TODO Figure out why this only works .then?
-        // eslint-disable-next-line cypress/no-unnecessary-waiting
-        cy.wait(600);
+        // cy.wait(600);
         AgreementLineFormInteractor.saveAndClose();
       });
 
