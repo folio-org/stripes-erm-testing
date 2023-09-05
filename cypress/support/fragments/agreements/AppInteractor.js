@@ -2,6 +2,7 @@ import {
   Accordion,
   Button,
   Checkbox,
+  Datepicker,
   HTML,
   including,
   MultiColumnListCell,
@@ -12,7 +13,7 @@ import {
   Section,
 } from '../../../../interactors';
 
-import { DatepickerInteractor as Datepicker } from '../../../../interactors';
+
 
 /* We can import other interactors here and expose their functionality
  * to allow for a singular "AppInteractor" import in our tests.
