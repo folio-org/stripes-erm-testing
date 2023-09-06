@@ -1,5 +1,5 @@
 import { getRandomPostfix } from '../../support/utils/stringTools';
-import { AppListItem } from '../../../interactors';
+import { Accordion, AppListItem } from '../../../interactors';
 import AgreementAppInteractor from '../../support/fragments/agreements/AppInteractor';
 import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
 import AgreementLineViewInteractor from '../../support/fragments/agreements/AgreementLineViewInteractor';
@@ -62,16 +62,8 @@ describe('Agreement line with internal resource', () => {
     cy.deleteUserViaApi(viewUser.userId);
 
     console.log('delete agreement line and agreement');
-    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-    cy.visit('/erm/agreements');
-    AgreementAppInteractor.searchAgreement(agreementName);
-    AgreementViewInteractor.paneExists(agreementName);
-    AgreementViewInteractor.openFirstAgreementLine();
-    AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
-    AgreementLineViewInteractor.delete('pane-view-agreement-line');
-    AgreementViewInteractor.paneExists(agreementName);
-    AgreementViewInteractor.delete(agreementName);
-    cy.logout();
+    cy.deleteAgreementLineViaApi(Cypress.env('agreementId'), Cypress.env('agreementLineId'));
+    cy.deleteAgreementViaApi(Cypress.env('agreementId'));
 
     console.log('set hideEResourcesFunctionality checkbox back to its original state');
     if (isChecked === true) {
@@ -150,6 +142,18 @@ describe('Agreement line with internal resource', () => {
         cy.get('#agreement-lines')
           .contains('div', packageName)
           .should('have.text', packageName);
+      });
+
+      // this is only for using the ids in the delete via api calls after the tests
+      it('should open agreement line view to get agreement and line ids', () => {
+        // have to close the already open accordion because it's clicked to open again in 'openFirstAgreementLine'
+        cy.do(Accordion('Agreement lines').clickHeader());
+        AgreementViewInteractor.openFirstAgreementLine();
+        AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
+        cy.getAllIdsFromURL().then(([agreementId, agreementLineId]) => {
+          Cypress.env('agreementId', agreementId);
+          Cypress.env('agreementLineId', agreementLineId);
+        });
       });
     });
 
