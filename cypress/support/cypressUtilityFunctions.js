@@ -8,3 +8,12 @@ Cypress.Commands.add('getIdFromURL', () => {
     return $url.match(regex)[0];
   });
 });
+
+Cypress.Commands.add('getAllIdsFromURL', () => {
+  cy.url().then(($url) => {
+    const regex = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/ig;
+    const matches = Array.from($url.matchAll(regex), match => match[0]);
+    return matches;
+  });
+});
+
