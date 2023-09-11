@@ -1,4 +1,5 @@
-import { MultiColumnListCell } from '@folio/stripes-testing';
+import { MultiColumnListCell } from '../../../interactors';
+
 import { getRandomPostfix } from '../../support/utils/stringTools';
 import DateTools from '../../support/utils/dateTools';
 
