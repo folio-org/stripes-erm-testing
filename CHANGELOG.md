@@ -11,6 +11,8 @@
     * add a bunch of new interactor functions and cypress commands
   * STRIPES-870 BREAKING upgrade react to v18
     * ERM-2995 Upgrade stripes-erm-testing React to v18
+  * STRIPES-868 *BREAKING* bump `react-intl` to `v6.4.4`
+    * ERM-3035 Upgrade stripes-erm-testing react-intl to v6
 
 ## 1.1.0 2023-02-22
   * Initial e2e cypress tests
