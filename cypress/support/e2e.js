@@ -22,30 +22,28 @@ Cypress.on('window:before:load', window => {
 });
 
 const defaultTestLanguage = 'en-US';
+let id;
+let value;
 before(() => {
-  cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
   cy.getAdminToken();
-  cy.visit('/settings/tenant-settings/locale');
-  cy.get('select#locale').invoke('val').then((selectedValue) => {
-    Cypress.env('localeValue', selectedValue);
-    if (selectedValue !== defaultTestLanguage) {
-      cy.get('select#locale').select(defaultTestLanguage);
-      cy.get('button[type="submit"]').click();
+  cy.getLocaleSettings().then(body => {
+    id = body.id;
+    value = body.value;
+    const localeValue = value.match(/"locale":"(.*?)"/);
+    if (localeValue) {
+      const extractedLocale = localeValue[1];
+      Cypress.env('localeValue', extractedLocale);
+      if (extractedLocale !== defaultTestLanguage) {
+        const updatedValue = value.replace(`"locale":"${extractedLocale}"`, `"locale":"${defaultTestLanguage}"`);
+        cy.putLocaleSettings(id, updatedValue);
+      }
     }
   });
-
-  cy.logout();
 });
 
 after(() => {
-  cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-  cy.getAdminToken();
-  cy.visit('/settings/tenant-settings/locale');
-  cy.get('select#locale').invoke('val').then((selectedValue) => {
-    if (selectedValue !== Cypress.env('localeValue')) {
-      cy.get('select#locale').select(Cypress.env('localeValue'));
-      cy.get('button[type="submit"]').click();
-    }
-  });
-  cy.logout();
+  if (Cypress.env('localeValue') !== defaultTestLanguage) {
+    cy.getAdminToken();
+    cy.putLocaleSettings(id, value);
+  }
 });
