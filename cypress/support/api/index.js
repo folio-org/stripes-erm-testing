@@ -3,3 +3,4 @@ require('./agreements');
 require('./licenses');
 require('./permissions');
 require('./users');
+require('./settings');
