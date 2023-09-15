@@ -22,21 +22,21 @@ Cypress.on('window:before:load', window => {
 });
 
 const defaultTestLanguage = 'en-US';
-let id;
-let value;
+let localeSettingsId;
+let localeSettingsValue;
 before(() => {
   cy.getAdminToken();
   cy.getLocaleSettings().then(body => {
     if (Object.keys(body).length > 0) {
-      id = body.id;
-      value = body.value;
-      const localeValue = value.match(/"locale":"(.*?)"/);
+      localeSettingsId = body.id;
+      localeSettingsValue = body.value;
+      const localeValue = localeSettingsValue.match(/"locale":"(.*?)"/);
       if (localeValue) {
         const extractedLocale = localeValue[1];
         Cypress.env('localeValue', extractedLocale);
         if (extractedLocale !== defaultTestLanguage) {
-          const updatedValue = value.replace(`"locale":"${extractedLocale}"`, `"locale":"${defaultTestLanguage}"`);
-          cy.putLocaleSettings(id, updatedValue);
+          const updatedValue = localeSettingsValue.replace(`"locale":"${extractedLocale}"`, `"locale":"${defaultTestLanguage}"`);
+          cy.putLocaleSettings(localeSettingsId, updatedValue);
         }
       }
     }
@@ -46,6 +46,6 @@ before(() => {
 after(() => {
   if (Cypress.env('localeValue') && Cypress.env('localeValue') !== defaultTestLanguage) {
     cy.getAdminToken();
-    cy.putLocaleSettings(id, value);
+    cy.putLocaleSettings(localeSettingsId, localeSettingsValue);
   }
 });
