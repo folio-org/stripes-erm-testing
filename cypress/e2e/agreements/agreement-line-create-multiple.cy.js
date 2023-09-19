@@ -19,7 +19,7 @@ const description = `Agreement line test description ${getRandomPostfix()}`;
 // agreement
 const agreement = {
   name: agreementName,
-  status: 'active',
+  status: 'Active',
   startDate: DateTools.getCurrentDate(),
 };
 

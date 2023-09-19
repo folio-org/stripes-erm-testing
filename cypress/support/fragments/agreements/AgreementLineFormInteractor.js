@@ -34,6 +34,9 @@ export default class AgreementLineFormInteractor {
 
   static linkSelectedEresource() {
     cy.expect(Button('Link selected e-resource').exists());
+    // without this wait the test continously fails for me (cm)
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(600);
     cy.do(Button('Link selected e-resource').click());
   }
 
