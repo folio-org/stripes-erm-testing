@@ -7,6 +7,8 @@ import {
   TextField,
 } from '../../../../interactors';
 
+import AgreementsSettingsInteractor from './AgreementsSettingsInteractor';
+
 import DateTools from '../../utils/dateTools';
 import { getRandomPostfix } from '../../utils/stringTools';
 
@@ -26,24 +28,33 @@ export default class AgreementFormInteractor {
 
   static fill(fillAgreement = {}) {
     // Default the necessary options so they always exist, no matter if only a subset gets passed in;
-    const fillName = fillAgreement.name ?? `autotest_agreement_${getRandomPostfix()}`;
-    const fillStatus = fillAgreement.status ?? 'Draft';
-    const fillStartDate = fillAgreement.startDate ?? DateTools.getCurrentDate();
+    fillAgreement.name =
+      fillAgreement.name || `autotest_agreement_${getRandomPostfix()}`;
+    fillAgreement.status = fillAgreement.status || 'Draft';
+    fillAgreement.startDate =
+      fillAgreement.startDate || DateTools.getCurrentDate();
 
+    AgreementsSettingsInteractor.fetchStatusLabel(fillAgreement);
     // Fill in field, then check it filled in as expected
-    this.fillName(fillName);
-    cy.expect(TextField('Name*').has({ value: fillName }));
+    this.fillName(fillAgreement.name);
+    cy.expect(TextField('Name*').has({ value: fillAgreement.name }));
 
-    cy.do(Select('Status*').choose(fillStatus));
-    cy.expect(Select('Status*').has({ selectedContent: fillStatus }));
+    cy.do(Select('Status*').choose(fillAgreement.status));
+    cy.expect(Select('Status*').has({ selectedContent: fillAgreement.status }));
 
-    cy.do(Datepicker({ id: 'period-start-date-0' }).fillIn(fillStartDate));
-    cy.expect(Datepicker({ id: 'period-start-date-0' }).has({ inputValue: fillStartDate }));
+    cy.do(
+      Datepicker({ id: 'period-start-date-0' }).fillIn(fillAgreement.startDate)
+    );
+    cy.expect(
+      Datepicker({ id: 'period-start-date-0' }).has({
+        inputValue: fillAgreement.startDate,
+      })
+    );
 
     /* If we need more fields in order to set up frequently tested agreement properties,
-       * they can be added here. Otherwise we can treat this as "fill basic agreement" and
-       * fill more fields per test.
-       */
+     * they can be added here. Otherwise we can treat this as "fill basic agreement" and
+     * fill more fields per test.
+     */
   }
 
   static save() {

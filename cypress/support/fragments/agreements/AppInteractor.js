@@ -13,8 +13,6 @@ import {
   Section,
 } from '../../../../interactors';
 
-
-
 /* We can import other interactors here and expose their functionality
  * to allow for a singular "AppInteractor" import in our tests.
  * I'm not sure if that's a good idea or not, I quite like the idea that different
