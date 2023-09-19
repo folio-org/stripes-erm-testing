@@ -60,10 +60,20 @@ export default class AgreementLineFormInteractor {
     cy.do(Button('Save & close').click());
   }
 
-  static checkDescriptionValidation() {
-    cy.do(TextArea('Description').click());
-    cy.do(TextArea('Note').click());
-    cy.expect(!TextArea('Description').valid());
+  static checkDescriptionIsValid() {
+    cy.get('#agreement-line-description').click();
+    cy.get('#agreement-line-note').click();
+    cy.contains(
+      'Please provide an e-resource or description to continue'
+    ).should('not.exist');
+  }
+
+  static checkDescriptionIsNotValid() {
+    cy.get('#agreement-line-description').click();
+    cy.get('#agreement-line-note').click();
+    cy.contains(
+      'Please provide an e-resource or description to continue'
+    ).should('be.visible');
   }
 
   static waitLoading() {

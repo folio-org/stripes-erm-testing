@@ -18,9 +18,11 @@ const description = `Agreement line test description ${getRandomPostfix()}`;
 // agreement
 const agreement = {
   name: agreementName,
-  status: 'Active',
+  status: 'active',
   startDate: DateTools.getCurrentDate(),
 };
+
+let agreementId = null;
 
 // users
 const editUser = {
@@ -44,14 +46,6 @@ const viewPermissions = [
   'ui-agreements.resources.view',
 ];
 
-function deleteFirstAgreementLine() {
-  AgreementViewInteractor.paneExists(agreementName);
-  AgreementViewInteractor.openFirstAgreementLine();
-  AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
-  AgreementLineViewInteractor.delete('pane-view-agreement-line');
-  AgreementViewInteractor.paneExists(agreementName);
-}
-
 describe('Agreement line test', () => {
   before('before hook', () => {
     console.log('createUser');
@@ -60,6 +54,9 @@ describe('Agreement line test', () => {
 
     cy.getAdminToken();
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+    cy.createAgreementViaApi(agreement).then((res) => {
+      agreementId = res?.id;
+    });
     cy.getPackages({
       match: 'name',
       term: packageName,
@@ -69,8 +66,7 @@ describe('Agreement line test', () => {
         LocalKBAdminAppInteractor.uploadJsonFileAndAwaitCompletion(fileName);
       }
     });
-    AgreementAppInteractor.openAgreementsApp();
-    AgreementAppInteractor.createAgreement(agreement);
+    cy.visit('/erm/agreements');
     AgreementAppInteractor.openLocalKB();
     AgreementAppInteractor.searchForPackage(packageName);
     PackageViewInteractor.addToBasket();
@@ -85,14 +81,13 @@ describe('Agreement line test', () => {
 
     console.log('delete agreement line and agreement');
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-    cy.visit('/erm/agreements');
-    AgreementAppInteractor.searchAgreement(agreementName);
-    AgreementViewInteractor.paneExists(agreementName);
-    deleteFirstAgreementLine();
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(6000);
-    deleteFirstAgreementLine();
-    AgreementViewInteractor.delete(agreementName);
+    cy.getAgreement(agreementId, { expandItems: true }).then((res) => {
+      res?.items?.forEach((line) => {
+        cy.deleteAgreementLineViaApi(line?.id);
+      });
+      console.log(res);
+    });
+    cy.deleteAgreementViaApi(agreementId);
     cy.logout();
   });
 
@@ -142,12 +137,12 @@ describe('Agreement line test', () => {
       });
 
       it('click description field then note to check validation', () => {
-        AgreementLineFormInteractor.checkDescriptionValidation();
+        AgreementLineFormInteractor.checkDescriptionIsNotValid();
       });
 
       it('fill description field and re-check validation', () => {
         AgreementLineFormInteractor.fill({ description });
-        AgreementLineFormInteractor.checkDescriptionValidation();
+        AgreementLineFormInteractor.checkDescriptionIsValid();
       });
 
       it('uncheck "create another" and save & close agreementline form', () => {

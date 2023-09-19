@@ -150,3 +150,11 @@ Cypress.Commands.add('deleteAgreementViaApi', (agreementId) => {
     isDefaultSearchParamsRequired: false
   });
 });
+
+Cypress.Commands.add('deleteAgreementLineViaApi', (agreementLineId) => {
+  cy.okapiRequest({
+    method: 'DELETE',
+    path: `erm/entitlements/${agreementLineId}`,
+    isDefaultSearchParamsRequired: false
+  });
+});
