@@ -5,7 +5,7 @@ Cypress.Commands.add('getLocaleSettings', () => {
       path: 'configurations/entries?query=(module==ORG%20and%20configName==localeSettings)',
     })
     .then(({ body }) => {
-      return body.configs[0];
+      return body?.configs[0] || {};
     });
 });
 
