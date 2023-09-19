@@ -73,6 +73,7 @@ describe('Agreement create and delete', () => {
       before(() => {
         cy.getIdFromURL().then(agreementId => {
           cy.getAgreement(agreementId).its('dateCreated').as('dateCreated');
+          Cypress.env('agreementId', agreementId);
         });
       });
 
@@ -117,12 +118,8 @@ describe('Agreement create and delete', () => {
       cy.logout();
 
       // delete created agreement as admin because user has no delete permission
-      cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-      cy.visit('/erm/agreements');
-      AppInteractor.searchAgreement(agreementName);
-      AgreementViewInteractor.paneExists(agreementName);
-      AgreementViewInteractor.delete(agreementName);
-      cy.logout();
+      cy.getAdminToken();
+      cy.deleteAgreementViaApi(Cypress.env('agreementId'));
     });
 
     createAgreement();

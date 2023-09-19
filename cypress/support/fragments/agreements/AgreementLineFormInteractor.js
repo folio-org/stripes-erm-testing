@@ -6,7 +6,7 @@ import {
   Selection,
   Checkbox,
   TextArea,
-} from '@folio/stripes-testing';
+} from '../../../../interactors';
 
 import { getRandomPostfix } from '../../utils/stringTools';
 

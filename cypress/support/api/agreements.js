@@ -151,10 +151,18 @@ Cypress.Commands.add('deleteAgreementViaApi', (agreementId) => {
   });
 });
 
-Cypress.Commands.add('deleteAgreementLineViaApi', (agreementLineId) => {
+Cypress.Commands.add('deleteAgreementLineViaApi', (agreementId, agreementLineId) => {
   cy.okapiRequest({
-    method: 'DELETE',
-    path: `erm/entitlements/${agreementLineId}`,
+    method: 'PUT',
+    path: `erm/sas/${agreementId}`,
+    body: {
+      items: [
+        {
+          'id': agreementLineId,
+          '_delete': true
+        }
+      ]
+    },
     isDefaultSearchParamsRequired: false
   });
 });
