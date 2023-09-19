@@ -24,4 +24,10 @@ export default class AgreementLineViewInteractor {
   static paneDoesNotExist(paneId) {
     cy.expect(Pane({ id: paneId }).absent());
   }
+
+  static closePane(paneId) {
+    this.paneExists(paneId);
+    cy.do(Pane({ id: paneId }).dismiss());
+    this.paneDoesNotExist(paneId);
+  }
 }
