@@ -84,7 +84,7 @@ describe('Agreement line test', () => {
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
     cy.getAgreement(agreementId, { expandItems: true }).then((res) => {
       res?.items?.forEach((line) => {
-        cy.deleteAgreementLineViaApi(line?.id);
+        cy.deleteAgreementLineViaApi(agreementId, line?.id);
       });
       console.log(res);
     });
