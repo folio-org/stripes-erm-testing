@@ -22,6 +22,7 @@ Cypress.on('window:before:load', window => {
 });
 
 const defaultTestLanguage = 'en-US';
+const defaultTestTimezone = 'UTC';
 let localeSettingsId;
 let localeSettingsValue;
 before(() => {
@@ -31,20 +32,24 @@ before(() => {
       localeSettingsId = body.id;
       localeSettingsValue = body.value;
       const localeValue = localeSettingsValue.match(/"locale":"(.*?)"/);
-      if (localeValue) {
-        const extractedLocale = localeValue[1];
-        Cypress.env('localeValue', extractedLocale);
-        if (extractedLocale !== defaultTestLanguage) {
-          const updatedValue = localeSettingsValue.replace(`"locale":"${extractedLocale}"`, `"locale":"${defaultTestLanguage}"`);
-          cy.putLocaleSettings(localeSettingsId, updatedValue);
-        }
+      const timezoneValue = localeSettingsValue.match(/"timezone":"(.*?)"/);
+      const extractedLocale = localeValue ? localeValue[1] : undefined;
+      const extractedTimezone = timezoneValue ? timezoneValue[1] : undefined;
+
+      Cypress.env('localeValue', extractedLocale);
+      Cypress.env('timezoneValue', extractedTimezone);
+
+      if (extractedLocale !== defaultTestLanguage || extractedTimezone !== defaultTestTimezone) {
+        const updatedValue = localeSettingsValue.replace(/"locale":"[^"]*"/, `"locale":"${defaultTestLanguage}"`).replace(/"timezone":"[^"]*"/, `"timezone":"${defaultTestTimezone}"`);
+        cy.putLocaleSettings(localeSettingsId, updatedValue);
       }
     }
   });
 });
 
 after(() => {
-  if (Cypress.env('localeValue') && Cypress.env('localeValue') !== defaultTestLanguage) {
+  if ((Cypress.env('localeValue') && Cypress.env('localeValue') !== defaultTestLanguage) ||
+    (Cypress.env('timezoneValue') && Cypress.env('timezoneValue') !== defaultTestTimezone)) {
     cy.getAdminToken();
     cy.putLocaleSettings(localeSettingsId, localeSettingsValue);
   }
