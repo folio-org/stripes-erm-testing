@@ -1,4 +1,4 @@
-import { MultiColumnListCell } from '../../../interactors';
+import { MultiColumnListCell, Modal, Button, Pane } from '../../../interactors';
 
 import { getRandomPostfix } from '../../support/utils/stringTools';
 import DateTools from '../../support/utils/dateTools';
@@ -37,6 +37,20 @@ const editPermissions = [
   'ui-local-kb-admin.jobs.edit',
 ];
 
+const editUserDelete = {
+  username: `editDeleteTest${getRandomPostfix()}`,
+  password: 'editDeleteTest',
+};
+
+const editDeletePermissions = [
+  'ui-agreements.agreements.edit',
+  'ui-agreements.resources.edit',
+  'ui-local-kb-admin.jobs.edit',
+  'ui-agreements.agreements.delete',
+  'ui-agreements.resources.delete',
+  'ui-local-kb-admin.jobs.delete',
+];
+
 const viewUser = {
   username: `viewTest${getRandomPostfix()}`,
   password: 'viewTest',
@@ -51,6 +65,7 @@ describe('Agreement line test', () => {
   before('before hook', () => {
     console.log('createUser');
     cy.createUserWithPwAndPerms(editUser, editPermissions);
+    cy.createUserWithPwAndPerms(editUserDelete, editDeletePermissions);
     cy.createUserWithPwAndPerms(viewUser, viewPermissions);
 
     cy.getAdminToken();
@@ -78,6 +93,7 @@ describe('Agreement line test', () => {
     console.log('delete users');
     cy.getAdminToken();
     cy.deleteUserViaApi(editUser.userId);
+    cy.deleteUserViaApi(editDeleteUser.userId);
     cy.deleteUserViaApi(viewUser.userId);
 
     console.log('delete agreement line and agreement');
@@ -116,7 +132,7 @@ describe('Agreement line test', () => {
         AgreementViewInteractor.openAgreementLinesAccordion();
       });
 
-      it('open agreement line accordion actions and click new agreement', () => {
+      it('open agreement line accordion actions and click new agreement line', () => {
         AgreementViewInteractor.newAgreementLine();
       });
 
@@ -175,7 +191,141 @@ describe('Agreement line test', () => {
         cy.expect(MultiColumnListCell(packageName).exists());
         cy.expect(MultiColumnListCell(description).exists());
       });
+
+      it('Select one of the agreement lines in the search and filter results', () => {
+        cy.do(MultiColumnListCell(packageName).click());
+        AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
+      });
+
+      it('Click Actions button', () => {
+        AgreementLineViewInteractor.openOptions();
+        cy.expect(AgreementLineViewInteractor.actionsButton.exists());
+        cy.do(AgreementLineViewInteractor.actionsButton.click());
+        cy.do(AgreementLineViewInteractor.actionsButton.click()).then(() => {
+          cy.expect(AgreementLineViewInteractor.editButton.exists());
+          cy.expect(AgreementLineViewInteractor.deleteButton.exists());
+        });
+      });
+
+      it('Select Delete in Actions menu', () => {
+        cy.do(AgreementLineViewInteractor.deleteButton.click());
+        cy.expect(Modal('Delete agreement line').exists());
+      });
+
+      it('Select Delete in  deletion confirmation dialogue', () => {
+        cy.expect(Button('Delete').exists());
+        cy.do(Button('Delete').click());
+      });
     });
+
+    // describe('editDeleteUser actions', () => {
+    //   before(() => {
+    //     cy.login(editUserDelete.username, editUserDelete.password);
+    //     cy.getToken(editUserDelete.username, editUserDelete.password);
+    //   });
+
+    //   after(() => {
+    //     cy.logout();
+    //   });
+
+    //   it('should open the agreements app', () => {
+    //     AgreementAppInteractor.openAgreementsApp();
+    //   });
+
+    //   it('select agreement from results list', () => {
+    //     AgreementAppInteractor.searchAgreement(agreementName);
+    //     AgreementViewInteractor.paneExists(agreementName);
+    //   });
+
+    //   it('expand agreement lines accordion in agreement view', () => {
+    //     AgreementViewInteractor.openAgreementLinesAccordion();
+    //   });
+
+    //   it('open agreement line accordion actions and click new agreement line', () => {
+    //     AgreementViewInteractor.newAgreementLine();
+    //   });
+
+    //   it('select e-resource from selection', () => {
+    //     AgreementLineFormInteractor.selectEresource(packageName);
+    //   });
+
+    //   it('link e-resource from selection', () => {
+    //     AgreementLineFormInteractor.linkSelectedEresource();
+    //   });
+
+    //   it('check "create another" option', () => {
+    //     AgreementLineFormInteractor.checkCreateAnother(true);
+    //   });
+
+    //   it('save but dont close agreement line', () => {
+    //     AgreementLineFormInteractor.save();
+    //     AgreementLineFormInteractor.unlinkSelectedEresource();
+    //   });
+
+    //   it('click description field then note to check validation', () => {
+    //     AgreementLineFormInteractor.checkDescriptionIsNotValid();
+    //   });
+
+    //   it('fill description field and re-check validation', () => {
+    //     AgreementLineFormInteractor.fill({ description });
+    //     AgreementLineFormInteractor.checkDescriptionIsValid();
+    //   });
+
+    //   it('uncheck "create another" and save & close agreementline form', () => {
+    //     AgreementLineFormInteractor.checkCreateAnother(false);
+    //     // cy.wait(600);
+    //     AgreementLineFormInteractor.saveAndClose();
+    //   });
+
+    //   it('close agreement line view', () => {
+    //     AgreementLineViewInteractor.closePane('pane-view-agreement-line');
+    //   });
+
+    //   it('should display agreement with agreement line and resource', () => {
+    //     AgreementViewInteractor.paneExists(agreementName);
+    //     AgreementViewInteractor.openAgreementLinesAccordion();
+    //     cy.get('#agreement-lines')
+    //       .contains('div', packageName)
+    //       .should('have.text', packageName);
+    //     cy.get('#agreement-lines')
+    //       .contains('div', description)
+    //       .should('have.text', description);
+    //   });
+
+    //   it('click view in agreement line search button', () => {
+    //     AgreementViewInteractor.viewAgreementLineSearch();
+    //   });
+
+    //   it('should display two agreement lines linked to the agreement', () => {
+    //     cy.expect(MultiColumnListCell(packageName).exists());
+    //     cy.expect(MultiColumnListCell(description).exists());
+    //   });
+
+    //   it('Select one of the agreement lines in the search and filter results', () => {
+    //     cy.do(MultiColumnListCell(packageName).click());
+    //     AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
+    //   });
+
+    //   it('Click Actions button', () => {
+    //     AgreementLineViewInteractor.openOptions();
+    //     cy.expect(AgreementLineViewInteractor.actionsButton.exists());
+    //     cy.do(AgreementLineViewInteractor.actionsButton.click());
+    //     cy.do(AgreementLineViewInteractor.actionsButton.click()).then(() => {
+    //       cy.expect(AgreementLineViewInteractor.editButton.exists());
+    //       cy.expect(AgreementLineViewInteractor.deleteButton.exists());
+    //     });
+    //   });
+
+    //   it('Select Delete in Actions menu', () => {
+    //     cy.do(AgreementLineViewInteractor.deleteButton.click());
+    //     cy.expect(Modal('Delete agreement line').exists());
+    //   });
+
+    //   it('Select Delete in  deletion confirmation dialogue', () => {
+    //     cy.expect(Button('Delete').exists());
+    //     cy.do(Button('Delete').click());
+    //   });
+    //   });
 
     describe('viewUser actions', () => {
       before(() => {
@@ -213,6 +363,12 @@ describe('Agreement line test', () => {
       it('should display two agreement lines linked to the agreement', () => {
         cy.expect(MultiColumnListCell(packageName).exists());
         cy.expect(MultiColumnListCell(description).exists());
+      });
+
+      it('Select one of the agreement lines in the search and filter results', () => {
+        cy.do(MultiColumnListCell(packageName).click());
+        AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
+        cy.expect(AgreementLineViewInteractor.actionsButton.absent());
       });
     });
   });

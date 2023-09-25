@@ -1,6 +1,7 @@
 import {
   Button,
   Modal,
+  DropdownMenu,
   Pane,
 } from '../../../../interactors';
 
@@ -11,6 +12,12 @@ import {
  * ie more than once, in various tests, then we should add an action here and import to ensure consistency.
  */
 export default class AgreementLineViewInteractor {
+
+  static deleteValueModal = Modal('Delete agreement line');
+  static actionsButton = Button('Actions');
+  static deleteButton = DropdownMenu().find(Button('Delete'));
+  static editButton = DropdownMenu().find(Button('Edit'));
+
   static delete(paneId) {
     cy.do(Pane({ id: paneId }).clickAction('Delete'));
     cy.expect(Modal('Delete agreement line').exists());
@@ -30,4 +37,12 @@ export default class AgreementLineViewInteractor {
     cy.do(Pane({ id: paneId }).dismiss());
     this.paneDoesNotExist(paneId);
   }
+
+  static openOptions = () => {
+    cy.expect(this.actionsButton.exists());
+    cy.do(this.actionsButton.click());
+    cy.expect(this.editButton.exists());
+    cy.expect(this.deleteButton.exists());
+  };
+
 }
