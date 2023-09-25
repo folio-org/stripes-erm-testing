@@ -93,7 +93,7 @@ describe('Agreement line test', () => {
     console.log('delete users');
     cy.getAdminToken();
     cy.deleteUserViaApi(editUser.userId);
-    cy.deleteUserViaApi(editDeleteUser.userId);
+    cy.deleteUserViaApi(editUserDelete.userId);
     cy.deleteUserViaApi(viewUser.userId);
 
     console.log('delete agreement line and agreement');

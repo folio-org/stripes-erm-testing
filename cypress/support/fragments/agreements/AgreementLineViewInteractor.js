@@ -12,7 +12,6 @@ import {
  * ie more than once, in various tests, then we should add an action here and import to ensure consistency.
  */
 export default class AgreementLineViewInteractor {
-
   static deleteValueModal = Modal('Delete agreement line');
   static actionsButton = Button('Actions');
   static deleteButton = DropdownMenu().find(Button('Delete'));
@@ -44,5 +43,4 @@ export default class AgreementLineViewInteractor {
     cy.expect(this.editButton.exists());
     cy.expect(this.deleteButton.exists());
   };
-
 }
