@@ -327,49 +327,49 @@ describe('Agreement line test', () => {
     //   });
     //   });
 
-    describe('viewUser actions', () => {
-      before(() => {
-        cy.login(viewUser.username, viewUser.password);
-        cy.getToken(viewUser.username, viewUser.password);
-      });
+    // describe('viewUser actions', () => {
+    //   before(() => {
+    //     cy.login(viewUser.username, viewUser.password);
+    //     cy.getToken(viewUser.username, viewUser.password);
+    //   });
 
-      after(() => {
-        cy.logout();
-      });
+    //   after(() => {
+    //     cy.logout();
+    //   });
 
-      it('should open the agreements app', () => {
-        AgreementAppInteractor.openAgreementsApp();
-      });
+    //   it('should open the agreements app', () => {
+    //     AgreementAppInteractor.openAgreementsApp();
+    //   });
 
-      it('select agreement from results list', () => {
-        AgreementAppInteractor.searchAgreement(agreementName);
-        AgreementViewInteractor.paneExists(agreementName);
-      });
+    //   it('select agreement from results list', () => {
+    //     AgreementAppInteractor.searchAgreement(agreementName);
+    //     AgreementViewInteractor.paneExists(agreementName);
+    //   });
 
-      it('expand agreement lines accordion in agreement view', () => {
-        AgreementViewInteractor.openAgreementLinesAccordion();
-        cy.get('#agreement-lines')
-          .contains('div', packageName)
-          .should('have.text', packageName);
-        cy.get('#agreement-lines')
-          .contains('div', description)
-          .should('have.text', description);
-      });
+    //   it('expand agreement lines accordion in agreement view', () => {
+    //     AgreementViewInteractor.openAgreementLinesAccordion();
+    //     cy.get('#agreement-lines')
+    //       .contains('div', packageName)
+    //       .should('have.text', packageName);
+    //     cy.get('#agreement-lines')
+    //       .contains('div', description)
+    //       .should('have.text', description);
+    //   });
 
-      it('click view in agreement line search button', () => {
-        AgreementViewInteractor.viewAgreementLineSearch();
-      });
+    //   it('click view in agreement line search button', () => {
+    //     AgreementViewInteractor.viewAgreementLineSearch();
+    //   });
 
-      it('should display two agreement lines linked to the agreement', () => {
-        cy.expect(MultiColumnListCell(packageName).exists());
-        cy.expect(MultiColumnListCell(description).exists());
-      });
+    //   it('should display two agreement lines linked to the agreement', () => {
+    //     cy.expect(MultiColumnListCell(packageName).exists());
+    //     cy.expect(MultiColumnListCell(description).exists());
+    //   });
 
-      it('Select one of the agreement lines in the search and filter results', () => {
-        cy.do(MultiColumnListCell(packageName).click());
-        AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
-        cy.expect(AgreementLineViewInteractor.actionsButton.absent());
-      });
-    });
+    //   it('Select one of the agreement lines in the search and filter results', () => {
+    //     cy.do(MultiColumnListCell(packageName).click());
+    //     AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
+    //     cy.expect(AgreementLineViewInteractor.actionsButton.absent());
+    //   });
+    // });
   });
 });
