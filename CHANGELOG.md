@@ -1,15 +1,26 @@
 # Change history for stripes-erm-testing
 
-## 2.0.0 In progress
+## 2.1.0 In Progress
+
+## 2.0.0 2023-10-12
   * Added stripes-kint-components to dev deps
+  * Added local-settings test
+  * Added timezone check to e2e.js
   * Tweaked Harnesses so that we can export *just* the base harness without the kint intl stuff. This means that kint-components can use the base harness as well.
-  * ERM-2773 Add agreement line with internal KB resource
-    * add packages: uuid, cypress-wait-until
+  * ERM-3045: Swap Logs component to prev-next pagination
+  * ERM-3001 Update Node.js to v18 in GitHub Actions
+  * ERM-2973 Replace naive fetch hooks with parallelised ones (and deprecate)
+  * ERM-2967 Use useChunkedCQLFetch consistently across ERM
+  * ERM-2926 Fix cypress license-lifecycle test
+  * ERM-2841 Edit Agreement line and create another, Link from agreement to search for all its agreement lines, Add agreement line with description only
+  * ERM-2815 Search or filter for an Agreement
   * ERM-2812 Create an Agreement and Delete an Agreement
     * extend select interactor with selectedContent filter
+  * ERM-2773 Add agreement line with internal KB resource
+    * add packages: uuid, cypress-wait-until
   * ERM-2715 Create a license and delete a license
     * add a bunch of new interactor functions and cypress commands
-  * STRIPES-870 BREAKING upgrade react to v18
+  * STRIPES-870 *BREAKING* upgrade react to v18
     * ERM-2995 Upgrade stripes-erm-testing React to v18
   * STRIPES-868 *BREAKING* bump `react-intl` to `v6.4.4`
     * ERM-3035 Upgrade stripes-erm-testing react-intl to v6
