@@ -32,6 +32,16 @@ export default class AgreementLineFormInteractor {
     cy.expect(TextArea('Description').has({ value: fillDescription }));
   }
 
+  static fillNote(fillAgreementLine = {}) {
+    const fillNote =
+      fillAgreementLine.note ??
+      `autotest_agreement_line_note_${getRandomPostfix()}`;
+
+    // Fill in field, then check it filled in as expected
+    cy.do(TextArea('Note').fillIn(fillNote));
+    cy.expect(TextArea('Note').has({ value: fillNote }));
+  }
+
   static linkSelectedEresource() {
     cy.expect(Button('Link selected e-resource').exists());
     // without this wait the test continously fails for me (cm)

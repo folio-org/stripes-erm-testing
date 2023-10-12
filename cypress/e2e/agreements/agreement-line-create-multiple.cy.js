@@ -15,6 +15,7 @@ const fileName = 'simple_package_for_updates_1.json';
 const packageName = 'Simple package to test updating package metadata';
 const agreementName = `Agreement test ${getRandomPostfix()}`;
 const description = `Agreement line test description ${getRandomPostfix()}`;
+const note = `Agreement line test note ${getRandomPostfix()}`;
 
 // agreement
 const agreement = {
@@ -37,20 +38,6 @@ const editPermissions = [
   'ui-local-kb-admin.jobs.edit',
 ];
 
-const editUserDelete = {
-  username: `editDeleteTest${getRandomPostfix()}`,
-  password: 'editDeleteTest',
-};
-
-const editDeletePermissions = [
-  'ui-agreements.agreements.edit',
-  'ui-agreements.resources.edit',
-  'ui-local-kb-admin.jobs.edit',
-  'ui-agreements.agreements.delete',
-  'ui-agreements.resources.delete',
-  'ui-local-kb-admin.jobs.delete',
-];
-
 const viewUser = {
   username: `viewTest${getRandomPostfix()}`,
   password: 'viewTest',
@@ -65,7 +52,6 @@ describe('Agreement line test', () => {
   before('before hook', () => {
     console.log('createUser');
     cy.createUserWithPwAndPerms(editUser, editPermissions);
-    cy.createUserWithPwAndPerms(editUserDelete, editDeletePermissions);
     cy.createUserWithPwAndPerms(viewUser, viewPermissions);
 
     cy.getAdminToken();
@@ -93,7 +79,6 @@ describe('Agreement line test', () => {
     console.log('delete users');
     cy.getAdminToken();
     cy.deleteUserViaApi(editUser.userId);
-    cy.deleteUserViaApi(editUserDelete.userId);
     cy.deleteUserViaApi(viewUser.userId);
 
     console.log('delete agreement line and agreement');
@@ -162,6 +147,14 @@ describe('Agreement line test', () => {
         AgreementLineFormInteractor.checkDescriptionIsValid();
       });
 
+      it('save but dont close agreement line', () => {
+        AgreementLineFormInteractor.save();
+      });
+
+      it('fill note field', () => {
+        AgreementLineFormInteractor.fillNote({ note });
+      });
+
       it('uncheck "create another" and save & close agreementline form', () => {
         AgreementLineFormInteractor.checkCreateAnother(false);
         // cy.wait(600);
@@ -193,7 +186,7 @@ describe('Agreement line test', () => {
       });
 
       it('Select one of the agreement lines in the search and filter results', () => {
-        cy.do(MultiColumnListCell(packageName).click());
+        cy.do(MultiColumnListCell(note).click());
         AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
       });
 
@@ -215,6 +208,7 @@ describe('Agreement line test', () => {
       it('Select Delete in  deletion confirmation dialogue', () => {
         cy.expect(Button('Delete').exists());
         cy.do(Button('Delete').click());
+        // AgreementViewInteractor.viewAgreementLineSearch();
       });
     });
 
