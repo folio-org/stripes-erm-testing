@@ -37,6 +37,7 @@ const mockErmComponents = {
   OrganizationsFieldArray: () => <div>OrganizationsFieldArray</div>,
   SerialCoverage: () => <div>SerialCoverage</div>,
   ViewOrganizationCard: () => <div>ViewOrganizationCard</div>,
+  Logs: () => <div>Logs</div>
 };
 
 export default mockErmComponents;

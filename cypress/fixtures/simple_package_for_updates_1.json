@@ -2,7 +2,7 @@
   "header": {
     "dataSchema": {
       "name": "mod-agreements-package",
-      "version": 1
+      "version": "2.0"
     }
   },
   "records": [
@@ -66,6 +66,8 @@
       ],
       "contentItems": [
         {
+          "sourceIdentifier": "24134b52-05cd-47d3-ae4e-02d1e2d9c4fb",
+          "sourceIdentifierNamespace": "gokb",
           "depth": "fulltext",
           "platformTitleInstance": {
             "platform": "Academy of Management",
