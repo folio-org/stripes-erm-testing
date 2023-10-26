@@ -1,4 +1,4 @@
-import { MultiColumnListCell, Modal, Button, Pane } from '../../../interactors';
+import { MultiColumnListCell, Modal, Button } from '../../../interactors';
 
 import { getRandomPostfix } from '../../support/utils/stringTools';
 import DateTools from '../../support/utils/dateTools';
