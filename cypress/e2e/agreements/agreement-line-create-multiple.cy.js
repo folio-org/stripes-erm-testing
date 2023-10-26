@@ -1,4 +1,4 @@
-import { MultiColumnListCell } from '../../../interactors';
+import { MultiColumnListCell, Modal, Button } from '../../../interactors';
 
 import { getRandomPostfix } from '../../support/utils/stringTools';
 import DateTools from '../../support/utils/dateTools';
@@ -15,6 +15,7 @@ const fileName = 'simple_package_for_updates_1.json';
 const packageName = 'Simple package to test updating package metadata';
 const agreementName = `Agreement test ${getRandomPostfix()}`;
 const description = `Agreement line test description ${getRandomPostfix()}`;
+const note = `Agreement line test note ${getRandomPostfix()}`;
 
 // agreement
 const agreement = {
@@ -116,7 +117,7 @@ describe('Agreement line test', () => {
         AgreementViewInteractor.openAgreementLinesAccordion();
       });
 
-      it('open agreement line accordion actions and click new agreement', () => {
+      it('open agreement line accordion actions and click new agreement line', () => {
         AgreementViewInteractor.newAgreementLine();
       });
 
@@ -144,6 +145,14 @@ describe('Agreement line test', () => {
       it('fill description field and re-check validation', () => {
         AgreementLineFormInteractor.fill({ description });
         AgreementLineFormInteractor.checkDescriptionIsValid();
+      });
+
+      it('save but dont close agreement line', () => {
+        AgreementLineFormInteractor.save();
+      });
+
+      it('fill note field', () => {
+        AgreementLineFormInteractor.fillNote({ note });
       });
 
       it('uncheck "create another" and save & close agreementline form', () => {
@@ -174,6 +183,32 @@ describe('Agreement line test', () => {
       it('should display two agreement lines linked to the agreement', () => {
         cy.expect(MultiColumnListCell(packageName).exists());
         cy.expect(MultiColumnListCell(description).exists());
+      });
+
+      it('Select one of the agreement lines in the search and filter results', () => {
+        cy.do(MultiColumnListCell(note).click());
+        AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
+      });
+
+      it('Click Actions button', () => {
+        AgreementLineViewInteractor.openOptions();
+        cy.expect(AgreementLineViewInteractor.actionsButton.exists());
+        cy.do(AgreementLineViewInteractor.actionsButton.click());
+        cy.do(AgreementLineViewInteractor.actionsButton.click()).then(() => {
+          cy.expect(AgreementLineViewInteractor.editButton.exists());
+          cy.expect(AgreementLineViewInteractor.deleteButton.exists());
+        });
+      });
+
+      it('Select Delete in Actions menu', () => {
+        cy.do(AgreementLineViewInteractor.deleteButton.click());
+        cy.expect(Modal('Delete agreement line').exists());
+      });
+
+      it('Select Delete in  deletion confirmation dialogue', () => {
+        cy.expect(Button('Delete').exists());
+        cy.do(Button('Delete').click());
+        // AgreementViewInteractor.viewAgreementLineSearch();
       });
     });
 
@@ -213,6 +248,12 @@ describe('Agreement line test', () => {
       it('should display two agreement lines linked to the agreement', () => {
         cy.expect(MultiColumnListCell(packageName).exists());
         cy.expect(MultiColumnListCell(description).exists());
+      });
+
+      it('Select one of the agreement lines in the search and filter results', () => {
+        cy.do(MultiColumnListCell(packageName).click());
+        AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
+        cy.expect(AgreementLineViewInteractor.actionsButton.absent());
       });
     });
   });
