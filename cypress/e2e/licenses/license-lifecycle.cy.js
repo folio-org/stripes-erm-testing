@@ -20,7 +20,6 @@ describe('License lifecycle', () => {
   };
 
   before(() => {
-    cy.getAdminToken();
     // the following sets Cypress.env('licenseTypeCreated') to true if a License.Type entry is created
     LicensesSettingsInteractor.ensureLicenseTypeExists(license);
     LicensesSettingsInteractor.fetchStatusLabel(license);

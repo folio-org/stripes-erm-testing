@@ -123,7 +123,16 @@ Cypress.Commands.add('setAgreementsGeneralSettings', (params) => {
     });
 });
 
-Cypress.Commands.add('createAgreementViaApi', (agreement) => {
+// This usually happens outside of logged in env
+// For use with a specific user login token, run `getToken` first and pass runWithAdminToken: false
+Cypress.Commands.add('createAgreementViaApi', ({
+  agreement,
+  runWithAdminToken = true
+}) => {
+  if (runWithAdminToken) {
+    cy.getAdminToken();
+  }
+
   const agreementStatus = agreement.status ? normalize(agreement.status) : 'active';
   const startDate = agreement.startDate ? DateTools.getApiDate(agreement.startDate) : DateTools.getApiDate();
   cy.okapiRequest({
@@ -143,7 +152,16 @@ Cypress.Commands.add('createAgreementViaApi', (agreement) => {
   return cy.get('@agreement');
 });
 
-Cypress.Commands.add('deleteAgreementViaApi', (agreementId) => {
+// This usually happens outside of logged in env
+// For use with a specific user login token, run `getToken` first and pass runWithAdminToken: false
+Cypress.Commands.add('deleteAgreementViaApi', ({
+  agreementId,
+  runWithAdminToken = true
+}) => {
+  if (runWithAdminToken) {
+    cy.getAdminToken();
+  }
+
   cy.okapiRequest({
     method: 'DELETE',
     path: `erm/sas/${agreementId}`,
@@ -151,7 +169,17 @@ Cypress.Commands.add('deleteAgreementViaApi', (agreementId) => {
   });
 });
 
-Cypress.Commands.add('deleteAgreementLineViaApi', (agreementId, agreementLineId) => {
+// This usually happens outside of logged in env
+// For use with a specific user login token, run `getToken` first and pass runWithAdminToken: false
+Cypress.Commands.add('deleteAgreementLineViaApi', ({
+  agreementId,
+  agreementLineId,
+  runWithAdminToken = true
+}) => {
+  if (runWithAdminToken) {
+    cy.getAdminToken();
+  }
+
   cy.okapiRequest({
     method: 'PUT',
     path: `erm/sas/${agreementId}`,

@@ -21,6 +21,7 @@ import {
  */
 import AgreementFormInteractor from './AgreementFormInteractor';
 import HomeInteractor from '../HomeInteractor';
+import LocalKBAdminAppInteractor from '../local-kb-admin/AppInteractor';
 
 // Making Appinteractor a class so it is consistent and clear where each action is coming from
 // The main interactor for the agreements 3 pane main landing page
@@ -129,5 +130,21 @@ export default class AppInteractor {
     cy.expect(Datepicker(label).is({ visible: true }));
     cy.do(Datepicker(label).fillIn(date));
     cy.do(Button('Apply').click());
+  }
+
+  static ensurePackage = ({
+    packageName,
+    fileName,
+  }) => {
+    cy.getPackages({
+      match: 'name',
+      term: packageName,
+    }).then((packages) => {
+      console.log("PACKAGES: %o", packages)
+      if (packages?.length === 0) {
+        LocalKBAdminAppInteractor.openLocalKbAdminApp();
+        LocalKBAdminAppInteractor.uploadJsonFileAndAwaitCompletion(fileName);
+      }
+    });
   }
 }

@@ -41,11 +41,19 @@ const viewPermissions = ['ui-licenses.licenses.view'];
 
 describe('License create and delete', () => {
   before(() => {
-    cy.createUserWithPwAndPerms(editUser, editPermissions);
-    cy.createUserWithPwAndPerms(editDeleteUser, editDeletePermissions);
-    cy.createUserWithPwAndPerms(viewUser, viewPermissions);
+    cy.createUserWithPwAndPerms({
+      userProperties: editUser,
+      permissions:  editPermissions
+    });
+    cy.createUserWithPwAndPerms({
+      userProperties: editDeleteUser,
+      permissions:  editDeletePermissions
+    });
+    cy.createUserWithPwAndPerms({
+      userProperties: viewUser,
+      permissions:  viewPermissions
+    });
 
-    cy.getAdminToken();
     // the following sets Cypress.env('licenseTypeCreated') to true if a License.Type entry is created
     LicensesSettingsInteractor.ensureLicenseTypeExists(license);
     LicensesSettingsInteractor.fetchStatusLabel(license);
@@ -58,10 +66,9 @@ describe('License create and delete', () => {
       cy.logout();
     }
 
-    cy.getAdminToken();
-    cy.deleteUserViaApi(editUser.userId);
-    cy.deleteUserViaApi(editDeleteUser.userId);
-    cy.deleteUserViaApi(viewUser.userId);
+    cy.deleteUserViaApi({ userId: editUser.userId });
+    cy.deleteUserViaApi({ userId: editDeleteUser.userId });
+    cy.deleteUserViaApi({ userId: viewUser.userId });
   });
 
   function createLicense() {
@@ -138,10 +145,7 @@ describe('License create and delete', () => {
 
     after(() => {
       cy.logout();
-
-      // delete created license as admin because user has no delete permission
-      cy.getAdminToken();
-      cy.deleteLicenseViaApi(Cypress.env('licenseId'));
+      cy.deleteLicenseViaApi({ licenseId: Cypress.env('licenseId') });
     });
 
     createLicense();

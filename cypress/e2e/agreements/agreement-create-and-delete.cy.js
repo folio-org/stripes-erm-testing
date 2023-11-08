@@ -40,19 +40,26 @@ const viewPermissions = ['ui-agreements.agreements.view'];
 
 describe('Agreement create and delete', () => {
   before(() => {
-    cy.createUserWithPwAndPerms(editUser, editPermissions);
-    cy.createUserWithPwAndPerms(editDeleteUser, editDeletePermissions);
-    cy.createUserWithPwAndPerms(viewUser, viewPermissions);
+    cy.createUserWithPwAndPerms({
+      userProperties: editUser,
+      permissions:  editPermissions
+    });
+    cy.createUserWithPwAndPerms({
+      userProperties: editDeleteUser,
+      permissions:  editDeletePermissions
+    });
+    cy.createUserWithPwAndPerms({
+      userProperties: viewUser,
+      permissions:  viewPermissions
+    });
 
-    cy.getAdminToken();
     AgreementsSettingsInteractor.fetchStatusLabel(agreement);
   });
 
   after(() => {
-    cy.getAdminToken();
-    cy.deleteUserViaApi(editUser.userId);
-    cy.deleteUserViaApi(editDeleteUser.userId);
-    cy.deleteUserViaApi(viewUser.userId);
+    cy.deleteUserViaApi({ userId: editUser.userId });
+    cy.deleteUserViaApi({ userId: editDeleteUser.userId });
+    cy.deleteUserViaApi({ userId: viewUser.userId });
   });
 
   function createAgreement() {
@@ -118,8 +125,7 @@ describe('Agreement create and delete', () => {
       cy.logout();
 
       // delete created agreement as admin because user has no delete permission
-      cy.getAdminToken();
-      cy.deleteAgreementViaApi(Cypress.env('agreementId'));
+      cy.deleteAgreementViaApi({ agreementId: Cypress.env('agreementId') });
     });
 
     createAgreement();

@@ -20,16 +20,17 @@ const viewPermissions = ['ui-agreements.agreements.view'];
 
 describe('Agreement search and filter', () => {
   before(() => {
-    cy.getAdminToken();
-    cy.createAgreementViaApi(agreement);
-    cy.createUserWithPwAndPerms(viewUser, viewPermissions);
+    cy.createAgreementViaApi({ agreement });
+    cy.createUserWithPwAndPerms({
+      userProperties: viewUser,
+      permissions:  viewPermissions
+    });
     AgreementsSettingsInteractor.fetchStatusLabel(agreement);
   });
 
   after(() => {
-    cy.getAdminToken();
-    cy.deleteAgreementViaApi(agreement.id);
-    cy.deleteUserViaApi(viewUser.userId);
+    cy.deleteAgreementViaApi({ agreementId: agreement.id });
+    cy.deleteUserViaApi({ userId: viewUser.userId });
   });
 
   describe('View user actions', () => {
