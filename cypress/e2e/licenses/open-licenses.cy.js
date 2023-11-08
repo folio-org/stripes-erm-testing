@@ -4,7 +4,6 @@ import AppInteractor from '../../support/fragments/licenses/AppInteractor';
 describe('Opening licenses', () => {
   before(() => {
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-    cy.getAdminToken();
     // cy.viewport(550, 750);
   });
 

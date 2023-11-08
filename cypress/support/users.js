@@ -17,8 +17,9 @@ Cypress.Commands.add('createUser', (userLastName, patronGroup, email) => {
   ]);
 });
 
-Cypress.Commands.add('createUserViaApi', (user) => {
+Cypress.Commands.add('createUserViaApi', ({ user, headers }) => {
   cy.okapiRequest({
+    headers,
     method: 'POST',
     path: 'users',
     body: user,
@@ -33,43 +34,70 @@ Cypress.Commands.add('createUserViaApi', (user) => {
   }));
 });
 
-Cypress.Commands.add('deleteUserViaApi', (userId) => {
+// This usually happens outside of logged in env
+// For use with a specific user login token, run `getToken` first and pass runWithAdminToken: false
+Cypress.Commands.add('deleteUserViaApi', ({
+  userId,
+  runWithAdminToken = true
+}) => {
+  // Ensure cookie gets set with admin access token
+  if (runWithAdminToken) {
+    cy.getAdminToken();
+  }
+
   cy.okapiRequest({
     method: 'DELETE',
     path: `bl-users/by-id/${userId}`,
-    isDefaultSearchParamsRequired: false
+    isDefaultSearchParamsRequired: false,
   });
 });
 
-Cypress.Commands.add('createUserWithPwAndPerms', (userProperties, permissions, patronGroupName) => {
-  cy.getAdminToken();
+// This usually happens outside of logged in env
+// For use with a specific user login token, run `getToken` first and pass runWithAdminToken: false
+Cypress.Commands.add('createUserWithPwAndPerms', ({
+  userProperties,
+  permissions,
+  patronGroupName,
+  runWithAdminToken = true
+}) => {
+  // Ensure cookie gets set with admin access token
+  if (runWithAdminToken) {
+    cy.getAdminToken();
+  }
 
   cy.getFirstUserGroupId({ limit: patronGroupName ? 100 : 1 }, patronGroupName)
     .then((userGroupdId) => {
       const queryField = 'permissionName';
       const permissionsQuery = permissions.map(permission => `${queryField}=="${permission}"`).join(' or ');
-      cy.getPermissionsApi({ query: `(${permissionsQuery})` })
+      cy.getPermissionsApi({
+        searchParams: { query: `(${permissionsQuery})` },
+      })
         .then((permissionsResponse) => {
           cy.createUserViaApi({
-            ...defaultUser,
-            patronGroup: userGroupdId,
-            username: userProperties.username,
-            barcode: uuid(),
-            personal: { ...defaultUser.personal, lastName: userProperties.username }
-          })
-            .then(newUserProperties => {
-              userProperties.userId = newUserProperties.id;
-              userProperties.barcode = newUserProperties.barcode;
-              userProperties.firstName = newUserProperties.firstName;
-              userProperties.lastName = newUserProperties.lastName;
-              cy.setUserPassword(userProperties);
-              cy.addPermissionsToNewUserApi({
+            user: {
+              ...defaultUser,
+              patronGroup: userGroupdId,
+              username: userProperties.username,
+              barcode: uuid(),
+              personal: { ...defaultUser.personal, lastName: userProperties.username }
+            },
+          }).then(newUserProperties => {
+            userProperties.userId = newUserProperties.id;
+            userProperties.barcode = newUserProperties.barcode;
+            userProperties.firstName = newUserProperties.firstName;
+            userProperties.lastName = newUserProperties.lastName;
+            cy.setUserPassword({
+              userCredentials: userProperties,
+            });
+            cy.addPermissionsToNewUserApi({
+              userAndPermissions: {
                 userId: userProperties.userId,
                 permissions: [...permissionsResponse.body.permissions.map(permission => permission.permissionName)]
-              });
-              cy.overrideLocalSettings(userProperties.userId);
-              cy.wrap(userProperties).as('userProperties');
+              },
             });
+            cy.overrideLocalSettings(userProperties.userId);
+            cy.wrap(userProperties).as('userProperties');
+          });
         });
     });
   return cy.get('@userProperties');

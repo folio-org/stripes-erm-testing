@@ -5,13 +5,11 @@ import AgreementViewInteractor from '../../support/fragments/agreements/Agreemen
 import AgreementLineViewInteractor from '../../support/fragments/agreements/AgreementLineViewInteractor';
 import AgreementsSettingsInteractor from '../../support/fragments/agreements/AgreementsSettingsInteractor';
 
-import LocalKBAdminAppInteractor from '../../support/fragments/local-kb-admin/AppInteractor';
 import BasketInteractor from '../../support/fragments/agreements/BasketInteractor';
 import PackageViewInteractor from '../../support/fragments/agreements/PackageViewInteractor';
 
-// file - package - agreement
-const fileName = 'simple_package_for_updates_1.json';
-const packageName = 'Simple package to test updating package metadata';
+import { SIMPLE_PACKAGE } from '../../constants/jsonImports';
+
 const agreementName = `Agreement line internal resource test ${getRandomPostfix()}`;
 
 // users
@@ -35,11 +33,16 @@ let isChecked = false; // variable to store checkbox state
 describe('Agreement line with internal resource', () => {
   before('before hook', () => {
     console.log('createUser');
-    cy.createUserWithPwAndPerms(editUser, editPermissions);
-    cy.createUserWithPwAndPerms(viewUser, viewPermissions);
+    cy.createUserWithPwAndPerms({
+      userProperties: editUser,
+      permissions:  editPermissions
+    });
+    cy.createUserWithPwAndPerms({
+      userProperties: viewUser,
+      permissions:  viewPermissions
+    });
 
     console.log('do not hide internal agreements knowledgebase');
-    cy.getAdminToken();
     cy.getAgreementsGeneralSettings().then((settings) => {
       if (settings?.hideEResourcesFunctionality === true) {
         // remember value and set to false
@@ -50,20 +53,18 @@ describe('Agreement line with internal resource', () => {
 
     console.log('check if hideKbCheckbox is unchecked');
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-    cy.getAdminToken();
     AgreementsSettingsInteractor.ensureHideAgreementsKBUnchecked();
     cy.logout();
   });
 
   after(() => {
     console.log('delete users');
-    cy.getAdminToken();
-    cy.deleteUserViaApi(editUser.userId);
-    cy.deleteUserViaApi(viewUser.userId);
+    cy.deleteUserViaApi({ userId: editUser.userId });
+    cy.deleteUserViaApi({ userId: viewUser.userId });
 
     console.log('delete agreement line and agreement');
-    cy.deleteAgreementLineViaApi(Cypress.env('agreementId'), Cypress.env('agreementLineId'));
-    cy.deleteAgreementViaApi(Cypress.env('agreementId'));
+    cy.deleteAgreementLineViaApi({ agreementId: Cypress.env('agreementId'), agreementLineId: Cypress.env('agreementLineId') });
+    cy.deleteAgreementViaApi({ agreementId: Cypress.env('agreementId') });
 
     console.log('set hideEResourcesFunctionality checkbox back to its original state');
     if (isChecked === true) {
@@ -83,7 +84,7 @@ describe('Agreement line with internal resource', () => {
 
   function testSelectPackagesAndSearch(mode) {
     it('should select "Packages" tab, search and find package', () => {
-      AgreementAppInteractor.searchForPackage(packageName);
+      AgreementAppInteractor.searchForPackage(SIMPLE_PACKAGE.packageName);
       if (mode === 'edit') {
         cy.expect(PackageViewInteractor.addToBasketButton.exists());
       } else if (mode === 'view') {
@@ -103,12 +104,12 @@ describe('Agreement line with internal resource', () => {
         cy.logout();
       });
 
-      it('should open the Local KB admin app', () => {
-        LocalKBAdminAppInteractor.openLocalKbAdminApp();
-      });
-
-      it('should create a json import job and await completion', () => {
-        LocalKBAdminAppInteractor.uploadJsonFileAndAwaitCompletion(fileName);
+      it('should ensure the package necessary for these tests is in the system', () => {
+        // Get package call inside here will work as it's called with editUser's perms
+        AgreementAppInteractor.ensurePackage({
+          packageName: SIMPLE_PACKAGE.packageName,
+          fileName: SIMPLE_PACKAGE.fileName
+        });
       });
 
       it('should open the agreements app', () => {
@@ -126,7 +127,7 @@ describe('Agreement line with internal resource', () => {
       it('should view basket', () => {
         AgreementAppInteractor.openBasket();
         BasketInteractor.waitLoading();
-        BasketInteractor.checkResourceIsInBasket(packageName);
+        BasketInteractor.checkResourceIsInBasket(SIMPLE_PACKAGE.packageName);
         BasketInteractor.ensureBasketResourceIsSelected();
       });
 
@@ -140,8 +141,8 @@ describe('Agreement line with internal resource', () => {
         AgreementViewInteractor.paneExists(agreementName);
         AgreementViewInteractor.openAgreementLinesAccordion();
         cy.get('#agreement-lines')
-          .contains('div', packageName)
-          .should('have.text', packageName);
+          .contains('div', SIMPLE_PACKAGE.packageName)
+          .should('have.text', SIMPLE_PACKAGE.packageName);
       });
 
       // this is only for using the ids in the delete via api calls after the tests

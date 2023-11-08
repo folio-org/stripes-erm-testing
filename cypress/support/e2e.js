@@ -26,6 +26,7 @@ const defaultTestTimezone = 'UTC';
 let localeSettingsId;
 let localeSettingsValue;
 before(() => {
+  // This is running before all tests, make sure logged in as admin
   cy.getAdminToken();
   cy.getLocaleSettings().then(body => {
     if (Object.keys(body).length > 0) {
@@ -50,6 +51,7 @@ before(() => {
 after(() => {
   if ((Cypress.env('localeValue') && Cypress.env('localeValue') !== defaultTestLanguage) ||
     (Cypress.env('timezoneValue') && Cypress.env('timezoneValue') !== defaultTestTimezone)) {
+    // This is running after all tests, make sure logged in as admin (test should have logged user out)
     cy.getAdminToken();
     cy.putLocaleSettings(localeSettingsId, localeSettingsValue);
   }

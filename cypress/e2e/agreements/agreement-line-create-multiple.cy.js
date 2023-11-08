@@ -5,14 +5,13 @@ import DateTools from '../../support/utils/dateTools';
 
 import AgreementAppInteractor from '../../support/fragments/agreements/AppInteractor';
 import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
-import LocalKBAdminAppInteractor from '../../support/fragments/local-kb-admin/AppInteractor';
 import AgreementLineFormInteractor from '../../support/fragments/agreements/AgreementLineFormInteractor';
 import PackageViewInteractor from '../../support/fragments/agreements/PackageViewInteractor';
 import AgreementLineViewInteractor from '../../support/fragments/agreements/AgreementLineViewInteractor';
 
+import { SIMPLE_PACKAGE } from '../../constants/jsonImports';
+
 // file - package - agreement
-const fileName = 'simple_package_for_updates_1.json';
-const packageName = 'Simple package to test updating package metadata';
 const agreementName = `Agreement test ${getRandomPostfix()}`;
 const description = `Agreement line test description ${getRandomPostfix()}`;
 const note = `Agreement line test note ${getRandomPostfix()}`;
@@ -50,46 +49,44 @@ const viewPermissions = [
 
 describe('Agreement line test', () => {
   before('before hook', () => {
-    console.log('createUser');
-    cy.createUserWithPwAndPerms(editUser, editPermissions);
-    cy.createUserWithPwAndPerms(viewUser, viewPermissions);
+    cy.createUserWithPwAndPerms({
+      userProperties: editUser,
+      permissions:  editPermissions
+    });
+    cy.createUserWithPwAndPerms({
+      userProperties: viewUser,
+      permissions:  viewPermissions
+    });
 
-    cy.getAdminToken();
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-    cy.createAgreementViaApi(agreement).then((res) => {
+    cy.createAgreementViaApi({ agreement }).then((res) => {
       agreementId = res?.id;
     });
-    cy.getPackages({
-      match: 'name',
-      term: packageName,
-    }).then((packages) => {
-      if (packages?.length === 0) {
-        LocalKBAdminAppInteractor.openLocalKbAdminApp();
-        LocalKBAdminAppInteractor.uploadJsonFileAndAwaitCompletion(fileName);
-      }
+
+    AgreementAppInteractor.ensurePackage({
+      packageName: SIMPLE_PACKAGE.packageName,
+      fileName: SIMPLE_PACKAGE.fileName
     });
     cy.visit('/erm/agreements');
     AgreementAppInteractor.openLocalKB();
-    AgreementAppInteractor.searchForPackage(packageName);
+    AgreementAppInteractor.searchForPackage(SIMPLE_PACKAGE.packageName);
     PackageViewInteractor.addToBasket();
     cy.logout();
   });
 
   after(() => {
-    console.log('delete users');
-    cy.getAdminToken();
-    cy.deleteUserViaApi(editUser.userId);
-    cy.deleteUserViaApi(viewUser.userId);
+    cy.deleteUserViaApi({ userId: editUser.userId });
+    cy.deleteUserViaApi({ userId: viewUser.userId });
 
     console.log('delete agreement line and agreement');
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
     cy.getAgreement(agreementId, { expandItems: true }).then((res) => {
       res?.items?.forEach((line) => {
-        cy.deleteAgreementLineViaApi(agreementId, line?.id);
+        cy.deleteAgreementLineViaApi({ agreementId, agreementLineId: line?.id });
       });
       console.log(res);
     });
-    cy.deleteAgreementViaApi(agreementId);
+    cy.deleteAgreementViaApi({ agreementId });
     cy.logout();
   });
 
@@ -122,7 +119,7 @@ describe('Agreement line test', () => {
       });
 
       it('select e-resource from selection', () => {
-        AgreementLineFormInteractor.selectEresource(packageName);
+        AgreementLineFormInteractor.selectEresource(SIMPLE_PACKAGE.packageName);
       });
 
       it('link e-resource from selection', () => {
@@ -169,8 +166,8 @@ describe('Agreement line test', () => {
         AgreementViewInteractor.paneExists(agreementName);
         AgreementViewInteractor.openAgreementLinesAccordion();
         cy.get('#agreement-lines')
-          .contains('div', packageName)
-          .should('have.text', packageName);
+          .contains('div', SIMPLE_PACKAGE.packageName)
+          .should('have.text', SIMPLE_PACKAGE.packageName);
         cy.get('#agreement-lines')
           .contains('div', description)
           .should('have.text', description);
@@ -181,7 +178,7 @@ describe('Agreement line test', () => {
       });
 
       it('should display two agreement lines linked to the agreement', () => {
-        cy.expect(MultiColumnListCell(packageName).exists());
+        cy.expect(MultiColumnListCell(SIMPLE_PACKAGE.packageName).exists());
         cy.expect(MultiColumnListCell(description).exists());
       });
 
@@ -234,8 +231,8 @@ describe('Agreement line test', () => {
       it('expand agreement lines accordion in agreement view', () => {
         AgreementViewInteractor.openAgreementLinesAccordion();
         cy.get('#agreement-lines')
-          .contains('div', packageName)
-          .should('have.text', packageName);
+          .contains('div', SIMPLE_PACKAGE.packageName)
+          .should('have.text', SIMPLE_PACKAGE.packageName);
         cy.get('#agreement-lines')
           .contains('div', description)
           .should('have.text', description);
@@ -246,12 +243,12 @@ describe('Agreement line test', () => {
       });
 
       it('should display two agreement lines linked to the agreement', () => {
-        cy.expect(MultiColumnListCell(packageName).exists());
+        cy.expect(MultiColumnListCell(SIMPLE_PACKAGE.packageName).exists());
         cy.expect(MultiColumnListCell(description).exists());
       });
 
       it('Select one of the agreement lines in the search and filter results', () => {
-        cy.do(MultiColumnListCell(packageName).click());
+        cy.do(MultiColumnListCell(SIMPLE_PACKAGE.packageName).click());
         AgreementLineViewInteractor.paneExists('pane-view-agreement-line');
         cy.expect(AgreementLineViewInteractor.actionsButton.absent());
       });
