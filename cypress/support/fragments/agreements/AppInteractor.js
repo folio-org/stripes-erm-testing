@@ -140,7 +140,6 @@ export default class AppInteractor {
       match: 'name',
       term: packageName,
     }).then((packages) => {
-      console.log("PACKAGES: %o", packages)
       if (packages?.length === 0) {
         LocalKBAdminAppInteractor.openLocalKbAdminApp();
         LocalKBAdminAppInteractor.uploadJsonFileAndAwaitCompletion(fileName);

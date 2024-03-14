@@ -6,6 +6,11 @@ import 'cypress-file-upload';
 import 'cypress-wait-until';
 
 setInteractorTimeout(100_000);
+
+// Direct paths are icky but stripes-testing was never meant to be a library
+// Possibly better to copy logic if this fails
+require('@folio/stripes-testing/cypress/support/tenant');
+
 require('./api'); // I have NO idea why but these need to be require not import
 require('./stripes');
 require('./users');
