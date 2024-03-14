@@ -1,4 +1,7 @@
-// This is NOT default for ERM, so we turn this off for all erm requests.
+// Direct paths are icky but stripes-testing was never meant to be a library
+// Possibly better to copy logic if this fails -- see e2e.js
+import Tenant from '@folio/stripes-testing/cypress/support/tenant';
+
 // We could create an equivalent okapiKiwtRequest or such with defaults for KIWT modules, but this is so far unnecessary
 const DEFAULT_SEARCH_PARAMS = {
   limit: 1000,
@@ -10,6 +13,7 @@ Cypress.Commands.add('okapiRequest', ({
   path,
   searchParams = {},
   body,
+  // This is NOT default for ERM, so we turn this off for all erm requests.
   isDefaultSearchParamsRequired = false,
   headers = {} // Any extra headers
 }) => {
@@ -25,7 +29,7 @@ Cypress.Commands.add('okapiRequest', ({
     method,
     url: queryString ? `${cypressEnvPath}?${queryString}` : cypressEnvPath,
     headers: {
-      'x-okapi-tenant': Cypress.env('OKAPI_TENANT'),
+      'x-okapi-tenant': Tenant.get(),
       //'x-okapi-token': Cypress.env('token')
       ...headers
     },
