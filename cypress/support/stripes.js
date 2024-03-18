@@ -30,7 +30,7 @@ Cypress.Commands.add('okapiRequest', ({
     url: queryString ? `${cypressEnvPath}?${queryString}` : cypressEnvPath,
     headers: {
       'x-okapi-tenant': Tenant.get(),
-      //'x-okapi-token': Cypress.env('token')
+      // 'x-okapi-token': Cypress.env('token')
       ...headers
     },
     body,
