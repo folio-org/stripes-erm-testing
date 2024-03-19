@@ -118,7 +118,7 @@ describe('Agreement create and delete', () => {
       cy.logout();
     });
 
-    it('should open the licenses app and see "Actions" button w/o "New" option', () => {
+    it('should open the agreements app and see "Actions" button w/o "New" option', () => {
       AppInteractor.openAgreementsApp();
       AppInteractor.waitLoading();
       cy.do(AppInteractor.actionsButton.click()).then(() => {

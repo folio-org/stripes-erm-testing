@@ -26,29 +26,31 @@ export default class AgreementFormInteractor {
     cy.do(TextField('Name*').fillIn(name));
   }
 
-  static fill(fillAgreement = {}) {
-    // Default the necessary options so they always exist, no matter if only a subset gets passed in;
-    const fillName =
-      fillAgreement.name ?? `autotest_agreement_${getRandomPostfix()}`;
-    const fillStatus = fillAgreement.status ?? 'Draft';
-    const fillStartDate =
-      fillAgreement.startDate ?? DateTools.getCurrentDate();
+  static saveButton = Button('Save & close');
 
-    AgreementsSettingsInteractor.fetchStatusLabel(fillAgreement);
+  static fill(agreement = {}) {
+    // Default the necessary options so they always exist, no matter if only a subset gets passed in;
+    const name =
+    agreement.name ?? `autotest_agreement_${getRandomPostfix()}`;
+    const status = agreement.status ?? 'Draft';
+    const startDate =
+    agreement.startDate ?? DateTools.getCurrentDate();
+
+    AgreementsSettingsInteractor.fetchStatusLabel(agreement);
     // Fill in field, then check it filled in as expected
-    cy.do(Select('Status*').choose(fillStatus));
-    cy.expect(Select('Status*').has({ selectedContent: fillStatus }));
+    cy.do(Select('Status*').choose(status));
+    cy.expect(Select('Status*').has({ selectedContent: status }));
 
     cy.do(
-      Datepicker({ id: 'period-start-date-0' }).fillIn(fillStartDate)
+      Datepicker({ id: 'period-start-date-0' }).fillIn(startDate)
     );
     cy.expect(
       Datepicker({ id: 'period-start-date-0' }).has({
-        inputValue: fillStartDate,
+        inputValue: startDate,
       })
     );
-    this.fillName(fillName);
-    cy.expect(TextField('Name*').has({ value: this.fillName }));
+    this.fillName(name);
+    cy.expect(TextField('Name*').has({ value: name }));
 
     /* If we need more fields in order to set up frequently tested agreement properties,
      * they can be added here. Otherwise we can treat this as "fill basic agreement" and
@@ -57,7 +59,7 @@ export default class AgreementFormInteractor {
   }
 
   static save() {
-    cy.do(Button('Save & close').click());
+    cy.do(this.saveButton.click());
   }
 
   static waitLoading() {
