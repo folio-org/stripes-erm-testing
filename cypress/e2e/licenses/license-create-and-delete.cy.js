@@ -153,7 +153,7 @@ describe('License create and delete', () => {
 
     describe('actions dropdown', () => {
       it('should open actions dropdown w/o delete option', () => {
-        cy.do(LicenseViewInteractor.actionsButton(licenseName).click())
+        cy.do(LicenseViewInteractor.actionsButton.click())
           .then(() => {
             cy.expect(LicenseViewInteractor.deleteButton.absent());
             cy.expect(LicenseViewInteractor.duplicateButton.exists());
@@ -178,14 +178,14 @@ describe('License create and delete', () => {
 
     describe('delete license', () => {
       it('should open actions dropdown with options', () => {
-        cy.do(LicenseViewInteractor.actionsButton(licenseName).click())
+        cy.do(LicenseViewInteractor.actionsButton.click())
           .then(() => {
             cy.expect(LicenseViewInteractor.deleteButton.exists());
             cy.expect(LicenseViewInteractor.duplicateButton.exists());
             cy.expect(LicenseViewInteractor.editButton.exists());
           });
         // close dropdown because in next step Actions button will be clicked again
-        cy.do(LicenseViewInteractor.actionsButton(licenseName).click());
+        cy.do(LicenseViewInteractor.actionsButton.click());
       });
 
       it('should delete the license', () => {
