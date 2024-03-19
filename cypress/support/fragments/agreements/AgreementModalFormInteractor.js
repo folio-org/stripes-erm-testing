@@ -13,29 +13,43 @@ import { getRandomPostfix } from '../../utils/stringTools';
 // The interactor for the agreement modal creation form
 
 export default class AgreementModalFormInteractor {
+  static modal = Modal(including('New agreement'));
+
   static modalExists() {
-    cy.expect(Modal(including('New agreement')).is({ visible: true }));
+    cy.expect(this.modal.is({ visible: true }));
   }
+
+  static nameField = this.modal.find(TextField('Name*'));
+  static statusField = this.modal.find(Select('Status*'));
+  static dateField = this.modal.find(Datepicker({ id: 'period-start-date' }));
 
   static fillName(name) {
-    cy.do(TextField('Name*').fillIn(name));
+    cy.do(this.nameField.fillIn(name));
   }
 
-  static fill(fillAgreement = {}) {
+  static fillStatus(status) {
+    cy.do(this.statusField.choose(status));
+  }
+
+  static fillDate(date) {
+    cy.do(this.dateField.fillIn(date));
+  }
+
+  static fill(agreement = {}) {
     // Default the necessary options so they always exist, no matter if only a subset gets passed in;
-    const fillName = fillAgreement.name ?? `autotest_agreement_${getRandomPostfix()}`;
-    const fillStatus = fillAgreement.status ?? 'Draft';
-    const fillStartDate = fillAgreement.startDate ?? DateTools.getCurrentDate();
+    const name = agreement.name ?? `autotest_agreement_${getRandomPostfix()}`;
+    const status = agreement.status ?? 'Draft';
+    const startDate = agreement.startDate ?? DateTools.getCurrentDate();
 
     // Fill in field, then check it filled in as expected
-    this.fillName(fillName);
-    cy.expect(TextField('Name*').has({ value: fillName }));
+    this.fillName(name);
+    cy.expect(this.nameField.has({ value: name }));
 
-    cy.do(Select('Status*').choose(fillStatus));
-    cy.expect(Select('Status*').has({ selectedContent: fillStatus }));
+    this.fillStatus(status);
+    cy.expect(this.statusField.has({ selectedContent: status }));
 
-    cy.do(Datepicker({ id: 'period-start-date' }).fillIn(fillStartDate));
-    cy.expect(Datepicker({ id: 'period-start-date' }).has({ inputValue: fillStartDate }));
+    this.fillDate(startDate);
+    cy.expect(this.dateField.has({ inputValue: startDate }));
   }
 
   static save() {
@@ -43,6 +57,6 @@ export default class AgreementModalFormInteractor {
   }
 
   static waitLoading() {
-    cy.expect(TextField('Name*').exists());
+    cy.expect(this.nameField.exists());
   }
 }
