@@ -28,28 +28,27 @@ export default class AgreementFormInteractor {
 
   static fill(fillAgreement = {}) {
     // Default the necessary options so they always exist, no matter if only a subset gets passed in;
-    fillAgreement.name =
-      fillAgreement.name || `autotest_agreement_${getRandomPostfix()}`;
-    fillAgreement.status = fillAgreement.status || 'Draft';
-    fillAgreement.startDate =
-      fillAgreement.startDate || DateTools.getCurrentDate();
+    const fillName =
+      fillAgreement.name ?? `autotest_agreement_${getRandomPostfix()}`;
+    const fillStatus = fillAgreement.status ?? 'Draft';
+    const fillStartDate =
+      fillAgreement.startDate ?? DateTools.getCurrentDate();
 
     AgreementsSettingsInteractor.fetchStatusLabel(fillAgreement);
     // Fill in field, then check it filled in as expected
-    this.fillName(fillAgreement.name);
-    cy.expect(TextField('Name*').has({ value: fillAgreement.name }));
-
-    cy.do(Select('Status*').choose(fillAgreement.status));
-    cy.expect(Select('Status*').has({ selectedContent: fillAgreement.status }));
+    cy.do(Select('Status*').choose(fillStatus));
+    cy.expect(Select('Status*').has({ selectedContent: fillStatus }));
 
     cy.do(
-      Datepicker({ id: 'period-start-date-0' }).fillIn(fillAgreement.startDate)
+      Datepicker({ id: 'period-start-date-0' }).fillIn(fillStartDate)
     );
     cy.expect(
       Datepicker({ id: 'period-start-date-0' }).has({
-        inputValue: fillAgreement.startDate,
+        inputValue: fillStartDate,
       })
     );
+    this.fillName(fillName);
+    cy.expect(TextField('Name*').has({ value: this.fillName }));
 
     /* If we need more fields in order to set up frequently tested agreement properties,
      * they can be added here. Otherwise we can treat this as "fill basic agreement" and

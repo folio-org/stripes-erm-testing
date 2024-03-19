@@ -42,15 +42,15 @@ describe('Agreement create and delete', () => {
   before(() => {
     cy.createUserWithPwAndPerms({
       userProperties: editUser,
-      permissions:  editPermissions
+      permissions: editPermissions
     });
     cy.createUserWithPwAndPerms({
       userProperties: editDeleteUser,
-      permissions:  editDeletePermissions
+      permissions: editDeletePermissions
     });
     cy.createUserWithPwAndPerms({
       userProperties: viewUser,
-      permissions:  viewPermissions
+      permissions: viewPermissions
     });
 
     AgreementsSettingsInteractor.fetchStatusLabel(agreement);
@@ -64,9 +64,18 @@ describe('Agreement create and delete', () => {
 
   function createAgreement() {
     describe('create agreement', () => {
-      it('should open the agreements app and see "New" button', () => {
+      it('should open the agreements app and see "Actions" button', () => {
         AppInteractor.openAgreementsApp();
-        cy.expect(AppInteractor.newButton.exists());
+        AppInteractor.waitLoading();
+      });
+
+      it('should open actions dropdown with "New" button', () => {
+        cy.expect(AppInteractor.actionsButton.exists());
+        cy.do(AppInteractor.actionsButton.click()).then(() => {
+          cy.expect(AppInteractor.newButton.exists());
+        });
+        // close dropdown because in next step Actions button will be clicked again
+        cy.do(AppInteractor.actionsButton.click());
       });
 
       it('should create agreement', () => {
@@ -109,9 +118,12 @@ describe('Agreement create and delete', () => {
       cy.logout();
     });
 
-    it('should open the agreements app and do NOT see "New" button', () => {
+    it('should open the licenses app and see "Actions" button w/o "New" option', () => {
       AppInteractor.openAgreementsApp();
-      cy.expect(AppInteractor.newButton.absent());
+      AppInteractor.waitLoading();
+      cy.do(AppInteractor.actionsButton.click()).then(() => {
+        cy.expect(AppInteractor.newButton.absent());
+      });
     });
   });
 

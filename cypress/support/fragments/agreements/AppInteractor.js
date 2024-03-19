@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   Datepicker,
+  DropdownMenu,
   HTML,
   including,
   MultiColumnListCell,
@@ -28,7 +29,9 @@ import LocalKBAdminAppInteractor from '../local-kb-admin/AppInteractor';
 export default class AppInteractor {
   static section = Section({ id: 'agreements-tab-pane' });
 
-  static newButton = Button('New');
+  // static newButton = Button('New');
+  static actionsButton = Pane(including('Agreements')).find(Button('Actions'));
+  static newButton = DropdownMenu().find(Button('New'));
 
   static localKbSearchButton = Button('Local KB search');
   static packagesButton = Button('Packages');
@@ -44,7 +47,7 @@ export default class AppInteractor {
       this.section.find(MultiColumnListRow()).exists(),
       this.section.find(HTML(including('No results found. Please check your filters.'))).exists()
     ));
-    cy.expect(this.newButton.exists());
+    cy.expect(this.actionsButton.exists());
   };
 
   static openLocalKB = () => {
@@ -56,7 +59,11 @@ export default class AppInteractor {
   }
 
   static createAgreement = (agreement) => {
-    cy.do(this.newButton.click());
+    // EXAMPLE scoped interactor fetch
+    /*
+    cy.do(Pane(including('Agreements')).find(Dropdown('Actions')).choose('New', true));
+    */
+    cy.do(Pane(including('Agreements')).clickAction('New'));
     AgreementFormInteractor.waitLoading();
     AgreementFormInteractor.fill(agreement);
     AgreementFormInteractor.save();
