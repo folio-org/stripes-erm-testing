@@ -23,6 +23,6 @@ module.exports = defineConfig({
       // eslint-disable-next-line global-require
       return require('./cypress/plugins/index')(on, config);
     },
-    baseUrl: 'https://folio-snapshot-2.dev.folio.org/',
+    baseUrl: 'https://folio-snapshot-2.dev.folio.org',
   },
 });

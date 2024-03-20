@@ -68,7 +68,7 @@ describe('License lifecycle', () => {
       LicenseViewInteractor.recordMetadataInfo(this.dateCreated);
     });
 
-/*     it('should wait 60 seconds between create and edit', () => {
+    /*     it('should wait 60 seconds between create and edit', () => {
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(60000);
     }); */
