@@ -1,6 +1,6 @@
 # Change history for stripes-erm-testing
 
-## 2.1.0 In Progress
+## 2.1.0 2024-03-22
   * ERM-3095 Refactor e2e cypress tests to bring in line with new login
   * ERM-2836 Remove an Agreement line
   * fix: Fixes to integration tests #53 (useSecureTokens, REQUIRES RTR)
