@@ -25,6 +25,7 @@ describe('Agreement search and filter', () => {
       userProperties: viewUser,
       permissions:  viewPermissions
     });
+    cy.getAdminToken();
     AgreementsSettingsInteractor.fetchStatusLabel(agreement);
   });
 

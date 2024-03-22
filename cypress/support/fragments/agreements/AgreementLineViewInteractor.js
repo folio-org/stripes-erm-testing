@@ -13,7 +13,7 @@ import {
  */
 export default class AgreementLineViewInteractor {
   static deleteValueModal = Modal('Delete agreement line');
-  static actionsButton = Button('Actions');
+  static actionsButton = Pane({ id: 'pane-view-agreement-line' }).find(Button('Actions'));
   static deleteButton = DropdownMenu().find(Button('Delete'));
   static editButton = DropdownMenu().find(Button('Edit'));
 

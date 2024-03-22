@@ -17,8 +17,9 @@
 
 Cypress.Commands.add('getTokensFromLoginWithExpiry', ({ headers }) => {
   // Grab access and refresh tokens
-  const accessToken = headers['set-cookie'][0].split(';')[0];
-  const refreshToken = headers['set-cookie'][1].split(';')[0];
+  const accessToken = headers['set-cookie'][0].split(';')[0].split('=')[1];
+  const refreshToken = headers['set-cookie'][1].split(';')[0].split('=')[1];
+
   Cypress.env('accessToken', accessToken);
   Cypress.env('refreshToken', refreshToken);
 

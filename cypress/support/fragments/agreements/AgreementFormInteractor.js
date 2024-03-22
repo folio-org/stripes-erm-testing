@@ -26,30 +26,31 @@ export default class AgreementFormInteractor {
     cy.do(TextField('Name*').fillIn(name));
   }
 
-  static fill(fillAgreement = {}) {
+  static saveButton = Button('Save & close');
+
+  static fill(agreement = {}) {
     // Default the necessary options so they always exist, no matter if only a subset gets passed in;
-    fillAgreement.name =
-      fillAgreement.name || `autotest_agreement_${getRandomPostfix()}`;
-    fillAgreement.status = fillAgreement.status || 'Draft';
-    fillAgreement.startDate =
-      fillAgreement.startDate || DateTools.getCurrentDate();
+    const name =
+    agreement.name ?? `autotest_agreement_${getRandomPostfix()}`;
+    const status = agreement.status ?? 'Draft';
+    const startDate =
+    agreement.startDate ?? DateTools.getCurrentDate();
 
-    AgreementsSettingsInteractor.fetchStatusLabel(fillAgreement);
+    AgreementsSettingsInteractor.fetchStatusLabel(agreement);
     // Fill in field, then check it filled in as expected
-    this.fillName(fillAgreement.name);
-    cy.expect(TextField('Name*').has({ value: fillAgreement.name }));
-
-    cy.do(Select('Status*').choose(fillAgreement.status));
-    cy.expect(Select('Status*').has({ selectedContent: fillAgreement.status }));
+    cy.do(Select('Status*').choose(status));
+    cy.expect(Select('Status*').has({ selectedContent: status }));
 
     cy.do(
-      Datepicker({ id: 'period-start-date-0' }).fillIn(fillAgreement.startDate)
+      Datepicker({ id: 'period-start-date-0' }).fillIn(startDate)
     );
     cy.expect(
       Datepicker({ id: 'period-start-date-0' }).has({
-        inputValue: fillAgreement.startDate,
+        inputValue: startDate,
       })
     );
+    this.fillName(name);
+    cy.expect(TextField('Name*').has({ value: name }));
 
     /* If we need more fields in order to set up frequently tested agreement properties,
      * they can be added here. Otherwise we can treat this as "fill basic agreement" and
@@ -58,7 +59,7 @@ export default class AgreementFormInteractor {
   }
 
   static save() {
-    cy.do(Button('Save & close').click());
+    cy.do(this.saveButton.click());
   }
 
   static waitLoading() {

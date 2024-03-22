@@ -17,21 +17,21 @@ export default class LicenseFormInteractor {
   }
 
   // We default the fill to a very basic license
-  static fill(fillLicense = {}) {
+  static fill(license = {}) {
     // Default the necessary options so they always exist, no matter if only a subset gets passed in;
-    const fillName = fillLicense.name ?? `autotest_agreement_${getRandomPostfix()}`;
-    const fillStatus = fillLicense.status ?? 'Active';
-    const fillType = fillLicense.type ?? 'Local';
+    const name = license.name ?? `autotest_agreement_${getRandomPostfix()}`;
+    const status = license.status ?? 'Active';
+    const type = license.type ?? 'Local';
 
     // Fill in field, then check it filled in as expected
-    cy.do(Select('Status*').choose(fillStatus));
-    cy.expect(Select('Status*').has({ selectedContent: fillStatus }));
+    cy.do(Select('Status*').choose(status));
+    cy.expect(Select('Status*').has({ selectedContent: status }));
 
-    cy.do(Select('Type*').choose(fillType));
-    cy.expect(Select('Type*').has({ selectedContent: fillType }));
+    cy.do(Select('Type*').choose(type));
+    cy.expect(Select('Type*').has({ selectedContent: type }));
 
-    this.fillName(fillName);
-    cy.expect(TextField('Name*').has({ value: fillName }));
+    this.fillName(name);
+    cy.expect(TextField('Name*').has({ value: name }));
 
     /* If we need more fields in order to set up frequently tested license properties,
      * they can be added here. Otherwise we can treat this as "fill basic license" and

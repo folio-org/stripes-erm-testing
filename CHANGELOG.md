@@ -1,6 +1,9 @@
 # Change history for stripes-erm-testing
 
 ## 2.1.0 In Progress
+  * ERM-3095 Refactor e2e cypress tests to bring in line with new login
+  * ERM-2836 Remove an Agreement line
+  * fix: Fixes to integration tests #53 (useSecureTokens, REQUIRES RTR)
 
 ## 2.0.0 2023-10-12
   * Added stripes-kint-components to dev deps
@@ -24,6 +27,8 @@
     * ERM-2995 Upgrade stripes-erm-testing React to v18
   * STRIPES-868 *BREAKING* bump `react-intl` to `v6.4.4`
     * ERM-3035 Upgrade stripes-erm-testing react-intl to v6
+  * ERM-3018 Implement GOKb Title UUID as primary match ID where available
+    * Updated to use mod-agreements-package schema v2.0 #48
 
 ## 1.1.0 2023-02-22
   * Initial e2e cypress tests

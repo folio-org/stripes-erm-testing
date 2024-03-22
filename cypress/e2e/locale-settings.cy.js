@@ -1,3 +1,7 @@
+import {
+  Heading,
+  including,
+} from '../../interactors';
 
 describe('Locale settings', () => {
   before(() => {
@@ -10,6 +14,7 @@ describe('Locale settings', () => {
 
   it('visiting locale settings renders the correct page', () => {
     cy.visit('/settings/tenant-settings/locale');
+    cy.expect(Heading(including('Language and localization')).exists());
   });
 
   it('should have the expected locale en-US', () => {

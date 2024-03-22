@@ -14,7 +14,8 @@ import DateTools from '../../utils/dateTools';
  * ie more than once, in various tests, then we should add an action here and import to ensure consistency.
  */
 export default class LicenseViewInteractor {
-  static actionsButton = (licenseName) => Pane(including(licenseName)).find(Button('Actions'));
+  static actionsButton = Pane({ id: 'pane-view-license' }).find(Button('Actions'));
+
   static deleteButton = DropdownMenu().find(Button('Delete'));
   static duplicateButton = DropdownMenu().find(Button('Duplicate'));
   static editButton = DropdownMenu().find(Button('Edit'));

@@ -8,3 +8,4 @@ export { default as Datepicker } from './datepicker';
 export { default as FormattedDateTime } from './formatted-date-time';
 export { default as Select } from './select';
 export { default as AppList, AppListItem } from './app-list';
+export { default as NavList, NavListItem } from './nav-list';

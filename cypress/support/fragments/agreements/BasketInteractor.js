@@ -26,10 +26,11 @@ export default class BasketInteractor {
     cy.visit('/erm/basket');
   }
 
-  static createAgreement = (fillAgreement) => {
+  static createAgreement = (agreement) => {
     cy.do(this.createNewAgreementButton.click());
     AgreementModalFormInteractor.modalExists();
-    AgreementModalFormInteractor.fill(fillAgreement);
+    AgreementModalFormInteractor.waitLoading();
+    AgreementModalFormInteractor.fill(agreement);
     AgreementModalFormInteractor.save();
   }
 
