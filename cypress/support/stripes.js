@@ -24,6 +24,18 @@ Cypress.Commands.add('okapiRequest', ({
     Object.entries(DEFAULT_SEARCH_PARAMS).forEach(([key, value]) => initialParams.append(key, value));
   }
 
+  // FIXME am VERY not sure about this... perhaps better off ensuring that api calls
+  // Handle post Q release
+  /* cy.getCookie('folioAccessToken').then(cookieObj => {
+    if (!cookieObj && Cypress.env('accessToken')) {
+      // If we don't have an access token cookie, set the one from cypress env
+      console.log("CEFAT: %o", Cypress.env('accessToken'));
+      cy.clearCookies();
+      cy.setCookie('folioAccessToken', Cypress.env('accessToken'));
+      cy.setCookie('folioRefreshToken', Cypress.env('refreshToken'));
+    }
+  }); */
+
   const queryString = (initialParams).toString();
   cy.request({
     method,

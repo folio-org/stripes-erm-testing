@@ -17,6 +17,7 @@ describe('Agreement lifecycle', () => {
   };
 
   before(() => {
+    cy.getAdminToken();
     AgreementsSettingsInteractor.fetchStatusLabel(agreement);
 
     cy.login(Cypress.env('login_username'), Cypress.env('login_password'));

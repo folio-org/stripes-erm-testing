@@ -61,3 +61,28 @@ after(() => {
     cy.putLocaleSettings(localeSettingsId, localeSettingsValue);
   }
 });
+
+// FIXME Not sure about this either
+// Handle post Q release
+/* beforeEach(() => {
+  cy.getCookie('folioAccessToken').then(cookieObj => {
+    // Ensure cookie
+    if (Cypress.env('accessToken') && cookieObj?.value !== Cypress.env('accessToken')) {
+      cy.setCookie(
+        'folioAccessToken',
+        Cypress.env('accessToken'),
+        {
+          path: '/',
+          domain: undefined,
+        }
+      );
+    }
+  });
+
+  cy.getCookie('folioRefreshToken').then(cookieObj => {
+    // Ensure cookie
+    if (Cypress.env('refreshToken') && cookieObj?.value !== Cypress.env('refreshToken')) {
+      cy.setCookie('folioRefreshToken', Cypress.env('refreshToken'));
+    }
+  });
+}); */

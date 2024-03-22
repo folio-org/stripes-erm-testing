@@ -22,21 +22,21 @@ const editUser = {
   password: 'editTest'
 };
 
-const editPermissions = ['ui-agreements.agreements.edit'];
+const editPermissions = ['module.agreements.enabled', 'ui-agreements.agreements.edit'];
 
 const editDeleteUser = {
   username: `editDeleteTest${getRandomPostfix()}`,
   password: 'editDeleteTest'
 };
 
-const editDeletePermissions = ['ui-agreements.agreements.delete', 'ui-agreements.agreements.edit'];
+const editDeletePermissions = ['module.agreements.enabled', 'ui-agreements.agreements.delete', 'ui-agreements.agreements.edit'];
 
 const viewUser = {
   username: `viewTest${getRandomPostfix()}`,
   password: 'viewTest'
 };
 
-const viewPermissions = ['ui-agreements.agreements.view'];
+const viewPermissions = ['module.agreements.enabled', 'ui-agreements.agreements.view'];
 
 describe('Agreement create and delete', () => {
   before(() => {
@@ -53,6 +53,7 @@ describe('Agreement create and delete', () => {
       permissions: viewPermissions
     });
 
+    cy.getAdminToken();
     AgreementsSettingsInteractor.fetchStatusLabel(agreement);
   });
 

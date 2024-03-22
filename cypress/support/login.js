@@ -9,6 +9,7 @@ import {
 } from '../../interactors';
 
 Cypress.Commands.add('login', (username, password, visitPath = { path: '/', waiter: () => cy.expect(Heading(including('Welcome')).exists()) }) => {
+  cy.clearCookies();
   // We use a behind-the-scenes method of ensuring we are logged
   // out, rather than using the UI, in accordance with the Best
   // Practices guidance at
@@ -30,6 +31,12 @@ Cypress.Commands.add('login', (username, password, visitPath = { path: '/', wait
 
   visitPath.waiter();
 
+  /* // Ensure access tokens are properly set in env
+  // FIXME Handle post Q release
+  cy.getCookie('folioAccessToken').then(cookieObj => {
+    Cypress.env('accessToken', cookieObj.value);
+  }); */
+
   // There seems to be a race condition here: sometimes there is
   // re-render that happens so quickly that following actions like
   //       cy.get('#app-list-item-clickable-courses-module').click()
@@ -45,6 +52,10 @@ Cypress.Commands.add('logout', () => {
     // Use ID instead
     Button({ id: 'clickable-logout' }).click(),
   ]);
+
+  Cypress.env('accessToken', null);
+  Cypress.env('refreshToken', null);
+  cy.clearCookies();
 
   cy.expect(Button('Log in', { disabled: true }).exists());
 });
