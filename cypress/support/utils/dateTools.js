@@ -1,27 +1,30 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 export default {
   getCurrentDate: () => {
-    return moment.utc().format('MM/DD/YYYY');
+    return dayjs.utc().format('MM/DD/YYYY');
   },
 
   getDateAfter: (date) => {
-    return moment.utc(date).add(1, 'day').format('MM/DD/YYYY');
+    return dayjs.utc(date).add(1, 'day').format('MM/DD/YYYY');
   },
 
   getDateBefore: (date) => {
-    return moment.utc(date).add(-1, 'day').format('MM/DD/YYYY');
+    return dayjs.utc(date).add(-1, 'day').format('MM/DD/YYYY');
   },
 
   getApiDate: (date) => {
-    return moment.utc(date).format('YYYY-MM-DD');
+    return dayjs.utc(date).format('YYYY-MM-DD');
   },
 
   getDateNoZeros(date) {
-    return moment.utc(date).format('M/D/YYYY');
+    return dayjs.utc(date).format('M/D/YYYY');
   },
 
   getFormattedDateWithTime(date) {
-    return moment.utc(date).format('M/D/YYYY h:mm A');
+    return dayjs.utc(date).format('M/D/YYYY h:mm A');
   },
 };
