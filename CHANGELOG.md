@@ -1,5 +1,11 @@
 # Change history for stripes-erm-testing
 
+## 2.1.1 2024-04-18
+  * Added jest-config-stripes moduleNameMapper configs into jest.config.js, so any fixes and changes in there will be reflected by default
+  * Exposed componentMocks, extra complex mocks which make use of stripes-components and so can't be part of manual mocks
+    * MockTypedownGetter -- centralised "Typedown" mock that tests can make use of to test typedowns should they wish
+  * Added support for TestForm children to access handleSubmit function
+
 ## 2.1.0 2024-03-22
   * ERM-3095 Refactor e2e cypress tests to bring in line with new login
   * ERM-2836 Remove an Agreement line
