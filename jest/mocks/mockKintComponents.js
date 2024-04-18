@@ -29,7 +29,7 @@ const mockKintComponents = {
   CustomPropertyCard: () => <div>CustomPropertyCard</div>,
   CustomPropertiesView: () => <div>CustomPropertiesView</div>,
   EditableRefdataCategoryList: () => <div>EditableRefdataCategoryList</div>,
-  EditableRefdataList: () => <div>EditableRefdataList</div>,
+  EditableRefdataList: () => <div>EditableRefdataList</div>
 };
 
 export default mockKintComponents;

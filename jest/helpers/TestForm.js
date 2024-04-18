@@ -50,7 +50,7 @@ const TestForm = ({
     >
       {({ handleSubmit, ...otherFormProps }) => (
         <form onSubmit={handleSubmit}>
-          {renderChildren(otherFormProps)}
+          {renderChildren({ handleSubmit, ...otherFormProps })}
           <Button data-testid="submit" id="submit" type="submit">
             Submit
           </Button>

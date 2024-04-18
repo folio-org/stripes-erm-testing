@@ -1,6 +1,6 @@
 {
   "name": "@folio/stripes-erm-testing",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Testing library for Stripes ERM applications",
   "sideEffects": [
     "*.css"
