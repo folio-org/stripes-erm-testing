@@ -17,7 +17,11 @@ module.exports = {
   ],
   moduleNameMapper: {
     '^.+\\.(css)$': path.join(__dirname, './jest/mocks/styleMock.js'),
-    '^.+\\.(svg)$': 'identity-obj-proxy',
+    /* config.moduleNameMapper needs to be at end, since regex keys here are
+     * applied top to bottom, so any overwriting behaviour
+     * we want specifically needs to happen _first_.
+     */
+    ...(config.moduleNameMapper ?? {}),
   },
   setupFiles: [
     ...config.setupFiles,
