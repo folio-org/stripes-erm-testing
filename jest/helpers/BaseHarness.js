@@ -62,8 +62,3 @@ BaseHarness.propTypes = {
   height: PropTypes.number,
 };
 
-BaseHarness.defaultProps = {
-  width: 500,
-  height: 500,
-  shouldMockOffsetSize: true,
-};

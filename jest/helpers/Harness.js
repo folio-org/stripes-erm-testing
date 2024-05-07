@@ -43,9 +43,3 @@ Harness.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
 };
-
-Harness.defaultProps = {
-  width: 500,
-  height: 500,
-  shouldMockOffsetSize: true,
-};
