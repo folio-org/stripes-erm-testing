@@ -99,7 +99,7 @@ const mockStripesCore = {
     return typeof children === 'function' ?
       children({ hasPermission: true }) : <>{children}</>;
   },
-  Pluggable: props => <>{props.children}</>,
+  Pluggable: jest.fn(props => <>{props.children}</>),
   TitleManager: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
