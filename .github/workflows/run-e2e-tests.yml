@@ -4,6 +4,7 @@ on:
   # Run every day at 6:37 and 18:37
     - cron:  '37 6,18 * * *'
   workflow_dispatch:
+  push:
 
 jobs:
   run-cypress-tests:
