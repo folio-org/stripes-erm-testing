@@ -3,15 +3,15 @@ import {
   including,
 } from '../../interactors';
 
+before(() => {
+  cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+});
+
+after(() => {
+  cy.logout();
+});
+
 describe('Locale settings', () => {
-  before(() => {
-    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
-  });
-
-  after(() => {
-    cy.logout();
-  });
-
   it('visiting locale settings renders the correct page', () => {
     cy.visit('/settings/tenant-settings/locale');
     cy.expect(Heading(including('Language and localization')).exists());
