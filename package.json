@@ -22,7 +22,6 @@
     "@folio/jest-config-stripes": "^2.0.0",
     "@folio/stripes-testing": "^4.7.0",
     "@interactors/html": "^1.0.0-rc1.4",
-    "cypress": "^13.13.2",
     "date-fns": "^2.16.1",
     "final-form": "^4.20.7",
     "final-form-arrays": "^3.0.2",
@@ -46,7 +45,7 @@
     "@folio/stripes-cli": "^3.1.0",
     "@folio/stripes-testing": "^4.7.0",
     "@interactors/html": "^1.0.0-rc1.4",
-    "@interactors/with-cypress": "^1.0.0-rc1.2",
+    "@interactors/with-cypress": "^1.0.0-rc1.3",
     "@k-int/stripes-kint-components": "^5.5.1",
     "babel-plugin-require-context-hook": "^1.0.0",
     "cypress-downloadfile": "^1.2.1",
@@ -73,5 +72,8 @@
     "react-intl": "^6.4.4",
     "react-query": "^3.9.0",
     "react-router-dom": "^5.2.0"
+  },
+  "resolutions": {
+    "cypress": "^13.0.0"
   }
 }

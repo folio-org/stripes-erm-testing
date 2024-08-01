@@ -8,6 +8,8 @@ A repository for shared testing config and components for the ERM suite of appli
 
 As a developer, there are several options for running the cypress tests, but they all have one thing in common. There must already be a fully functioning back/front-end system to point at.
 
+NOTE - Cypress version is dictated by @folio/stripes-testing, and so there is no direct dependency on cypress in our package.json to avoid confusion and drift.
+
 #### Commands
 
 Running with
