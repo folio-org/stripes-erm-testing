@@ -24,5 +24,6 @@ module.exports = defineConfig({
       return require('./cypress/plugins/index')(on, config);
     },
     baseUrl: 'https://folio-snapshot.dev.folio.org',
+    testIsolation: false
   },
 });

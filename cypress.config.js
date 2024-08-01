@@ -24,5 +24,6 @@ module.exports = defineConfig({
       return require('./cypress/plugins/index')(on, config);
     },
     baseUrl: 'https://folio-testing-cypress-diku.ci.folio.org',
+    testIsolation: false
   },
 });

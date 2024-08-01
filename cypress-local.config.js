@@ -25,5 +25,6 @@ module.exports = defineConfig({
       return require('./cypress/plugins/index')(on, config);
     },
     baseUrl: 'http://localhost:3000',
+    testIsolation: false
   },
 });

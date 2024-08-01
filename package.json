@@ -22,7 +22,7 @@
     "@folio/jest-config-stripes": "^2.0.0",
     "@folio/stripes-testing": "^4.7.0",
     "@interactors/html": "^1.0.0-rc1.4",
-    "cypress": "10.9.0",
+    "cypress": "^13.13.2",
     "date-fns": "^2.16.1",
     "final-form": "^4.20.7",
     "final-form-arrays": "^3.0.2",
@@ -33,7 +33,7 @@
     "react-final-form": "^6.5.9",
     "react-final-form-arrays": "^3.1.4",
     "react-intl": "^6.4.4",
-    "react-query": "^3.6.0",
+    "react-query": "^3.9.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"
   },
@@ -54,6 +54,7 @@
     "cypress-grep": "^3.0.3",
     "cypress-wait-until": "^1.7.2",
     "cypress-xpath": "^1.6.2",
+    "dayjs": "^1.11.10",
     "eslint": "^7.32.0",
     "eslint-plugin-cypress": "^2.11.2",
     "eslint-plugin-import": "^2.26.0",
@@ -61,7 +62,6 @@
     "identity-obj-proxy": "^3.0.0",
     "jest-webpack": "^0.5.1",
     "localforage": "^1.9.0",
-    "dayjs": "^1.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "uuid": "^3.4.0"
