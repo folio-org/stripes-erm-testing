@@ -1,5 +1,4 @@
 const { defineConfig } = require('cypress');
-const setupNodeEvents = require('./setupNodeEvents');
 
 /* For use with a fully running rancher-desktop system */
 module.exports = defineConfig({
@@ -19,7 +18,12 @@ module.exports = defineConfig({
     grepOmitFiltered: true,
   },
   e2e: {
-    setupNodeEvents,
+    // We've imported your old cypress plugins here.
+    // You may want to clean this up later by importing these.
+    setupNodeEvents(on, config) {
+      // eslint-disable-next-line global-require
+      return require('./cypress/plugins/index')(on, config);
+    },
     baseUrl: 'http://localhost:3000',
     testIsolation: false
   },
