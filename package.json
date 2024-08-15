@@ -75,6 +75,6 @@
     "react-router-dom": "^5.2.0"
   },
   "resolutions": {
-    "cypress-cloud": "1.0.0-0"
+    "cypress-cloud": null
   }
 }
