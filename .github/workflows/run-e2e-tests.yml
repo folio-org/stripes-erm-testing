@@ -1,26 +1,26 @@
 name: run cypress tests
 on:
   schedule:
-    # Run every day at 6:37 and 18:37
-    - cron: "37 6,18 * * *"
+  # Run every day at 6:37 and 18:37
+    - cron:  '37 6,18 * * *'
   workflow_dispatch:
   push:
 
 jobs:
   run-cypress-tests:
     env:
-      FOLIO_NPM_REGISTRY: "https://repository.folio.org/repository/npm-folioci/"
-      FOLIO_MD_REGISTRY: "https://folio-registry.dev.folio.org"
-      NODEJS_VERSION: "18"
+        FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci/'
+        FOLIO_MD_REGISTRY: 'https://folio-registry.dev.folio.org'
+        NODEJS_VERSION: '18'
     runs-on: ubuntu-latest
     steps:
       - uses: folio-org/checkout@v2
         with:
           fetch-depth: 0
-
+      ## Most of these steps are ripped from the old jest test runner...
+      ## could use some tweaks but I just want to get it running right now
       - name: Setup kernel for react native, increase watchers
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -34,19 +34,8 @@ jobs:
       - name: Run yarn install
         run: yarn install --ignore-scripts
 
-      - name: Manually remove cypress-cloud from node_modules
-        run: rm -rf ./node_modules/cypress-cloud
-
       - name: Install cypress
         run: yarn run cypress install
-
-      # Check for cypress-cloud in node_modules
-      - name: Check for cypress-cloud in node_modules
-        run: find ./node_modules -name "cypress-cloud"
-
-      # Debug why cypress-cloud is installed
-      - name: Debug why cypress-cloud is installed
-        run: yarn why cypress-cloud
 
       - name: Run cypress tests
         run: yarn test:cypress
