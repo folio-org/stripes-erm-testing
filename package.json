@@ -73,8 +73,5 @@
     "react-intl": "^6.4.4",
     "react-query": "^3.9.0",
     "react-router-dom": "^5.2.0"
-  },
-  "resolutions": {
-    "cypress-cloud": null
   }
 }
