@@ -35,7 +35,7 @@ jobs:
         run: yarn install --ignore-scripts
 
       - name: Manually remove cypress-cloud from node_modules
-        run: rm -rf ./node_modules/cypress-cloud ./node_modules/@folio/stripes-testing/node_modules/cypress-cloud
+        run: rm -rf ./node_modules/cypress-cloud
 
       - name: Install cypress
         run: yarn run cypress install
