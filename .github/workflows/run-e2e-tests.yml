@@ -1,17 +1,17 @@
 name: run cypress tests
 on:
   schedule:
-  # Run every day at 6:37 and 18:37
-    - cron:  '37 6,18 * * *'
+    # Run every day at 6:37 and 18:37
+    - cron: "37 6,18 * * *"
   workflow_dispatch:
   push:
 
 jobs:
   run-cypress-tests:
     env:
-        FOLIO_NPM_REGISTRY: 'https://repository.folio.org/repository/npm-folioci/'
-        FOLIO_MD_REGISTRY: 'https://folio-registry.dev.folio.org'
-        NODEJS_VERSION: '18'
+      FOLIO_NPM_REGISTRY: "https://repository.folio.org/repository/npm-folioci/"
+      FOLIO_MD_REGISTRY: "https://folio-registry.dev.folio.org"
+      NODEJS_VERSION: "18"
     runs-on: ubuntu-latest
     steps:
       - uses: folio-org/checkout@v2
@@ -37,5 +37,13 @@ jobs:
       - name: Install cypress
         run: yarn run cypress install
 
+      # - name: Run cypress tests
+      #   run: yarn test:cypress
+
+      # Print all environment variables to ensure nothing unexpected is influencing the run
+      - name: Print Environment Variables
+        run: printenv
+
+      # Run Cypress tests with explicit config file reference
       - name: Run cypress tests
-        run: yarn test:cypress
+        run: yarn cypress run --config-file ./cypress.config.js
