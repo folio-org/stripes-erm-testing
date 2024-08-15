@@ -1,4 +1,5 @@
 const { defineConfig } = require('cypress');
+const setupNodeEvents = require('./setupNodeEvents');
 
 module.exports = defineConfig({
   viewportWidth: 1920,
@@ -17,13 +18,8 @@ module.exports = defineConfig({
     grepOmitFiltered: true,
   },
   e2e: {
-    // We've imported your old cypress plugins here.
-    // You may want to clean this up later by importing these.
-    setupNodeEvents(on, config) {
-      // eslint-disable-next-line global-require
-      return require('./cypress/plugins/index')(on, config);
-    },
+    setupNodeEvents,
     baseUrl: 'https://folio-testing-cypress-diku.ci.folio.org',
-    testIsolation: false
+    testIsolation: false,
   },
 });
