@@ -34,6 +34,9 @@ jobs:
       - name: Run yarn install
         run: yarn install --ignore-scripts
 
+      - name: Remove cypress-cloud
+        run: yarn remove cypress-cloud
+
       - name: Install cypress
         run: yarn run cypress install
 
