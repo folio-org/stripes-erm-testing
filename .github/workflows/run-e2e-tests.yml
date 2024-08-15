@@ -17,10 +17,10 @@ jobs:
       - uses: folio-org/checkout@v2
         with:
           fetch-depth: 0
-      ## Most of these steps are ripped from the old jest test runner...
-      ## could use some tweaks but I just want to get it running right now
+
       - name: Setup kernel for react native, increase watchers
         run: echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
+
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -37,13 +37,13 @@ jobs:
       - name: Install cypress
         run: yarn run cypress install
 
-      # - name: Run cypress tests
-      #   run: yarn test:cypress
+      # Check for cypress-cloud in node_modules
+      - name: Check for cypress-cloud in node_modules
+        run: find ./node_modules -name "cypress-cloud"
 
-      # Print all environment variables to ensure nothing unexpected is influencing the run
-      - name: Print Environment Variables
-        run: printenv
+      # Debug why cypress-cloud is installed
+      - name: Debug why cypress-cloud is installed
+        run: yarn why cypress-cloud
 
-      # Run Cypress tests with explicit config file reference
       - name: Run cypress tests
-        run: yarn cypress run --config-file ./cypress.config.js
+        run: yarn test:cypress
