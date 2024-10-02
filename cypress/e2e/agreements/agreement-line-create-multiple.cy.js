@@ -1,13 +1,13 @@
-import { MultiColumnListCell, Modal, Button } from '../../../interactors';
+import { Button, Modal, MultiColumnListCell } from '../../../interactors';
 
-import { getRandomPostfix } from '../../support/utils/stringTools';
 import DateTools from '../../support/utils/dateTools';
+import { getRandomPostfix } from '../../support/utils/stringTools';
 
-import AgreementAppInteractor from '../../support/fragments/agreements/AppInteractor';
-import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
 import AgreementLineFormInteractor from '../../support/fragments/agreements/AgreementLineFormInteractor';
-import PackageViewInteractor from '../../support/fragments/agreements/PackageViewInteractor';
 import AgreementLineViewInteractor from '../../support/fragments/agreements/AgreementLineViewInteractor';
+import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
+import AgreementAppInteractor from '../../support/fragments/agreements/AppInteractor';
+import PackageViewInteractor from '../../support/fragments/agreements/PackageViewInteractor';
 
 import { SIMPLE_PACKAGE } from '../../constants/jsonImports';
 
@@ -132,21 +132,27 @@ describe('Agreement line test', () => {
 
       it('save but dont close agreement line', () => {
         AgreementLineFormInteractor.save();
-        AgreementLineFormInteractor.unlinkSelectedEresource();
+        // Not sure this is correct
+        // AgreementLineFormInteractor.unlinkSelectedEresource();
       });
 
       it('click description field then note to check validation', () => {
+        // FIXME I don't like this at all
+        AgreementLineFormInteractor.focusDescription();
+        AgreementLineFormInteractor.focusNote();
         AgreementLineFormInteractor.checkDescriptionIsNotValid();
       });
 
       it('fill description field and re-check validation', () => {
         AgreementLineFormInteractor.fill({ description });
+        AgreementLineFormInteractor.focusDescription();
+        AgreementLineFormInteractor.focusNote();
         AgreementLineFormInteractor.checkDescriptionIsValid();
       });
 
-      it('save but dont close agreement line', () => {
+      /* it('save but dont close agreement line', () => {
         AgreementLineFormInteractor.save();
-      });
+      }); */
 
       it('fill note field', () => {
         AgreementLineFormInteractor.fillNote({ note });
