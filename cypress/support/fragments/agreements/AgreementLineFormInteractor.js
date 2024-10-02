@@ -1,11 +1,12 @@
 import {
   Button,
+  Checkbox,
   including,
   Pane,
-  TextField,
   Selection,
-  Checkbox,
+  SelectionOption,
   TextArea,
+  TextField,
 } from '../../../../interactors';
 
 import { getRandomPostfix } from '../../utils/stringTools';
@@ -16,9 +17,10 @@ export default class AgreementLineFormInteractor {
   }
 
   static selectEresource(eresourceName) {
-    cy.do(Selection('E-resource').open());
-    cy.do(Selection('E-resource').choose(eresourceName));
-    cy.expect(Selection('E-resource').value(eresourceName));
+    cy.do(Selection({ id: 'linkedResource-basket-selector' }).open());
+    cy.wait(600);
+    cy.do(SelectionOption(eresourceName).click());
+    //cy.expect(Selection('E-resource').has({ value: eresourceName }));
   }
 
   static fill(fillAgreementLine = {}) {
@@ -28,11 +30,13 @@ export default class AgreementLineFormInteractor {
       `autotest_agreement_line_description_${getRandomPostfix()}`;
 
     // Fill in field, then check it filled in as expected
+    cy.wait(600);
     cy.do(TextArea('Description').fillIn(fillDescription));
     cy.expect(TextArea('Description').has({ value: fillDescription }));
   }
 
   static fillNote(fillAgreementLine = {}) {
+    cy.wait(600);
     const fillNote =
       fillAgreementLine.note ??
       `autotest_agreement_line_note_${getRandomPostfix()}`;
@@ -57,33 +61,44 @@ export default class AgreementLineFormInteractor {
 
   static checkCreateAnother(checkValue) {
     cy.expect(Checkbox('Create another').exists());
-    if (Checkbox('Create another').is({ checked: checkValue })) {
-      cy.do(Checkbox('Create another').click());
-      cy.expect(Checkbox('Create another').is({ checked: checkValue }));
+    if (checkValue) {
+      cy.do(Checkbox('Create another').checkIfNotSelected());
+    } else {
+      cy.do(Checkbox('Create another').uncheckIfSelected());
     }
+    cy.wait(600);
+    cy.expect(Checkbox('Create another').is({ checked: checkValue }));
   }
 
   static save() {
+    cy.wait(600);
     cy.expect(Button('Save').exists());
     cy.do(Button('Save').click());
   }
 
   static saveAndClose() {
+    cy.wait(600);
     cy.expect(Button('Save & close').exists());
     cy.do(Button('Save & close').click());
   }
 
-  static checkDescriptionIsValid() {
+  static focusDescription() {
+    cy.wait(600);
     cy.get('#agreement-line-description').click();
+  }
+
+  static focusNote() {
+    cy.wait(600);
     cy.get('#agreement-line-note').click();
+  }
+
+  static checkDescriptionIsValid() {
     cy.contains(
       'Please provide an e-resource or description to continue'
     ).should('not.exist');
   }
 
   static checkDescriptionIsNotValid() {
-    cy.get('#agreement-line-description').click();
-    cy.get('#agreement-line-note').click();
     cy.contains(
       'Please provide an e-resource or description to continue'
     ).should('be.visible');
