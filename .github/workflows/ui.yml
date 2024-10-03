@@ -11,7 +11,7 @@ jobs:
     with:
       compile-translations: false
       jest-enabled: false
-      sonar-sources: ./
+      sonar-enabled: false
     # Only handle push events from the main branch, to decrease noise
     if: github.ref_name == github.event.repository.default_branch || github.event_name != 'push'
     secrets: inherit
