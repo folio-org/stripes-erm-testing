@@ -12,11 +12,11 @@
   "scripts": {
     "lint": "eslint .",
     "test:cypress": "cypress run --browser chrome",
-    "test:cypress:snapshot": "cypress run --config-file cypress-snapshot.config.js --browser chrome",
-    "test:cypress:snapshot2": "cypress run --config-file cypress-snapshot2.config.js --browser chrome",
-    "test:cypress:local": "cypress run --config-file cypress-local.config.js --browser chrome",
-    "test:cypress:vagrant": "cypress run --config-file cypress-vagrant.config.js --browser chrome",
-    "test:cypress:dev": "cypress run --config-file cypress-dev.config.js --browser chrome"
+    "test:cypress:snapshot": "yarn run test:cypress --config-file cypress-snapshot.config.js",
+    "test:cypress:snapshot2": "yarn run test:cypress --config-file cypress-snapshot2.config.js",
+    "test:cypress:local": "yarn run test:cypress --config-file cypress-local.config.js",
+    "test:cypress:vagrant": "yarn run test:cypress --config-file cypress-vagrant.config.js",
+    "test:cypress:dev": "yarn run test:cypress --config-file cypress-dev.config.js"
   },
   "dependencies": {
     "@folio/jest-config-stripes": "^2.0.0",
