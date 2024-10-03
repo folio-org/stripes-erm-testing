@@ -1,0 +1,17 @@
+name: Centralized workflow test
+on:
+  - push
+  - pull_request
+  - workflow_dispatch
+
+jobs:
+  ui:
+    # Use the shared workflow from https://github.com/folio-org/.github
+    uses: folio-org/.github/.github/workflows/ui.yml@v1
+    with:
+      compile-translations: false
+      jest-enabled: false
+      sonar-enabled: false
+    # Only handle push events from the main branch, to decrease noise
+    if: github.ref_name == github.event.repository.default_branch || github.event_name != 'push'
+    secrets: inherit
