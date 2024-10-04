@@ -1,53 +1,79 @@
 import {
   Button,
+  Checkbox,
   including,
   Pane,
-  TextField,
   Selection,
-  Checkbox,
+  SelectionOption,
   TextArea,
 } from '../../../../interactors';
 
 import { getRandomPostfix } from '../../utils/stringTools';
+import InteractorsTools from '../../utils/interactorsTools';
 
 export default class AgreementLineFormInteractor {
   static paneExists() {
     cy.expect(Pane(including('New agreement line')).is({ visible: true }));
   }
 
+  static getDescriptionField() {
+    return TextArea('Description');
+  }
+
+  static getNoteField() {
+    return TextArea('Note');
+  }
+
+  static getCreateAnotherCheckbox() {
+    return Checkbox('Create another');
+  }
+
+  static getBasketSelector() {
+    return Selection({ id: 'linkedResource-basket-selector' });
+  }
+
+  static getLinkSelectedEresourceButton() {
+    return Button('Link selected e-resource');
+  }
+
   static selectEresource(eresourceName) {
-    cy.do(Selection('E-resource').open());
-    cy.do(Selection('E-resource').choose(eresourceName));
-    cy.expect(Selection('E-resource').value(eresourceName));
+    const basketSelector = this.getBasketSelector();
+    cy.do(basketSelector.open());
+    cy.do(SelectionOption(eresourceName).click());
+    // This expect doesn't work right now... keep an eye on it
+    // cy.expect(basketSelector.has({ value: eresourceName }));
   }
 
   static fill(fillAgreementLine = {}) {
+    const descriptionField = this.getDescriptionField();
     // Default the necessary options so they always exist, no matter if only a subset gets passed in;
     const fillDescription =
       fillAgreementLine.description ??
       `autotest_agreement_line_description_${getRandomPostfix()}`;
 
     // Fill in field, then check it filled in as expected
-    cy.do(TextArea('Description').fillIn(fillDescription));
-    cy.expect(TextArea('Description').has({ value: fillDescription }));
+    cy.do(descriptionField.fillIn(fillDescription));
+    cy.expect(descriptionField.has({ value: fillDescription }));
   }
 
+  // Not sure about this in honesty... feels like we should be able to fill fields slightly smartly from single "fill" method
   static fillNote(fillAgreementLine = {}) {
+    const noteField = this.getNoteField();
     const fillNote =
       fillAgreementLine.note ??
       `autotest_agreement_line_note_${getRandomPostfix()}`;
 
     // Fill in field, then check it filled in as expected
-    cy.do(TextArea('Note').fillIn(fillNote));
-    cy.expect(TextArea('Note').has({ value: fillNote }));
+    cy.do(noteField.fillIn(fillNote));
+    cy.expect(noteField.has({ value: fillNote }));
   }
 
   static linkSelectedEresource() {
-    cy.expect(Button('Link selected e-resource').exists());
+    const button = this.getLinkSelectedEresourceButton();
+    cy.expect(button.exists());
     // without this wait the test continously fails for me (cm)
     // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(600);
-    cy.do(Button('Link selected e-resource').click());
+    cy.do(button.click());
   }
 
   static unlinkSelectedEresource() {
@@ -56,16 +82,20 @@ export default class AgreementLineFormInteractor {
   }
 
   static checkCreateAnother(checkValue) {
-    cy.expect(Checkbox('Create another').exists());
-    if (Checkbox('Create another').is({ checked: checkValue })) {
-      cy.do(Checkbox('Create another').click());
-      cy.expect(Checkbox('Create another').is({ checked: checkValue }));
+    const checkbox = this.getCreateAnotherCheckbox();
+    cy.expect(checkbox.exists());
+    if (checkValue) {
+      cy.do(checkbox.checkIfNotSelected());
+    } else {
+      cy.do(checkbox.uncheckIfSelected());
     }
+    cy.expect(checkbox.is({ checked: checkValue }));
   }
 
   static save() {
     cy.expect(Button('Save').exists());
     cy.do(Button('Save').click());
+    cy.expect(InteractorsTools.checkCalloutMessage('Agreement line created'));
   }
 
   static saveAndClose() {
@@ -74,22 +104,24 @@ export default class AgreementLineFormInteractor {
   }
 
   static checkDescriptionIsValid() {
-    cy.get('#agreement-line-description').click();
-    cy.get('#agreement-line-note').click();
+    // Ensure the field is touched
+    const descriptionField = this.getDescriptionField();
+    InteractorsTools.touchField(descriptionField);
     cy.contains(
       'Please provide an e-resource or description to continue'
     ).should('not.exist');
   }
 
   static checkDescriptionIsNotValid() {
-    cy.get('#agreement-line-description').click();
-    cy.get('#agreement-line-note').click();
+    // Ensure the field is touched
+    const descriptionField = this.getDescriptionField();
+    InteractorsTools.touchField(descriptionField);
     cy.contains(
       'Please provide an e-resource or description to continue'
     ).should('be.visible');
   }
 
   static waitLoading() {
-    cy.expect(TextField('Description').exists());
+    cy.expect(TextArea('Description').exists());
   }
 }

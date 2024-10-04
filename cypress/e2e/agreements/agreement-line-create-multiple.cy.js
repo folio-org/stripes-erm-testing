@@ -1,13 +1,13 @@
-import { MultiColumnListCell, Modal, Button } from '../../../interactors';
+import { Button, Modal, MultiColumnListCell } from '../../../interactors';
 
-import { getRandomPostfix } from '../../support/utils/stringTools';
 import DateTools from '../../support/utils/dateTools';
+import { getRandomPostfix } from '../../support/utils/stringTools';
 
-import AgreementAppInteractor from '../../support/fragments/agreements/AppInteractor';
-import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
 import AgreementLineFormInteractor from '../../support/fragments/agreements/AgreementLineFormInteractor';
-import PackageViewInteractor from '../../support/fragments/agreements/PackageViewInteractor';
 import AgreementLineViewInteractor from '../../support/fragments/agreements/AgreementLineViewInteractor';
+import AgreementViewInteractor from '../../support/fragments/agreements/AgreementViewInteractor';
+import AgreementAppInteractor from '../../support/fragments/agreements/AppInteractor';
+import PackageViewInteractor from '../../support/fragments/agreements/PackageViewInteractor';
 
 import { SIMPLE_PACKAGE } from '../../constants/jsonImports';
 
@@ -132,10 +132,11 @@ describe('Agreement line test', () => {
 
       it('save but dont close agreement line', () => {
         AgreementLineFormInteractor.save();
-        AgreementLineFormInteractor.unlinkSelectedEresource();
+        // Check desc field has emptied
+        cy.expect(AgreementLineFormInteractor.getDescriptionField().has({ value: '' }));
       });
 
-      it('click description field then note to check validation', () => {
+      it('touch description field to check validation', () => {
         AgreementLineFormInteractor.checkDescriptionIsNotValid();
       });
 
@@ -144,17 +145,12 @@ describe('Agreement line test', () => {
         AgreementLineFormInteractor.checkDescriptionIsValid();
       });
 
-      it('save but dont close agreement line', () => {
-        AgreementLineFormInteractor.save();
-      });
-
       it('fill note field', () => {
         AgreementLineFormInteractor.fillNote({ note });
       });
 
       it('uncheck "create another" and save & close agreementline form', () => {
         AgreementLineFormInteractor.checkCreateAnother(false);
-        // cy.wait(600);
         AgreementLineFormInteractor.saveAndClose();
       });
 
@@ -165,6 +161,7 @@ describe('Agreement line test', () => {
       it('should display agreement with agreement line and resource', () => {
         AgreementViewInteractor.paneExists(agreementName);
         AgreementViewInteractor.openAgreementLinesAccordion();
+        // This get should be done in the page interactor and with interactors
         cy.get('#agreement-lines')
           .contains('div', SIMPLE_PACKAGE.packageName)
           .should('have.text', SIMPLE_PACKAGE.packageName);
@@ -178,6 +175,7 @@ describe('Agreement line test', () => {
       });
 
       it('should display two agreement lines linked to the agreement', () => {
+        // This should be in the page interactor
         cy.expect(MultiColumnListCell(SIMPLE_PACKAGE.packageName).exists());
         cy.expect(MultiColumnListCell(description).exists());
       });
@@ -190,6 +188,7 @@ describe('Agreement line test', () => {
       it('Click Actions button', () => {
         AgreementLineViewInteractor.openOptions();
         cy.expect(AgreementLineViewInteractor.actionsButton.exists());
+        // FIXME This isn't how to use cy.do
         cy.do(AgreementLineViewInteractor.actionsButton.click());
         cy.do(AgreementLineViewInteractor.actionsButton.click()).then(() => {
           cy.expect(AgreementLineViewInteractor.editButton.exists());
@@ -233,9 +232,10 @@ describe('Agreement line test', () => {
         cy.get('#agreement-lines')
           .contains('div', SIMPLE_PACKAGE.packageName)
           .should('have.text', SIMPLE_PACKAGE.packageName);
-        cy.get('#agreement-lines')
+        // This one was previsouly deleted... How did this ever pass???
+        /* cy.get('#agreement-lines')
           .contains('div', description)
-          .should('have.text', description);
+          .should('have.text', description); */
       });
 
       it('click view in agreement line search button', () => {
@@ -244,7 +244,7 @@ describe('Agreement line test', () => {
 
       it('should display two agreement lines linked to the agreement', () => {
         cy.expect(MultiColumnListCell(SIMPLE_PACKAGE.packageName).exists());
-        cy.expect(MultiColumnListCell(description).exists());
+        // cy.expect(MultiColumnListCell(description).exists());
       });
 
       it('Select one of the agreement lines in the search and filter results', () => {
