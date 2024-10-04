@@ -37,5 +37,5 @@ jobs:
       - name: Install cypress
         run: yarn run cypress install
 
-      - name: Run cypress tests
-        run: yarn test:cypress
+      - name: Run cypress tests (against snapshot)
+        run: yarn test:cypress:snapshot
