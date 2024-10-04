@@ -9,6 +9,7 @@ import {
 } from '../../../../interactors';
 
 import { getRandomPostfix } from '../../utils/stringTools';
+import InteractorsTools from '../../utils/interactorsTools';
 
 export default class AgreementLineFormInteractor {
   static paneExists() {
@@ -94,9 +95,7 @@ export default class AgreementLineFormInteractor {
   static save() {
     cy.expect(Button('Save').exists());
     cy.do(Button('Save').click());
-    // FIXME Add check here that the save has _completed_ and form has rerendered without wait -- not sure best way to do that
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(600);
+    cy.expect(InteractorsTools.checkCalloutMessage('Agreement line created'));
   }
 
   static saveAndClose() {
@@ -105,12 +104,18 @@ export default class AgreementLineFormInteractor {
   }
 
   static checkDescriptionIsValid() {
+    // Ensure the field is touched
+    const descriptionField = this.getDescriptionField();
+    InteractorsTools.touchField(descriptionField);
     cy.contains(
       'Please provide an e-resource or description to continue'
     ).should('not.exist');
   }
 
   static checkDescriptionIsNotValid() {
+    // Ensure the field is touched
+    const descriptionField = this.getDescriptionField();
+    InteractorsTools.touchField(descriptionField);
     cy.contains(
       'Please provide an e-resource or description to continue'
     ).should('be.visible');

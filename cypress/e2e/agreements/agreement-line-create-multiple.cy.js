@@ -2,7 +2,6 @@ import { Button, Modal, MultiColumnListCell } from '../../../interactors';
 
 import DateTools from '../../support/utils/dateTools';
 import { getRandomPostfix } from '../../support/utils/stringTools';
-import InteractorsTools from '../../support/utils/interactorsTools';
 
 import AgreementLineFormInteractor from '../../support/fragments/agreements/AgreementLineFormInteractor';
 import AgreementLineViewInteractor from '../../support/fragments/agreements/AgreementLineViewInteractor';
@@ -138,16 +137,11 @@ describe('Agreement line test', () => {
       });
 
       it('touch description field to check validation', () => {
-        // FIXME Idk if this is the "right" way, but it's certainly less brittle
-        const descriptionField = AgreementLineFormInteractor.getDescriptionField();
-        InteractorsTools.touchField(descriptionField);
         AgreementLineFormInteractor.checkDescriptionIsNotValid();
       });
 
       it('fill description field and re-check validation', () => {
-        const descriptionField = AgreementLineFormInteractor.getDescriptionField();
         AgreementLineFormInteractor.fill({ description });
-        InteractorsTools.touchField(descriptionField);
         AgreementLineFormInteractor.checkDescriptionIsValid();
       });
 
@@ -250,7 +244,7 @@ describe('Agreement line test', () => {
 
       it('should display two agreement lines linked to the agreement', () => {
         cy.expect(MultiColumnListCell(SIMPLE_PACKAGE.packageName).exists());
-        //cy.expect(MultiColumnListCell(description).exists());
+        // cy.expect(MultiColumnListCell(description).exists());
       });
 
       it('Select one of the agreement lines in the search and filter results', () => {
