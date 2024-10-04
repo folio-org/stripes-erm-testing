@@ -2,6 +2,7 @@ import { Button, Modal, MultiColumnListCell } from '../../../interactors';
 
 import DateTools from '../../support/utils/dateTools';
 import { getRandomPostfix } from '../../support/utils/stringTools';
+import InteractorsTools from '../../support/utils/interactorsTools';
 
 import AgreementLineFormInteractor from '../../support/fragments/agreements/AgreementLineFormInteractor';
 import AgreementLineViewInteractor from '../../support/fragments/agreements/AgreementLineViewInteractor';
@@ -132,27 +133,23 @@ describe('Agreement line test', () => {
 
       it('save but dont close agreement line', () => {
         AgreementLineFormInteractor.save();
-        // Not sure this is correct
-        // AgreementLineFormInteractor.unlinkSelectedEresource();
+        // Check desc field has emptied
+        cy.expect(AgreementLineFormInteractor.getDescriptionField().has({ value: '' }));
       });
 
-      it('click description field then note to check validation', () => {
-        // FIXME I don't like this at all
-        AgreementLineFormInteractor.focusDescription();
-        AgreementLineFormInteractor.focusNote();
+      it('touch description field to check validation', () => {
+        // FIXME Idk if this is the "right" way, but it's certainly less brittle
+        const descriptionField = AgreementLineFormInteractor.getDescriptionField();
+        InteractorsTools.touchField(descriptionField);
         AgreementLineFormInteractor.checkDescriptionIsNotValid();
       });
 
       it('fill description field and re-check validation', () => {
+        const descriptionField = AgreementLineFormInteractor.getDescriptionField();
         AgreementLineFormInteractor.fill({ description });
-        AgreementLineFormInteractor.focusDescription();
-        AgreementLineFormInteractor.focusNote();
+        InteractorsTools.touchField(descriptionField);
         AgreementLineFormInteractor.checkDescriptionIsValid();
       });
-
-      /* it('save but dont close agreement line', () => {
-        AgreementLineFormInteractor.save();
-      }); */
 
       it('fill note field', () => {
         AgreementLineFormInteractor.fillNote({ note });
@@ -160,7 +157,6 @@ describe('Agreement line test', () => {
 
       it('uncheck "create another" and save & close agreementline form', () => {
         AgreementLineFormInteractor.checkCreateAnother(false);
-        // cy.wait(600);
         AgreementLineFormInteractor.saveAndClose();
       });
 
@@ -171,6 +167,7 @@ describe('Agreement line test', () => {
       it('should display agreement with agreement line and resource', () => {
         AgreementViewInteractor.paneExists(agreementName);
         AgreementViewInteractor.openAgreementLinesAccordion();
+        // This get should be done in the page interactor and with interactors
         cy.get('#agreement-lines')
           .contains('div', SIMPLE_PACKAGE.packageName)
           .should('have.text', SIMPLE_PACKAGE.packageName);
@@ -184,6 +181,7 @@ describe('Agreement line test', () => {
       });
 
       it('should display two agreement lines linked to the agreement', () => {
+        // This should be in the page interactor
         cy.expect(MultiColumnListCell(SIMPLE_PACKAGE.packageName).exists());
         cy.expect(MultiColumnListCell(description).exists());
       });
@@ -196,6 +194,7 @@ describe('Agreement line test', () => {
       it('Click Actions button', () => {
         AgreementLineViewInteractor.openOptions();
         cy.expect(AgreementLineViewInteractor.actionsButton.exists());
+        // FIXME This isn't how to use cy.do
         cy.do(AgreementLineViewInteractor.actionsButton.click());
         cy.do(AgreementLineViewInteractor.actionsButton.click()).then(() => {
           cy.expect(AgreementLineViewInteractor.editButton.exists());

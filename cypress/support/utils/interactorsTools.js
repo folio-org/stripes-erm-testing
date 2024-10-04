@@ -89,5 +89,9 @@ export default {
   checkCalloutMessage: (text, calloutType = calloutTypes.success) => {
     cy.expect(Callout({ type: calloutType }).is({ textContent: text }));
   },
-  closeCalloutMessage: () => cy.do(Callout().find(Button({ icon:'times' })).click())
+  closeCalloutMessage: () => cy.do(Callout().find(Button({ icon:'times' })).click()),
+  touchField: (fieldInteractor) => cy.do([
+    fieldInteractor.focus(),
+    cy.do(fieldInteractor.blur())
+  ])
 };
