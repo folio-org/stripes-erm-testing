@@ -1,6 +1,12 @@
 # Change history for stripes-erm-testing
 
-## 2.2.0 In progress
+## 2.2.0 2024-10-30
+  * ERM-3374 Update module license and guidance for stripes-erm-testing
+  * ERM-3165 Replace moment with dayjs across app suite
+  * defaultProps deprecated
+  * Pluggable mock now uses jest.fn so it can be overwritten
+  * Cypress fixes and tweaks
+  * Centralised github actions
 
 ## 2.1.1 2024-04-18
   * Added jest-config-stripes moduleNameMapper configs into jest.config.js, so any fixes and changes in there will be reflected by default
