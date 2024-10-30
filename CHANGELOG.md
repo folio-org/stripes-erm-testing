@@ -1,5 +1,8 @@
 # Change history for stripes-erm-testing
 
+## 2.2.1 2024-10-30
+  * Ensure tag is a run condition for github actions (allowing release)
+
 ## 2.2.0 2024-10-30
   * ERM-3374 Update module license and guidance for stripes-erm-testing
   * ERM-3165 Replace moment with dayjs across app suite
