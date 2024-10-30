@@ -1,6 +1,6 @@
 # Change history for stripes-erm-testing
 
-## 2.3.0 IN PROGRESS
+## 2.4.0 IN PROGRESS
 
 ## 2.2.0 2024-10-30
   * ERM-3374 Update module license and guidance for stripes-erm-testing
