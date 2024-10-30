@@ -7,6 +7,7 @@
   * Pluggable mock now uses jest.fn so it can be overwritten
   * Cypress fixes and tweaks
   * Centralised github actions
+  * Ensure tag is a run condition for github actions (allowing release)
 
 ## 2.1.1 2024-04-18
   * Added jest-config-stripes moduleNameMapper configs into jest.config.js, so any fixes and changes in there will be reflected by default
