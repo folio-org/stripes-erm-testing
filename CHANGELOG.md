@@ -2,6 +2,9 @@
 
 ## 2.4.0 IN PROGRESS
 
+## 2.2.1 2024-10-31
+  * Reinstate devDev that might have broken releases
+
 ## 2.2.0 2024-10-30
   * ERM-3374 Update module license and guidance for stripes-erm-testing
   * ERM-3165 Replace moment with dayjs across app suite
