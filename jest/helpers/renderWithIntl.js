@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from '@folio/jest-config-stripes/testing-library/react';
 
 import Harness from './Harness';
@@ -6,16 +5,24 @@ import Harness from './Harness';
 const renderWithIntl = (
   children,
   translations = [],
+  // DEPRECATED Would be a great breaking change to move renderer into extraOptions
+  // DO that alongside expected breaking change upgrades in Sunflower
+  /*
+    * BREAKING CHANGE remove renderer as third option in renderWithIntl()
+      * Instead it is an option in 3rd position "extraOptions" object
+  */
   renderer = render,
   extraOptions = {
-    mockWindowSize: true
+    mockWindowSize: true,
+    // renderer: render,
   }
 ) => {
   // Defaulting
   const {
     intlKey,
     mockWindowSize = true,
-    moduleName
+    moduleName,
+    // renderer = render
   } = extraOptions;
 
   if (mockWindowSize) {

@@ -24,12 +24,12 @@ const mockKintComponents = {
 
     return ({ data: returnShape, isLoading: false });
   }),
-  CustomPropertiesEdit: () => <div>CustomPropertiesEdit</div>,
-  CustomPropertiesFilter: () => <div>CustomPropertiesFilter</div>,
-  CustomPropertyCard: () => <div>CustomPropertyCard</div>,
-  CustomPropertiesView: () => <div>CustomPropertiesView</div>,
-  EditableRefdataCategoryList: () => <div>EditableRefdataCategoryList</div>,
-  EditableRefdataList: () => <div>EditableRefdataList</div>
+  CustomPropertiesEdit: jest.fn(() => <div>CustomPropertiesEdit</div>),
+  CustomPropertiesFilter: jest.fn(() => <div>CustomPropertiesFilter</div>),
+  CustomPropertyCard: jest.fn(() => <div>CustomPropertyCard</div>),
+  CustomPropertiesView: jest.fn(() => <div>CustomPropertiesView</div>),
+  EditableRefdataCategoryList: jest.fn(() => <div>EditableRefdataCategoryList</div>),
+  EditableRefdataList: jest.fn(() => <div>EditableRefdataList</div>)
 };
 
 export default mockKintComponents;

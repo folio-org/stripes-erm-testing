@@ -103,12 +103,11 @@ const mockStripesCore = {
   TitleManager: jest.fn(({ children, ...rest }) => (
     <span {...rest}>{children}</span>
   )),
-  IfInterface: ({ children }) => {
+  IfInterface: jest.fn(({ children }) => {
     return typeof children === 'function' ?
       children({ hasInterface: true }) : <>{children}</>;
-  },
-
-  HandlerManager: () => <div>HandlerManager</div>,
+  }),
+  HandlerManager: jest.fn(() => <div>HandlerManager</div>),
 };
 
 export default mockStripesCore;

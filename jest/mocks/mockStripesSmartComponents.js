@@ -2,22 +2,23 @@
 import React from 'react';
 
 const mockStripesSmartComponents = {
-  LocationLookup: () => <div>LocationLookup</div>,
-  ViewMetaData: () => <div>ViewMetaData</div>,
-  NotesSmartAccordion: () => <div>NotesSmartAccordion</div>,
-  ControlledVocab: () => <div>ControlledVocab</div>,
-  ConfigManager: () => <div>ConfigManager</div>,
-  NoteCreatePage: () => <div>NoteCreatePage</div>,
-  NoteEditPage: () => <div>NoteEditPage</div>,
-  NoteViewPage: () => <div>NoteViewPage</div>,
-  StripesConnectedSource: (props, logger, resourceName) => ({
+  LocationLookup: jest.fn(() => <div>LocationLookup</div>),
+  ViewMetaData: jest.fn(() => <div>ViewMetaData</div>),
+  NotesSmartAccordion: jest.fn(() => <div>NotesSmartAccordion</div>),
+  ColumnManagerMenu: jest.fn(() => <div>ColumnManagerMenu</div>),
+  ControlledVocab: jest.fn(() => <div>ControlledVocab</div>),
+  ConfigManager: jest.fn(() => <div>ConfigManager</div>),
+  NoteCreatePage: jest.fn(() => <div>NoteCreatePage</div>),
+  NoteEditPage: jest.fn(() => <div>NoteEditPage</div>),
+  NoteViewPage: jest.fn(() => <div>NoteViewPage</div>),
+  StripesConnectedSource: jest.fn((props, logger, resourceName) => ({
     fetchMore: jest.fn(val => val),
     totalCount: () => props?.resources?.[resourceName]?.other?.totalRecords ?? undefined,
     update: jest.fn(),
     loaded: jest.fn(),
     records: () => props?.resources?.[resourceName]?.records ?? [],
     pending: () => jest.fn()
-  })
+  }))
 };
 
 export default mockStripesSmartComponents;
