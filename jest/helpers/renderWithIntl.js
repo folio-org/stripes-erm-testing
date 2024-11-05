@@ -5,16 +5,9 @@ import Harness from './Harness';
 const renderWithIntl = (
   children,
   translations = [],
-  // DEPRECATED Would be a great breaking change to move renderer into extraOptions
-  // DO that alongside expected breaking change upgrades in Sunflower
-  /*
-    * BREAKING CHANGE remove renderer as third option in renderWithIntl()
-      * Instead it is an option in 3rd position "extraOptions" object
-  */
-  renderer = render,
   extraOptions = {
     mockWindowSize: true,
-    // renderer: render,
+    renderer: render,
   }
 ) => {
   // Defaulting
@@ -22,7 +15,7 @@ const renderWithIntl = (
     intlKey,
     mockWindowSize = true,
     moduleName,
-    // renderer = render
+    renderer = render
   } = extraOptions;
 
   if (mockWindowSize) {
