@@ -1,6 +1,8 @@
 # Change history for stripes-erm-testing
 
-## 2.4.0 IN PROGRESS
+## 3.0.0 IN PROGRESS
+  * BREAKING CHANGE remove renderer as third option in renderWithIntl()
+    * Instead it is an option in 3rd position "extraOptions" object
 
 ## 2.2.1 2024-10-31
   * Reinstate devDev that might have broken releases
