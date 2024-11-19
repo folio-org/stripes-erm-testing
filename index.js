@@ -6,6 +6,7 @@ export {
   CalloutHarness,
   renderWithIntl,
   TestForm,
+  testSelect,
   translationsProperties
 } from './jest/helpers';
 
