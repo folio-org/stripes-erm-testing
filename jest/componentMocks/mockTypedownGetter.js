@@ -9,7 +9,7 @@ const {
 const mockTypedownGetter = (optionArray = []) => ({
   id,
   input: { onChange, value },
-  renderFooter,
+  renderFooter = () => {},
   renderListItem
 }) => {
   return (
