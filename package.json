@@ -19,8 +19,8 @@
     "test:cypress:dev": "yarn run test:cypress --config-file cypress-dev.config.js"
   },
   "dependencies": {
-    "@folio/jest-config-stripes": "^2.0.0",
-    "@folio/stripes-testing": "^4.7.0",
+    "@folio/jest-config-stripes": "^3.0.0",
+    "@folio/stripes-testing": "^5.0.0",
     "@interactors/html": "^1.0.0-rc1.4",
     "cypress": "12.0.0",
     "date-fns": "^2.16.1",
@@ -32,7 +32,7 @@
     "react-dom": "^18.2.0",
     "react-final-form": "^6.5.9",
     "react-final-form-arrays": "^3.1.4",
-    "react-intl": "^6.4.4",
+    "react-intl": "^7.1.5",
     "react-query": "^3.9.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0"
@@ -41,13 +41,13 @@
     "@babel/core": "^7.18.9",
     "@babel/eslint-parser": "^7.15.0",
     "@cypress/webpack-preprocessor": "^5.16.2",
-    "@folio/eslint-config-stripes": "^7.1.0",
-    "@folio/jest-config-stripes": "^2.0.0",
-    "@folio/stripes": "^9.2.0",
-    "@folio/stripes-cli": "^3.2.0",
+    "@folio/eslint-config-stripes": "^8.0.0",
+    "@folio/jest-config-stripes": "^3.0.0",
+    "@folio/stripes": "^10.0.0",
+    "@folio/stripes-cli": "^4.0.0",
     "@interactors/html": "^1.0.0-rc1.4",
     "@interactors/with-cypress": "^1.0.0-rc1.3",
-    "@k-int/stripes-kint-components": "^5.8.3",
+    "@k-int/stripes-kint-components": "^5.11.0",
     "babel-plugin-require-context-hook": "^1.0.0",
     "cypress-downloadfile": "^1.2.1",
     "cypress-file-upload": "^5.0.8",
@@ -67,10 +67,10 @@
     "uuid": "^3.4.0"
   },
   "peerDependencies": {
-    "@folio/stripes": "^9.2.0",
+    "@folio/stripes": "^10.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-intl": "^6.4.4",
+    "react-intl": "^7.1.5",
     "react-query": "^3.9.0",
     "react-router-dom": "^5.2.0"
   },
