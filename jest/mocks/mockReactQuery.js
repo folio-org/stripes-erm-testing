@@ -1,5 +1,11 @@
+const invalidateQueries = jest.fn(input => input);
+
 const mockReactQuery = {
+  invalidateQueries,
   useQuery: jest.fn(() => ({ data: {}, refetch: jest.fn(), isLoading: false })),
+  useQueryClient: jest.fn(() => ({
+    invalidateQueries,
+  })),
   useInfiniteQuery: jest.fn(),
   useMutation: jest.fn((_key, func) => ({
     mutateAsync: (...incomingParams) => {
