@@ -1,5 +1,7 @@
 # Change history for stripes-erm-testing
 
+## 3.1.0 IN PROGRESS
+
 ## 3.0.0 2025-03-13
   * ERM-3607: *BREAKING* Stripes v10 dependencies update
   * *BREAKING* remove renderer as third option in renderWithIntl()
