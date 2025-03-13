@@ -1,8 +1,14 @@
 # Change history for stripes-erm-testing
 
-## 3.0.0 IN PROGRESS
-  * BREAKING CHANGE remove renderer as third option in renderWithIntl()
+## 3.0.0 2025-03-13
+  * ERM-3607: *BREAKING* Stripes v10 dependencies update
+  * *BREAKING* remove renderer as third option in renderWithIntl()
     * Instead it is an option in 3rd position "extraOptions" object
+  * Added default value for renderFooter prop in mockTypedownGetter
+  * Added invalidate queries as an exposed jest fn
+  * Added testSelect helper function
+  * Changed mockKy and mockReactQuery to improve automatic coverage of tests
+  * Updated most mocks to use jest.fn for easier overriding
 
 ## 2.2.1 2024-10-31
   * Reinstate devDev that might have broken releases
