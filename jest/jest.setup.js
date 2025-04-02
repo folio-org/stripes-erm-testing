@@ -7,7 +7,7 @@ const suppressErrors = [
 
 const originalError = console.error;
 console.error = jest.spyOn(console, 'error').mockImplementation((message, ...rest) => {
-  if (suppressErrors.every(m => !message.includes(m))) {
+  if (suppressErrors.every(m => message.includes instanceof Function && !message.includes(m))) {
     originalError.apply(console, [message, ...rest]);
   }
 });
