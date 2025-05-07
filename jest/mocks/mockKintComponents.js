@@ -24,6 +24,10 @@ const mockKintComponents = {
 
     return ({ data: returnShape, isLoading: false });
   }),
+  useSettingSection: jest.fn(() => ({
+    settings: [],
+    handleSubmit: jest.fn()
+  })),
   CustomPropertiesEdit: jest.fn(() => <div>CustomPropertiesEdit</div>),
   CustomPropertiesFilter: jest.fn(() => <div>CustomPropertiesFilter</div>),
   CustomPropertyCard: jest.fn(() => <div>CustomPropertyCard</div>),
