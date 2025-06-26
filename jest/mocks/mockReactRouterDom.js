@@ -1,6 +1,6 @@
 const mockReactRouterDom = {
   useLocation: jest.fn().mockReturnValue({}),
-  useHistory: jest.fn(() => ({ push: jest.fn(() => null) })),
+  useHistory: jest.fn(() => ({ push: jest.fn(() => null), replace: jest.fn(() => null) })),
   useParams: jest.fn().mockReturnValue({})
 };
 
