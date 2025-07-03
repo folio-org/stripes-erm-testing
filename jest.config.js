@@ -12,6 +12,10 @@ const extraESModules = ['@folio', 'ky', '@k-int'].join('|');
 
 module.exports = {
   ...config,
+  collectCoverageFrom: [
+    ...config.collectCoverageFrom,
+    '**/(lib|src)/**/*.{ts,tsx}',
+  ],
   transformIgnorePatterns: [
     `/node_modules/(?!${extraESModules})`
   ],
