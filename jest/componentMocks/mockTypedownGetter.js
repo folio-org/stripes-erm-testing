@@ -7,7 +7,7 @@ const {
   TextField: MockTextField,
 } = jest.requireActual('@folio/stripes-components');
 
-const mockTypedownGetter = (optionArray = []) => ({
+const mockTypedownGetter = (optionArray = [], renderListItems = false) => ({
   id,
   input: { onChange, value },
   onType,
@@ -39,7 +39,7 @@ const mockTypedownGetter = (optionArray = []) => ({
             onClick={() => onChange(seq)}
           >
             {`Typedown-${id}-option-${seq.id}`}
-            {renderListItem(seq)}
+            {renderListItems ? renderListItem(seq) : null}
           </MockButton>
         );
       })}
