@@ -84,6 +84,9 @@ const withStripes = (Component, options) => ({ stripes, ...rest }) => {
 const mockKyJson = jest.fn(() => Promise.resolve({ id: 'some-id' }));
 const mockKyText = jest.fn(() => Promise.resolve('{"id": "some-id"}'));
 
+const mockBlob = { size: 12, type: 'text/plain' };
+const mockKyBlob = jest.fn(() => Promise.resolve(mockBlob));
+
 const mockKy = jest.fn((...input) => {
   const response = {
     input, // In case we want to inspect what was passed IN to ky.
@@ -91,7 +94,7 @@ const mockKy = jest.fn((...input) => {
     status: 200,
     json: mockKyJson,
     text: mockKyText,
-    blob: jest.fn(() => Promise.resolve(new Blob(['mock content'], { type: 'text/plain' }))),
+    blob: mockKyBlob,
   };
 
   return {
@@ -112,6 +115,7 @@ const mockStripesCore = {
   // EXPOSE MOCKS USED INTERNALLY SO THEY CAN BE FIXED WITHIN TESTS INDEPENDENTLY
   mockKyJson,
   mockKyText,
+  mockKyBlob,
   mockKy,
   stripesConnect,
   useChunkedCQLFetch: jest.fn().mockReturnValue({ items: [], isLoading: false, itemQueries: [] }),
