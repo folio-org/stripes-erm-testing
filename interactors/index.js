@@ -11,3 +11,4 @@ export { default as AppList, AppListItem } from './app-list';
 export { default as NavList, NavListItem } from './nav-list';
 export { default as Badge } from './badge';
 export { default as Icon, IconElement } from './icon';
+export { default as Accordion } from './accordion';

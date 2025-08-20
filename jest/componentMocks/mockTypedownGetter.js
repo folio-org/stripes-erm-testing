@@ -1,20 +1,33 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 
 const {
   Button: MockButton,
-  KeyValue: MockKeyValue
+  KeyValue: MockKeyValue,
+  TextField: MockTextField,
 } = jest.requireActual('@folio/stripes-components');
 
-const mockTypedownGetter = (optionArray = []) => ({
+const mockTypedownGetter = (optionArray = [], renderListItems = false) => ({
   id,
   input: { onChange, value },
+  onType,
   renderFooter = () => {},
   renderListItem
 }) => {
+  const [typed, setTyped] = useState('');
+
+
   return (
     <div>
       {`Typedown-${id}`}
+      <MockTextField
+        label={`Typedown-${id}-textfield`}
+        onChange={e => {
+          onType(e);
+          setTyped(e.target.value);
+        }}
+        value={typed}
+      />
       <MockKeyValue
         label={`Typedown-${id}-selected-option`}
         value={value ? renderListItem(value, '') : 'Nothing selected'}
@@ -26,6 +39,7 @@ const mockTypedownGetter = (optionArray = []) => ({
             onClick={() => onChange(seq)}
           >
             {`Typedown-${id}-option-${seq.id}`}
+            {renderListItems ? renderListItem(seq) : null}
           </MockButton>
         );
       })}

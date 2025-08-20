@@ -84,6 +84,9 @@ const withStripes = (Component, options) => ({ stripes, ...rest }) => {
 const mockKyJson = jest.fn(() => Promise.resolve({ id: 'some-id' }));
 const mockKyText = jest.fn(() => Promise.resolve('{"id": "some-id"}'));
 
+const mockBlob = { size: 12, type: 'text/plain' };
+const mockKyBlob = jest.fn(() => Promise.resolve(mockBlob));
+
 const mockKy = jest.fn((...input) => {
   const response = {
     input, // In case we want to inspect what was passed IN to ky.
@@ -91,6 +94,7 @@ const mockKy = jest.fn((...input) => {
     status: 200,
     json: mockKyJson,
     text: mockKyText,
+    blob: mockKyBlob,
   };
 
   return {
@@ -101,20 +105,22 @@ const mockKy = jest.fn((...input) => {
   };
 });
 
+// Decorate mockKy with special verbs
+mockKy.get = jest.fn(mockKy);
+mockKy.post = jest.fn(mockKy);
+mockKy.put = jest.fn(mockKy);
+mockKy.delete = jest.fn(mockKy);
+
 const mockStripesCore = {
   // EXPOSE MOCKS USED INTERNALLY SO THEY CAN BE FIXED WITHIN TESTS INDEPENDENTLY
   mockKyJson,
   mockKyText,
+  mockKyBlob,
   mockKy,
   stripesConnect,
   useChunkedCQLFetch: jest.fn().mockReturnValue({ items: [], isLoading: false, itemQueries: [] }),
   useStripes: jest.fn(() => STRIPES),
-  useOkapiKy: jest.fn(() => ({
-    delete: mockKy,
-    post: mockKy,
-    put: mockKy,
-    get: mockKy,
-  })),
+  useOkapiKy: jest.fn(() => mockKy),
   useCallout,
   withStripes,
   IfPermission: ({ children }) => {

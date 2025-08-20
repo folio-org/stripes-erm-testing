@@ -1,10 +1,32 @@
 const invalidateQueries = jest.fn(input => input);
 const setQueriesData = jest.fn((key, settingsFunc) => { return ({ key, settingsFunc }); });
 
+const mockNaiveQueryReturn = {
+  data: {},
+  refetch: jest.fn(),
+  isLoading: false
+};
+
+// A more in depth useQuery mock
+const mockUseQuery = jest.fn((queryKey, queryFunc, queryOpts) => {
+  // Ensure the queryFunc got run
+  queryFunc();
+
+  return ({
+    queryKey,
+    queryOpts,
+    ...mockNaiveQueryReturn
+  });
+});
+
+
 const mockReactQuery = {
   invalidateQueries,
   setQueriesData,
-  useQuery: jest.fn(() => ({ data: {}, refetch: jest.fn(), isLoading: false })),
+  mockNaiveQueryReturn,
+  mockUseQuery, // Provide so it can be directly influenced
+  // useQuery: jest.fn(() => ({ data: {}, refetch: jest.fn(), isLoading: false })),
+  useQuery: mockUseQuery,
   useQueryClient: jest.fn(() => ({
     invalidateQueries,
     setQueriesData,
