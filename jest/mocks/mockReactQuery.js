@@ -7,16 +7,19 @@ const mockNaiveQueryReturn = {
   isLoading: false
 };
 
+const mockGetQueryReturn = jest.fn((...props) => {
+  return ({
+    ...props,
+    ...mockNaiveQueryReturn
+  });
+});
+
 // A more in depth useQuery mock
 const mockUseQuery = jest.fn((queryKey, queryFunc, queryOpts) => {
   // Ensure the queryFunc got run
   queryFunc();
 
-  return ({
-    queryKey,
-    queryOpts,
-    ...mockNaiveQueryReturn
-  });
+  return mockGetQueryReturn(queryKey, queryOpts);
 });
 
 
@@ -24,6 +27,7 @@ const mockReactQuery = {
   invalidateQueries,
   setQueriesData,
   mockNaiveQueryReturn,
+  mockGetQueryReturn, // A way to still do all the query shenanigans and still impact the return directly
   mockUseQuery, // Provide so it can be directly influenced
   // useQuery: jest.fn(() => ({ data: {}, refetch: jest.fn(), isLoading: false })),
   useQuery: mockUseQuery,
