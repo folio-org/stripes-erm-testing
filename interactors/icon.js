@@ -9,6 +9,7 @@ export default Bigtest.createInteractor('icon')
 
 export const IconElement = Bigtest.createInteractor('icon-element')
   .selector('[class^=stripes__icon]')
+  .locator((el) => el.classList.toString().split(' ').find(cn => cn.startsWith('icon-')).replace('icon-', ''))
   .filters({
     // Get the icon name from the classlist
     icon: (el) => {
