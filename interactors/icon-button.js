@@ -14,7 +14,9 @@ export default HTML.extend('icon button')
     icon: (el) => el.getAttribute('icon'),
     button: (el) => el.tagName.toLowerCase() === 'button',
     anchor: (el) => el.tagName.toLowerCase() === 'a',
-    ariaLabel
+    ariaLabel,
+    ariaLabelledBy: el => el.getAttribute('aria-labelledby'),
+    ariaDescribedBy: el => el.getAttribute('aria-describedby')
   })
   .actions({
     click: ({ perform }) => perform(el => el.click()),
