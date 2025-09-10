@@ -12,3 +12,4 @@ export { default as NavList, NavListItem } from './nav-list';
 export { default as Badge } from './badge';
 export { default as Icon, IconElement } from './icon';
 export { default as Accordion } from './accordion';
+export { default as TextDiv } from './text-div';
