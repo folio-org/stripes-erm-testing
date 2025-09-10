@@ -7,13 +7,12 @@ export default Bigtest.createInteractor('icon')
     textContent: (el) => el.textContent,
   });
 
+const getIconFromClass = (el) => el.classList.toString().split(' ').find(cn => cn.startsWith('icon-')).replace('icon-', '');
+
 export const IconElement = Bigtest.createInteractor('icon-element')
-  .selector('[class^=stripes__icon]')
-  .locator((el) => el.classList.toString().split(' ').find(cn => cn.startsWith('icon-')).replace('icon-', ''))
+  .selector(':is([class^=spinner-][class*=stripes__icon], [class^=stripes__icon])') // spinner-ellipsis starts spinner- for some reason
+  .locator(getIconFromClass)
   .filters({
     // Get the icon name from the classlist
-    icon: (el) => {
-      // Take the classlist and find the icon-<iconName> class
-      return el.classList.toString().split(' ').find(cn => cn.startsWith('icon-')).replace('icon-', '');
-    }
+    icon: getIconFromClass
   });
