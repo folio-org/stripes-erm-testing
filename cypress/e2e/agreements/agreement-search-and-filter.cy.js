@@ -1,7 +1,6 @@
 import generateItemBarcode from '../../support/utils/generateItemBarcode';
 import DateTools from '../../support/utils/dateTools';
 
-import Permissions from '../../support/dictionary/permissions';
 import AppInteractor from '../../support/fragments/agreements/AppInteractor';
 import AgreementsSettingsInteractor from '../../support/fragments/agreements/AgreementsSettingsInteractor';
 
