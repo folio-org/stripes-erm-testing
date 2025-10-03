@@ -12,13 +12,11 @@ const agreement = {
 };
 
 // EXAMPLE fixed this cypress test using the stripes-testing patterns.
-// Annoyingly the Permissions are ONLY avaiable from the list in stripes-testing -.-
-// This means that in order to test new permissions, we would NEED to add them in that repo
-const viewPermissions = [Permissions.uiAgreementsSearchAndView.gui];
+const viewPermissions = ['ui-agreements.agreements.view'];
 
 describe('Agreement search and filter', () => {
   before(() => {
-    cy.createTempUser(viewPermissions).then(user => {
+    cy.createUserWithInternalPermissions(viewPermissions).then(user => {
       Cypress.env('testUser', user);
     });
 
