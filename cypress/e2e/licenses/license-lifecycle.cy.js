@@ -24,12 +24,12 @@ describe('License lifecycle', () => {
     LicensesSettingsInteractor.ensureLicenseTypeExists(license);
     LicensesSettingsInteractor.fetchStatusLabel(license);
 
-    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+    cy.login(Cypress.env('diku_login'), Cypress.env('diku_password'));
   });
 
   after(() => {
     if (Cypress.env('licenseTypeCreated') === true) {
-      cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+      cy.login(Cypress.env('diku_login'), Cypress.env('diku_password'));
       LicensesSettingsInteractor.deleteLicensesRefdataValue(refdataTypeDesc, license.type);
       cy.logout();
     }

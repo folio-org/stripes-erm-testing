@@ -1,7 +1,7 @@
 import generateItemBarcode from '../../support/utils/generateItemBarcode';
 import DateTools from '../../support/utils/dateTools';
-import { getRandomPostfix } from '../../support/utils/stringTools';
 
+import Permissions from '../../support/dictionary/permissions';
 import AppInteractor from '../../support/fragments/agreements/AppInteractor';
 import AgreementsSettingsInteractor from '../../support/fragments/agreements/AgreementsSettingsInteractor';
 
@@ -11,32 +11,30 @@ const agreement = {
   startDate: DateTools.getCurrentDate()
 };
 
-const viewUser = {
-  username: `viewTest${getRandomPostfix()}`,
-  password: 'viewTest'
-};
-
-const viewPermissions = ['ui-agreements.agreements.view'];
+// EXAMPLE fixed this cypress test using the stripes-testing patterns.
+// Annoyingly the Permissions are ONLY avaiable from the list in stripes-testing -.-
+// This means that in order to test new permissions, we would NEED to add them in that repo
+const viewPermissions = [Permissions.uiAgreementsSearchAndView.gui];
 
 describe('Agreement search and filter', () => {
   before(() => {
-    cy.createAgreementViaApi({ agreement });
-    cy.createUserWithPwAndPerms({
-      userProperties: viewUser,
-      permissions:  viewPermissions
+    cy.createTempUser(viewPermissions).then(user => {
+      Cypress.env('testUser', user);
     });
+
+    cy.createAgreementViaApi({ agreement });
     cy.getAdminToken();
     AgreementsSettingsInteractor.fetchStatusLabel(agreement);
   });
 
   after(() => {
     cy.deleteAgreementViaApi({ agreementId: agreement.id });
-    cy.deleteUserViaApi({ userId: viewUser.userId });
+    cy.deleteUserViaApi(Cypress.env('testUser').id);
   });
 
   describe('View user actions', () => {
     before(() => {
-      cy.login(viewUser.username, viewUser.password);
+      cy.login(Cypress.env('testUser').username, Cypress.env('testUser').password);
     });
 
     after(() => {

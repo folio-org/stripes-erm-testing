@@ -58,7 +58,7 @@ describe('Agreement line test', () => {
       permissions:  viewPermissions
     });
 
-    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+    cy.login(Cypress.env('diku_login'), Cypress.env('diku_password'));
     cy.createAgreementViaApi({ agreement }).then((res) => {
       agreementId = res?.id;
     });
@@ -79,7 +79,7 @@ describe('Agreement line test', () => {
     cy.deleteUserViaApi({ userId: viewUser.userId });
 
     console.log('delete agreement line and agreement');
-    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+    cy.login(Cypress.env('diku_login'), Cypress.env('diku_password'));
     cy.getAgreement(agreementId, { expandItems: true }).then((res) => {
       res?.items?.forEach((line) => {
         cy.deleteAgreementLineViaApi({ agreementId, agreementLineId: line?.id });
