@@ -32,26 +32,20 @@ const editDeleteUser = {
 
 const editDeletePermissions = ['ui-licenses.licenses.delete', 'ui-licenses.licenses.edit'];
 
-const viewUser = {
-  username: `viewTest${getRandomPostfix()}`,
-  password: 'viewTest'
-};
-
 const viewPermissions = ['ui-licenses.licenses.view'];
 
 describe('License create and delete', () => {
   before(() => {
-    cy.createUserWithPwAndPerms({
-      userProperties: editUser,
-      permissions:  editPermissions
+    cy.createUserWithInternalPermissions(editPermissions).then(user => {
+      Cypress.env('editUser', user);
     });
-    cy.createUserWithPwAndPerms({
-      userProperties: editDeleteUser,
-      permissions:  editDeletePermissions
+
+    cy.createUserWithInternalPermissions(editDeletePermissions).then(user => {
+      Cypress.env('editDeleteUser', user);
     });
-    cy.createUserWithPwAndPerms({
-      userProperties: viewUser,
-      permissions:  viewPermissions
+
+    cy.createUserWithInternalPermissions(viewPermissions).then(user => {
+      Cypress.env('viewUser', user);
     });
 
     // the following sets Cypress.env('licenseTypeCreated') to true if a License.Type entry is created
@@ -66,9 +60,9 @@ describe('License create and delete', () => {
       cy.logout();
     }
 
-    cy.deleteUserViaApi({ userId: editUser.userId });
-    cy.deleteUserViaApi({ userId: editDeleteUser.userId });
-    cy.deleteUserViaApi({ userId: viewUser.userId });
+    cy.deleteUserViaApi({ userId: Cypress.env('editUser').userId });
+    cy.deleteUserViaApi({ userId: Cypress.env('editDeleteUser').userId });
+    cy.deleteUserViaApi({ userId: Cypress.env('viewUser').userId });
   });
 
   function createLicense() {
@@ -119,8 +113,8 @@ describe('License create and delete', () => {
 
   describe('view user actions', () => {
     before(() => {
-      cy.login(viewUser.username, viewUser.password);
-      cy.getToken(viewUser.username, viewUser.password);
+      cy.login(Cypress.env('viewUser').username, Cypress.env('viewUser').password);
+      cy.getToken(Cypress.env('viewUser').username, Cypress.env('viewUser').password);
     });
 
     after(() => {
@@ -139,8 +133,8 @@ describe('License create and delete', () => {
 
   describe('edit user actions', () => {
     before(() => {
-      cy.login(editUser.username, editUser.password);
-      cy.getToken(editUser.username, editUser.password);
+      cy.login(Cypress.env('editUser').username, Cypress.env('editUser').password);
+      cy.getToken(Cypress.env('editUser').username, Cypress.env('editUser').password);
     });
 
     after(() => {
@@ -165,8 +159,8 @@ describe('License create and delete', () => {
 
   describe('editDelete user actions', () => {
     before(() => {
-      cy.login(editDeleteUser.username, editDeleteUser.password);
-      cy.getToken(editDeleteUser.username, editDeleteUser.password);
+      cy.login(Cypress.env('editDeleteUser').username, Cypress.env('editDeleteUser').password);
+      cy.getToken(Cypress.env('editDeleteUser').username, Cypress.env('editDeleteUser').password);
     });
 
     after(() => {
