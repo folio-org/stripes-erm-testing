@@ -20,7 +20,7 @@ describe('Agreement lifecycle', () => {
     cy.getAdminToken();
     AgreementsSettingsInteractor.fetchStatusLabel(agreement);
 
-    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+    cy.login(Cypress.env('diku_login'), Cypress.env('diku_password'));
   });
 
   it('should be possible to fill in the "Create agreement" form and submit it', () => {

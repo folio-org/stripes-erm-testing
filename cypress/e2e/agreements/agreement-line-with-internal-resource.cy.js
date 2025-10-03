@@ -52,7 +52,7 @@ describe('Agreement line with internal resource', () => {
     });
 
     console.log('check if hideKbCheckbox is unchecked');
-    cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+    cy.login(Cypress.env('diku_login'), Cypress.env('diku_password'));
     AgreementsSettingsInteractor.ensureHideAgreementsKBUnchecked();
     cy.logout();
   });

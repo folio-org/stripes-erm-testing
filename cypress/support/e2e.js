@@ -12,9 +12,9 @@ setInteractorTimeout(100_000);
 require('@folio/stripes-testing/cypress/support/tenant');
 
 require('./api'); // I have NO idea why but these need to be require not import
-require('./stripes');
-require('./users');
-require('./login');
+require('@folio/stripes-testing/cypress/support/stripes');
+require('@folio/stripes-testing/cypress/support/users');
+require('@folio/stripes-testing/cypress/support/login');
 require('./cypressUtilityFunctions');
 
 require('cypress-downloadfile/lib/downloadFileCommand');
@@ -28,25 +28,31 @@ Cypress.on('window:before:load', window => {
 
 const defaultTestLanguage = 'en-US';
 const defaultTestTimezone = 'UTC';
-let localeSettingsId;
-let localeSettingsValue;
+
+beforeEach(() => {
+  cy.intercept('POST', '/authn/refresh').as('/authn/refresh');
+});
+
 before(() => {
   // This is running before all tests, make sure logged in as admin
   cy.getAdminToken();
   cy.getLocaleSettings().then(body => {
     if (Object.keys(body).length > 0) {
-      localeSettingsId = body.id;
-      localeSettingsValue = body.value;
-      const localeValue = localeSettingsValue.match(/"locale":"(.*?)"/);
-      const timezoneValue = localeSettingsValue.match(/"timezone":"(.*?)"/);
-      const extractedLocale = localeValue ? localeValue[1] : undefined;
-      const extractedTimezone = timezoneValue ? timezoneValue[1] : undefined;
+      const localeSettingsId = body.id;
+      const localeSettingsValue = body.value;
+      Cypress.env('localeSettingsId', body.value);
+      Cypress.env('localeSettingsValue', body.value);
 
-      Cypress.env('localeValue', extractedLocale);
-      Cypress.env('timezoneValue', extractedTimezone);
+      const localeValue = localeSettingsValue.locale;
+      const timezoneValue = localeSettingsValue.timezone;
 
-      if (extractedLocale !== defaultTestLanguage || extractedTimezone !== defaultTestTimezone) {
-        const updatedValue = localeSettingsValue.replace(/"locale":"[^"]*"/, `"locale":"${defaultTestLanguage}"`).replace(/"timezone":"[^"]*"/, `"timezone":"${defaultTestTimezone}"`);
+      if (localeValue !== defaultTestLanguage || timezoneValue !== defaultTestTimezone) {
+        const updatedValue = {
+          ...localeSettingsValue,
+          locale: defaultTestLanguage,
+          timezone: defaultTestTimezone,
+        };
+
         cy.putLocaleSettings(localeSettingsId, updatedValue);
       }
     }
@@ -54,35 +60,13 @@ before(() => {
 });
 
 after(() => {
-  if ((Cypress.env('localeValue') && Cypress.env('localeValue') !== defaultTestLanguage) ||
-    (Cypress.env('timezoneValue') && Cypress.env('timezoneValue') !== defaultTestTimezone)) {
+  const localeValue = Cypress.env('localeSettingsValue').locale;
+  const timezoneValue = Cypress.env('localeSettingsValue').timezone;
+
+  if ((localeValue && localeValue !== defaultTestLanguage) ||
+    (timezoneValue && timezoneValue !== defaultTestTimezone)) {
     // This is running after all tests, make sure logged in as admin (test should have logged user out)
     cy.getAdminToken();
-    cy.putLocaleSettings(localeSettingsId, localeSettingsValue);
+    cy.putLocaleSettings(Cypress.env('localeSettingsId'), Cypress.env('localeSettingsValue'));
   }
 });
-
-// FIXME Not sure about this either
-// Handle post Q release
-/* beforeEach(() => {
-  cy.getCookie('folioAccessToken').then(cookieObj => {
-    // Ensure cookie
-    if (Cypress.env('accessToken') && cookieObj?.value !== Cypress.env('accessToken')) {
-      cy.setCookie(
-        'folioAccessToken',
-        Cypress.env('accessToken'),
-        {
-          path: '/',
-          domain: undefined,
-        }
-      );
-    }
-  });
-
-  cy.getCookie('folioRefreshToken').then(cookieObj => {
-    // Ensure cookie
-    if (Cypress.env('refreshToken') && cookieObj?.value !== Cypress.env('refreshToken')) {
-      cy.setCookie('folioRefreshToken', Cypress.env('refreshToken'));
-    }
-  });
-}); */

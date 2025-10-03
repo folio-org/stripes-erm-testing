@@ -55,7 +55,7 @@ export default class LicensesSettingsInteractor {
     const refdataDesc = 'License.Type';
     cy.getLicensesRefdataValues(refdataDesc).then((refdata) => {
       if (refdata.every(obj => obj.value !== normalize(license.type))) {
-        cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+        cy.login(Cypress.env('diku_login'), Cypress.env('diku_password'));
         this.createLicensesRefdataValue(refdataDesc, license.type);
         cy.logout();
         Cypress.env('licenseTypeCreated', true);

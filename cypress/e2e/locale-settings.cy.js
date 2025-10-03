@@ -4,7 +4,7 @@ import {
 } from '../../interactors';
 
 before(() => {
-  cy.login(Cypress.env('login_username'), Cypress.env('login_password'));
+  cy.login(Cypress.env('diku_login'), Cypress.env('diku_password'));
 });
 
 after(() => {
