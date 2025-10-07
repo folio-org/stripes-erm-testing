@@ -105,14 +105,24 @@ const mockKy = jest.fn((...input) => {
   };
 });
 
+const mockGet = jest.fn(mockKy);
+const mockPost = jest.fn(mockKy);
+const mockPut = jest.fn(mockKy);
+const mockDelete = jest.fn(mockKy);
+
+
 // Decorate mockKy with special verbs
-mockKy.get = jest.fn(mockKy);
-mockKy.post = jest.fn(mockKy);
-mockKy.put = jest.fn(mockKy);
-mockKy.delete = jest.fn(mockKy);
+mockKy.get = mockGet;
+mockKy.post = mockPost;
+mockKy.put = mockPut;
+mockKy.delete = mockDelete;
 
 const mockStripesCore = {
   // EXPOSE MOCKS USED INTERNALLY SO THEY CAN BE FIXED WITHIN TESTS INDEPENDENTLY
+  mockGet,
+  mockPost,
+  mockPut,
+  mockDelete,
   mockKyJson,
   mockKyText,
   mockKyBlob,
