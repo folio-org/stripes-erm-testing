@@ -37,25 +37,7 @@ const mockErmComponents = {
   OrganizationsFieldArray: jest.fn(() => <div>OrganizationsFieldArray</div>),
   SerialCoverage: jest.fn(() => <div>SerialCoverage</div>),
   ViewOrganizationCard: jest.fn(() => <div>ViewOrganizationCard</div>),
-  Logs: jest.fn(() => <div>Logs</div>),
-  usePolicies: jest.fn(() => ({ policies: [] })),
-  useGetAccess: jest.fn(() => ({
-    canCreate: true,
-    canCreateLoading: false,
-    canCreateQuery: true,
-    canRead: true,
-    canReadLoading: false,
-    canReadQuery: true,
-    canEdit: true,
-    canEditLoading: false,
-    canEditQuery: true,
-    canDelete: true,
-    canDeleteLoading: false,
-    canDeleteQuery: true,
-    canApplyPolicies: true,
-    canApplyPoliciesLoading: false,
-    canApplyPoliciesQuery: true
-  }))
+  Logs: jest.fn(() => <div>Logs</div>)
 };
 
 export default mockErmComponents;
