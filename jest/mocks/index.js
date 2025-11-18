@@ -7,4 +7,3 @@ export { default as mockReactRouterDom } from './mockReactRouterDom';
 export { default as mockStripesIcon } from './mockStripesIcon';
 export { default as mockStripesConfig } from './mockStripesConfig';
 export { default as mockCurrencyData } from './mockCurrencyData';
-export { default as mockRevokeObjectURL } from './mockRevokeObjectURL';
