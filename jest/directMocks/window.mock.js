@@ -12,6 +12,7 @@ window.matchMedia = jest.fn().mockImplementation(query => {
 });
 
 window.URL.createObjectURL = jest.fn();
+window.URL.revokeObjectURL = jest.fn();
 
 window.ResizeObserver = jest.fn().mockImplementation(() => ({
   observe: jest.fn(),

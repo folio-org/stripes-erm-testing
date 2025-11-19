@@ -1,5 +1,5 @@
 import { waitFor } from '@folio/jest-config-stripes/testing-library/react';
-import { Select } from '@folio/stripes-erm-testing';
+import { Select } from '../../interactors';
 
 const testSelect = ({
   selector,
