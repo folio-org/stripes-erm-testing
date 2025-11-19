@@ -15,13 +15,33 @@ const mockGetQueryReturn = jest.fn((...props) => {
 });
 
 // A more in depth useQuery mock
-const mockUseQuery = jest.fn((queryKey, queryFunc, queryOpts) => {
-  // Ensure the queryFunc got run
-  queryFunc();
+const mockUseQuery = jest.fn((arg1, arg2, arg3) => {
+  const isObjSig =
+    arg1 && typeof arg1 === 'object' && !Array.isArray(arg1) &&
+    ('queryKey' in arg1 || 'queryFn' in arg1);
+
+  if (isObjSig) {
+    // useQuery({ queryKey, queryFn, ...options }, queryClient?)
+    const { queryKey, queryFn, ...opts } = arg1;
+    const enabled = opts?.enabled;
+
+    if (enabled !== false && typeof queryFn === 'function') {
+      queryFn({ queryKey, signal: undefined, meta: opts?.meta });
+    }
+
+    return mockGetQueryReturn(queryKey, opts);
+  }
+
+  const queryKey = arg1;
+  const queryFunc = arg2;
+  const queryOpts = arg3;
+
+  if (typeof queryFunc === 'function') {
+    queryFunc();
+  }
 
   return mockGetQueryReturn(queryKey, queryOpts);
 });
-
 
 const mockReactQuery = {
   invalidateQueries,
