@@ -40,21 +40,13 @@ const mockErmComponents = {
   Logs: jest.fn(() => <div>Logs</div>),
   usePolicies: jest.fn(() => ({ policies: [] })),
   useGetAccess: jest.fn(() => ({
+    canAccessQuery: true, // This isn't the right shape at all
+    isLoading: false,
     canCreate: true,
-    canCreateLoading: false,
-    canCreateQuery: true,
     canRead: true,
-    canReadLoading: false,
-    canReadQuery: true,
     canEdit: true,
-    canEditLoading: false,
-    canEditQuery: true,
     canDelete: true,
-    canDeleteLoading: false,
-    canDeleteQuery: true,
     canApplyPolicies: true,
-    canApplyPoliciesLoading: false,
-    canApplyPoliciesQuery: true
   }))
 };
 
