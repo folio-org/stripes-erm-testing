@@ -1,6 +1,13 @@
 # Change history for stripes-erm-testing
 
-## 3.1.0 IN PROGRESS
+## 3.1.0 2026-04-16
+  * ERM-3967: Tweak mocks to represent new shape for useGetAccess
+  * ERM-3870: Fix/extend mockUseQuery in stripes-erm-testing
+  * ERM-3853: ui-erm-comparisons: include global permissions in package.json base permissions
+  * ERM-3808: Toast message for access policies on saving an agreement
+  * ERM-3755: Build search results transformation
+  * ERM-3719: Add histort.replace to ReeactRouterDOM mock
+  * ERM-3711: Migrate all setting uses in ui-agreements to use app settings
 
 ## 3.0.0 2025-03-13
   * ERM-3607: *BREAKING* Stripes v10 dependencies update
