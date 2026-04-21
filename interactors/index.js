@@ -1,3 +1,5 @@
+/* eslint-disable import/export */
+
 /* Export existing interactors as is */
 export * from '@folio/stripes-testing/interactors';
 
