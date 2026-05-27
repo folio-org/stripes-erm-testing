@@ -2,6 +2,9 @@
 
 ## 3.2.0 IN PROGRESS
 
+## 3.1.1 2026-05-27
+  * Bumped dependencies for Trillium release
+
 ## 3.1.0 2026-04-16
   * ERM-3967: Tweak mocks to represent new shape for useGetAccess
   * ERM-3870: Fix/extend mockUseQuery in stripes-erm-testing
