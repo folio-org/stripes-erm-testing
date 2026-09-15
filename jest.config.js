@@ -8,7 +8,13 @@ const config = require('@folio/jest-config-stripes');
  * In case of failure, check modules included in default config here:
  * https://github.com/folio-org/jest-config-stripes/blob/main/index.js
  */
-const extraESModules = ['@folio', 'ky', '@k-int', 'jsonpath-plus'].join('|');
+const extraESModules = [
+  '@folio',
+  'ky',
+  '@k-int',
+  'jsonpath-plus',
+  'keyboardjs',
+].join('|');
 
 module.exports = {
   ...config,

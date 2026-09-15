@@ -4,6 +4,7 @@
 
 ## 3.1.1 2026-05-27
   * Bumped dependencies for Trillium release
+  * ERM-4157: Update pure-ESM module list: add `keyboardjs`.
 
 ## 3.1.0 2026-04-16
   * ERM-3967: Tweak mocks to represent new shape for useGetAccess
